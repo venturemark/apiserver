@@ -1,0 +1,23 @@
+apiVersion: "networking.istio.io/v1beta1"
+kind: "VirtualService"
+metadata:
+  name: "{{ .Release.Name }}"
+  labels:
+    app.kubernetes.io/name: "{{ .Release.Name }}"
+spec:
+  hosts:
+    # The istio ingress gateway forwards traffic based on wildcard expressions.
+    # In our virtual service here we define the specific subdomain of our micro
+    # service according to the cluster name and DNS zone.
+    #
+    #     apiserver.kia02.aws.venturemark.co
+    #
+    - "{{ .Release.Name }}.{{ .Values.cluster.name }}.{{ .Values.cluster.zone }}"
+  gateways:
+    - "istio-system/ingressgateway"
+  http:
+    - route:
+      - destination:
+          host: "{{ .Release.Name }}"
+          port:
+            number: {{ .Values.port }}
