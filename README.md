@@ -1,6 +1,6 @@
 # apiserver
 
-Repo for serving the venturemark grpc api. After creating a kubernetes cluster
+Daemon for serving the venturemark grpc api. After creating a kubernetes cluster
 using https://github.com/xh3b4sd/kia this api server app can be deployed and
 used.
 
