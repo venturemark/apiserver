@@ -6,7 +6,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/venturemark/apigengo/pkg/pbf/post"
+	"github.com/venturemark/apigengo/pkg/pbf/metric"
 	"github.com/xh3b4sd/tracer"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -30,13 +30,13 @@ func mainE(ctx context.Context) error {
 		}
 	}
 
-	var a post.APIServer
+	var a metric.APIServer
 	{
 		g := grpc.NewServer()
 		reflection.Register(g)
 
 		a = &API{}
-		post.RegisterAPIServer(g, a)
+		metric.RegisterAPIServer(g, a)
 
 		err := g.Serve(l)
 		if err != nil {
@@ -50,25 +50,25 @@ func mainE(ctx context.Context) error {
 // -------------------------------------------------------------------------- //
 
 type API struct {
-	post.UnimplementedAPIServer
+	metric.UnimplementedAPIServer
 }
 
-func (a *API) Create(ctx context.Context, cre *post.CreateI) (*post.CreateO, error) {
+func (a *API) Create(ctx context.Context, cre *metric.CreateI) (*metric.CreateO, error) {
 	fmt.Printf("%#v\n", time.Now().String())
-	return &post.CreateO{Message: "create output"}, nil
+	return &metric.CreateO{}, nil
 }
 
-func (a *API) Delete(ctx context.Context, del *post.DeleteI) (*post.DeleteO, error) {
+func (a *API) Delete(ctx context.Context, del *metric.DeleteI) (*metric.DeleteO, error) {
 	fmt.Printf("%#v\n", time.Now().String())
-	return &post.DeleteO{Message: "delete output"}, nil
+	return &metric.DeleteO{}, nil
 }
 
-func (a *API) Search(ctx context.Context, sea *post.SearchI) (*post.SearchO, error) {
+func (a *API) Search(ctx context.Context, sea *metric.SearchI) (*metric.SearchO, error) {
 	fmt.Printf("%#v\n", time.Now().String())
-	return &post.SearchO{Message: "search output"}, nil
+	return &metric.SearchO{}, nil
 }
 
-func (a *API) Update(ctx context.Context, upd *post.UpdateI) (*post.UpdateO, error) {
+func (a *API) Update(ctx context.Context, upd *metric.UpdateI) (*metric.UpdateO, error) {
 	fmt.Printf("%#v\n", time.Now().String())
-	return &post.UpdateO{Message: "update output"}, nil
+	return &metric.UpdateO{}, nil
 }
