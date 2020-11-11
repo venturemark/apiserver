@@ -45,11 +45,21 @@ func (h *Handler) Create(ctx context.Context, obj *metric.CreateI) (*metric.Crea
 		return nil, tracer.Mask(err)
 	}
 
+	err = validate.Create(obj)
+	if err != nil {
+		return nil, tracer.Mask(err)
+	}
+
 	return &metric.CreateO{}, nil
 }
 
 func (h *Handler) Delete(ctx context.Context, obj *metric.DeleteI) (*metric.DeleteO, error) {
 	var err error
+
+	err = validate.Delete(obj)
+	if err != nil {
+		return nil, tracer.Mask(err)
+	}
 
 	err = validate.Delete(obj)
 	if err != nil {
@@ -67,11 +77,21 @@ func (h *Handler) Search(ctx context.Context, obj *metric.SearchI) (*metric.Sear
 		return nil, tracer.Mask(err)
 	}
 
+	err = validate.Search(obj)
+	if err != nil {
+		return nil, tracer.Mask(err)
+	}
+
 	return &metric.SearchO{}, nil
 }
 
 func (h *Handler) Update(ctx context.Context, obj *metric.UpdateI) (*metric.UpdateO, error) {
 	var err error
+
+	err = validate.Update(obj)
+	if err != nil {
+		return nil, tracer.Mask(err)
+	}
 
 	err = validate.Update(obj)
 	if err != nil {
