@@ -2,16 +2,14 @@ package daemon
 
 import (
 	"context"
-	"fmt"
-	"net"
-	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/venturemark/apigengo/pkg/pbf/metric"
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/tracer"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
+
+	"github.com/venturemark/apiserver/pkg/handler"
+	"github.com/venturemark/apiserver/pkg/handler/metric"
+	"github.com/venturemark/apiserver/pkg/server/grpc"
 )
 
 type runner struct {
@@ -38,53 +36,47 @@ func (r *runner) Run(cmd *cobra.Command, args []string) error {
 func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) error {
 	var err error
 
-	var l net.Listener
+	var m *metric.Handler
 	{
-		l, err = net.Listen("tcp", net.JoinHostPort(r.flag.Host, r.flag.Port))
+		c := metric.HandlerConfig{
+			Logger: r.logger,
+		}
+
+		m, err = metric.NewHandler(c)
 		if err != nil {
 			return tracer.Mask(err)
 		}
 	}
 
-	var a metric.APIServer
+	var g *grpc.Server
 	{
-		g := grpc.NewServer()
-		reflection.Register(g)
+		c := grpc.ServerConfig{
+			Logger: r.logger,
+			Handlers: []handler.Interface{
+				m,
+			},
 
-		a = &API{}
-		metric.RegisterAPIServer(g, a)
+			Host: r.flag.Host,
+			Port: r.flag.Port,
+		}
 
-		err := g.Serve(l)
+		g, err = grpc.NewServer(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
+
+	{
+		err = g.Attach()
+		if err != nil {
+			return tracer.Mask(err)
+		}
+
+		err = g.Listen()
 		if err != nil {
 			return tracer.Mask(err)
 		}
 	}
 
 	return nil
-}
-
-// -------------------------------------------------------------------------- //
-
-type API struct {
-	metric.UnimplementedAPIServer
-}
-
-func (a *API) Create(ctx context.Context, cre *metric.CreateI) (*metric.CreateO, error) {
-	fmt.Printf("%#v\n", time.Now().String())
-	return &metric.CreateO{}, nil
-}
-
-func (a *API) Delete(ctx context.Context, del *metric.DeleteI) (*metric.DeleteO, error) {
-	fmt.Printf("%#v\n", time.Now().String())
-	return &metric.DeleteO{}, nil
-}
-
-func (a *API) Search(ctx context.Context, sea *metric.SearchI) (*metric.SearchO, error) {
-	fmt.Printf("%#v\n", time.Now().String())
-	return &metric.SearchO{}, nil
-}
-
-func (a *API) Update(ctx context.Context, upd *metric.UpdateI) (*metric.UpdateO, error) {
-	fmt.Printf("%#v\n", time.Now().String())
-	return &metric.UpdateO{}, nil
 }
