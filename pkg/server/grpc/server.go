@@ -9,6 +9,7 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"github.com/venturemark/apiserver/pkg/handler"
+	"github.com/venturemark/apiserver/pkg/interceptor/stack"
 )
 
 type ServerConfig struct {
@@ -44,11 +45,32 @@ func NewServer(config ServerConfig) (*Server, error) {
 		return nil, tracer.Maskf(invalidConfigError, "%T.Port must not be empty", config)
 	}
 
+	var err error
+
+	var e *stack.Interceptor
+	{
+		c := stack.InterceptorConfig{
+			Logger: config.Logger,
+		}
+
+		e, err = stack.NewInterceptor(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	var u []grpc.UnaryServerInterceptor
+	{
+		u = append(u, e.Interceptor())
+	}
+
 	s := &Server{
 		logger:   config.Logger,
 		handlers: config.Handlers,
 
-		server: grpc.NewServer(),
+		server: grpc.NewServer(
+			grpc.ChainUnaryInterceptor(u...),
+		),
 
 		host: config.Host,
 		port: config.Port,

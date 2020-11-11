@@ -2,13 +2,13 @@ package metric
 
 import (
 	"context"
-	"fmt"
-	"time"
 
 	"github.com/venturemark/apigengo/pkg/pbf/metric"
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/tracer"
 	"google.golang.org/grpc"
+
+	"github.com/venturemark/apiserver/pkg/handler/metric/validate"
 )
 
 type HandlerConfig struct {
@@ -37,22 +37,66 @@ func (h *Handler) Attach(g *grpc.Server) {
 	metric.RegisterAPIServer(g, h)
 }
 
-func (h *Handler) Create(ctx context.Context, cre *metric.CreateI) (*metric.CreateO, error) {
-	fmt.Printf("%#v\n", time.Now().String())
+func (h *Handler) Create(ctx context.Context, obj *metric.CreateI) (*metric.CreateO, error) {
+	var err error
+
+	err = validate.Create(obj)
+	if err != nil {
+		return nil, tracer.Mask(err)
+	}
+
+	err = validate.Create(obj)
+	if err != nil {
+		return nil, tracer.Mask(err)
+	}
+
 	return &metric.CreateO{}, nil
 }
 
-func (h *Handler) Delete(ctx context.Context, del *metric.DeleteI) (*metric.DeleteO, error) {
-	fmt.Printf("%#v\n", time.Now().String())
+func (h *Handler) Delete(ctx context.Context, obj *metric.DeleteI) (*metric.DeleteO, error) {
+	var err error
+
+	err = validate.Delete(obj)
+	if err != nil {
+		return nil, tracer.Mask(err)
+	}
+
+	err = validate.Delete(obj)
+	if err != nil {
+		return nil, tracer.Mask(err)
+	}
+
 	return &metric.DeleteO{}, nil
 }
 
-func (h *Handler) Search(ctx context.Context, sea *metric.SearchI) (*metric.SearchO, error) {
-	fmt.Printf("%#v\n", time.Now().String())
+func (h *Handler) Search(ctx context.Context, obj *metric.SearchI) (*metric.SearchO, error) {
+	var err error
+
+	err = validate.Search(obj)
+	if err != nil {
+		return nil, tracer.Mask(err)
+	}
+
+	err = validate.Search(obj)
+	if err != nil {
+		return nil, tracer.Mask(err)
+	}
+
 	return &metric.SearchO{}, nil
 }
 
-func (h *Handler) Update(ctx context.Context, upd *metric.UpdateI) (*metric.UpdateO, error) {
-	fmt.Printf("%#v\n", time.Now().String())
+func (h *Handler) Update(ctx context.Context, obj *metric.UpdateI) (*metric.UpdateO, error) {
+	var err error
+
+	err = validate.Update(obj)
+	if err != nil {
+		return nil, tracer.Mask(err)
+	}
+
+	err = validate.Update(obj)
+	if err != nil {
+		return nil, tracer.Mask(err)
+	}
+
 	return &metric.UpdateO{}, nil
 }
