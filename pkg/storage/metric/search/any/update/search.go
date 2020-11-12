@@ -5,5 +5,5 @@ import (
 )
 
 func (u *Update) Search(obj *metric.SearchI) (*metric.SearchO, error) {
-	return nil, nil
+	return &metric.SearchO{}, nil
 }
