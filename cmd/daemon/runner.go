@@ -10,11 +10,13 @@ import (
 	"github.com/venturemark/apiserver/pkg/handler"
 	"github.com/venturemark/apiserver/pkg/handler/metric"
 	"github.com/venturemark/apiserver/pkg/server/grpc"
+	"github.com/venturemark/apiserver/pkg/storage"
 )
 
 type runner struct {
-	flag   *flag
-	logger logger.Interface
+	flag    *flag
+	logger  logger.Interface
+	storage *storage.Storage
 }
 
 func (r *runner) Run(cmd *cobra.Command, args []string) error {
@@ -39,7 +41,8 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 	var m *metric.Handler
 	{
 		c := metric.HandlerConfig{
-			Logger: r.logger,
+			Logger:  r.logger,
+			Storage: r.storage,
 		}
 
 		m, err = metric.NewHandler(c)
