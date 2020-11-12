@@ -9,7 +9,7 @@ used.
 ### EKS
 
 ```
-helm -n infra install apiserver ./helm/apiserver --set cluster.name=kia02 --set cluster.zone=aws.venturemark.co
+hlm -n infra install apiserver ./hlm/apiserver --set cluster.name=kia02 --set cluster.zone=aws.venturemark.co
 ```
 
 ```
@@ -21,7 +21,7 @@ grpcurl apiserver.kia02.aws.venturemark.co:443 post.API/Search
 ### OSX
 
 ```
-helm -n infra install apiserver ./helm/apiserver
+hlm -n infra install apiserver ./hlm/apiserver
 ```
 
 ```
