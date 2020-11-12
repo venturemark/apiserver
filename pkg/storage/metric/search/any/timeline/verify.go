@@ -1,10 +1,10 @@
-package update
+package timeline
 
 import (
 	"github.com/venturemark/apigengo/pkg/pbf/metric"
 )
 
-func (u *Update) Verify(obj *metric.SearchI) bool {
+func (t *Timeline) Verify(obj *metric.SearchI) bool {
 	{
 		// We need a filter. Any search request without it does not make sense,
 		// because we do then not even know what we should search for.
@@ -40,7 +40,7 @@ func (u *Update) Verify(obj *metric.SearchI) bool {
 	{
 		// Searching without having any property given we can use to search for
 		// does not work. We always need to receive at least one property.
-		if len(obj.Filter.Property) == 0 {
+		if len(obj.Filter.Property) < 2 {
 			return false
 		}
 
@@ -50,10 +50,10 @@ func (u *Update) Verify(obj *metric.SearchI) bool {
 			if p.Timestamp != "" {
 				return false
 			}
-			// With this particular search implementation we require only update
-			// IDs to be given. If any update ID property is empty, we decline
-			// service for this request.
-			if p.UpdateId == "" {
+			// With this particular search implementation we require only
+			// timeline IDs to be given. If any timeline ID property is empty,
+			// we decline service for this request.
+			if p.TimelineId == "" {
 				return false
 			}
 		}
@@ -63,7 +63,7 @@ func (u *Update) Verify(obj *metric.SearchI) bool {
 		var l []string
 
 		for _, p := range obj.Filter.Property {
-			l = append(l, p.UpdateId)
+			l = append(l, p.TimelineId)
 		}
 
 		// We do not want to do unnecessary work. We want clients to be aware of

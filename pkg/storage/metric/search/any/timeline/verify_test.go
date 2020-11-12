@@ -1,4 +1,4 @@
-package update
+package timeline
 
 import (
 	"strconv"
@@ -10,7 +10,7 @@ import (
 	redigofake "github.com/xh3b4sd/redigo/fake"
 )
 
-func Test_Update_Verify_Invalid(t *testing.T) {
+func Test_Timeline_Verify_Invalid(t *testing.T) {
 	testCases := []struct {
 		obj *metric.SearchI
 	}{
@@ -64,7 +64,7 @@ func Test_Update_Verify_Invalid(t *testing.T) {
 							Timestamp: "1605025038",
 						},
 						{
-							UpdateId: "upd-al9qy",
+							TimelineId: "tml-al9qy",
 						},
 					},
 				},
@@ -80,11 +80,11 @@ func Test_Update_Verify_Invalid(t *testing.T) {
 					},
 					Property: []*metric.SearchI_Filter_Property{
 						{
-							Timestamp: "1605025038",
-							UpdateId:  "upd-al9qy",
+							TimelineId: "tml-al9qy",
+							Timestamp:  "1605025038",
 						},
 						{
-							UpdateId: "upd-al9qy",
+							TimelineId: "tml-al9qy",
 						},
 					},
 				},
@@ -101,10 +101,10 @@ func Test_Update_Verify_Invalid(t *testing.T) {
 					},
 					Property: []*metric.SearchI_Filter_Property{
 						{
-							UpdateId: "upd-al9qy",
+							TimelineId: "tml-al9qy",
 						},
 						{
-							UpdateId: "upd-i45kj",
+							TimelineId: "tml-i45kj",
 						},
 					},
 				},
@@ -120,13 +120,28 @@ func Test_Update_Verify_Invalid(t *testing.T) {
 					},
 					Property: []*metric.SearchI_Filter_Property{
 						{
-							UpdateId: "upd-al9qy",
+							TimelineId: "tml-al9qy",
 						},
 						{
-							UpdateId: "upd-al9qy",
+							TimelineId: "tml-al9qy",
 						},
 						{
-							UpdateId: "upd-al9qy",
+							TimelineId: "tml-al9qy",
+						},
+					},
+				},
+			},
+		},
+		// Case 8 ensures that search input with a single property is not valid.
+		{
+			obj: &metric.SearchI{
+				Filter: &metric.SearchI_Filter{
+					Operator: []string{
+						"any",
+					},
+					Property: []*metric.SearchI_Filter_Property{
+						{
+							TimelineId: "tml-al9qy",
 						},
 					},
 				},
@@ -138,20 +153,20 @@ func Test_Update_Verify_Invalid(t *testing.T) {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			var err error
 
-			var u *Update
+			var tml *Timeline
 			{
 				c := Config{
 					Logger: loggerfake.New(),
 					Redigo: redigofake.New(),
 				}
 
-				u, err = New(c)
+				tml, err = New(c)
 				if err != nil {
 					t.Fatal(err)
 				}
 			}
 
-			ok := u.Verify(tc.obj)
+			ok := tml.Verify(tc.obj)
 
 			if ok != false {
 				t.Fatalf("\n\n%s\n", cmp.Diff(ok, false))
@@ -160,7 +175,7 @@ func Test_Update_Verify_Invalid(t *testing.T) {
 	}
 }
 
-func Test_Update_Verify_Valid(t *testing.T) {
+func Test_Timeline_Verify_Valid(t *testing.T) {
 	testCases := []struct {
 		obj *metric.SearchI
 	}{
@@ -173,7 +188,7 @@ func Test_Update_Verify_Valid(t *testing.T) {
 					},
 					Property: []*metric.SearchI_Filter_Property{
 						{
-							UpdateId: "upd-kj3h4",
+							TimelineId: "tml-kj3h4",
 						},
 					},
 				},
@@ -188,13 +203,13 @@ func Test_Update_Verify_Valid(t *testing.T) {
 					},
 					Property: []*metric.SearchI_Filter_Property{
 						{
-							UpdateId: "upd-al9qy",
+							TimelineId: "tml-al9qy",
 						},
 						{
-							UpdateId: "upd-i45kj",
+							TimelineId: "tml-i45kj",
 						},
 						{
-							UpdateId: "upd-kj3h4",
+							TimelineId: "tml-kj3h4",
 						},
 					},
 				},
@@ -206,20 +221,20 @@ func Test_Update_Verify_Valid(t *testing.T) {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			var err error
 
-			var u *Update
+			var tml *Timeline
 			{
 				c := Config{
 					Logger: loggerfake.New(),
 					Redigo: redigofake.New(),
 				}
 
-				u, err = New(c)
+				tml, err = New(c)
 				if err != nil {
 					t.Fatal(err)
 				}
 			}
 
-			ok := u.Verify(tc.obj)
+			ok := tml.Verify(tc.obj)
 
 			if ok != true {
 				t.Fatalf("\n\n%s\n", cmp.Diff(ok, true))
