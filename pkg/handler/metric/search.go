@@ -11,9 +11,9 @@ func (h *Handler) Search(ctx context.Context, obj *metric.SearchI) (*metric.Sear
 	// Search for any metric associated with the given updates. One or many
 	// update IDs may be provided.
 	{
-		ok := h.storage.Metric.Search.Any.Update.Verify(obj)
+		ok := h.storage.Metric.Search.Non.Timeline.Verify(obj)
 		if ok {
-			res, err := h.storage.Metric.Search.Any.Update.Search(obj)
+			res, err := h.storage.Metric.Search.Non.Timeline.Search(obj)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}

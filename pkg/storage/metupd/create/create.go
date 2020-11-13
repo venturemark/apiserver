@@ -1,11 +1,11 @@
-package any
+package create
 
 import (
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/storage/metric/search/any/update"
+	"github.com/venturemark/apiserver/pkg/storage/metupd/create/non"
 )
 
 type Config struct {
@@ -13,29 +13,29 @@ type Config struct {
 	Redigo redigo.Interface
 }
 
-type Any struct {
-	Update *update.Update
+type Create struct {
+	Non *non.Non
 }
 
-func New(config Config) (*Any, error) {
+func New(config Config) (*Create, error) {
 	var err error
 
-	var u *update.Update
+	var n *non.Non
 	{
-		c := update.Config{
+		c := non.Config{
 			Logger: config.Logger,
 			Redigo: config.Redigo,
 		}
 
-		u, err = update.New(c)
+		n, err = non.New(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 	}
 
-	a := &Any{
-		Update: u,
+	s := &Create{
+		Non: n,
 	}
 
-	return a, nil
+	return s, nil
 }

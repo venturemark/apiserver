@@ -9,6 +9,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/handler"
 	"github.com/venturemark/apiserver/pkg/handler/metric"
+	"github.com/venturemark/apiserver/pkg/handler/metupd"
 	"github.com/venturemark/apiserver/pkg/server/grpc"
 	"github.com/venturemark/apiserver/pkg/storage"
 )
@@ -38,14 +39,27 @@ func (r *runner) Run(cmd *cobra.Command, args []string) error {
 func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) error {
 	var err error
 
-	var m *metric.Handler
+	var metricHandler *metric.Handler
 	{
 		c := metric.HandlerConfig{
 			Logger:  r.logger,
 			Storage: r.storage,
 		}
 
-		m, err = metric.NewHandler(c)
+		metricHandler, err = metric.NewHandler(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
+
+	var metupdHandler *metupd.Handler
+	{
+		c := metupd.HandlerConfig{
+			Logger:  r.logger,
+			Storage: r.storage,
+		}
+
+		metupdHandler, err = metupd.NewHandler(c)
 		if err != nil {
 			return tracer.Mask(err)
 		}
@@ -56,7 +70,8 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 		c := grpc.ServerConfig{
 			Logger: r.logger,
 			Handlers: []handler.Interface{
-				m,
+				metricHandler,
+				metupdHandler,
 			},
 
 			Host: r.flag.Host,

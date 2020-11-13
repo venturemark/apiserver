@@ -6,6 +6,7 @@ import (
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/storage/metric"
+	"github.com/venturemark/apiserver/pkg/storage/metupd"
 )
 
 type Config struct {
@@ -15,26 +16,41 @@ type Config struct {
 
 type Storage struct {
 	Metric *metric.Metric
+	MetUpd *metupd.MetUpd
 }
 
 func New(config Config) (*Storage, error) {
 	var err error
 
-	var m *metric.Metric
+	var metricStorage *metric.Metric
 	{
 		c := metric.Config{
 			Logger: config.Logger,
 			Redigo: config.Redigo,
 		}
 
-		m, err = metric.New(c)
+		metricStorage, err = metric.New(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	var metupdStorage *metupd.MetUpd
+	{
+		c := metupd.Config{
+			Logger: config.Logger,
+			Redigo: config.Redigo,
+		}
+
+		metupdStorage, err = metupd.New(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 	}
 
 	s := &Storage{
-		Metric: m,
+		Metric: metricStorage,
+		MetUpd: metupdStorage,
 	}
 
 	return s, nil

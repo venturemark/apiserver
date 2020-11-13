@@ -1,11 +1,11 @@
-package search
+package metupd
 
 import (
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/storage/metric/search/non"
+	"github.com/venturemark/apiserver/pkg/storage/metupd/create"
 )
 
 type Config struct {
@@ -13,29 +13,29 @@ type Config struct {
 	Redigo redigo.Interface
 }
 
-type Search struct {
-	Non *non.Non
+type MetUpd struct {
+	Create *create.Create
 }
 
-func New(config Config) (*Search, error) {
+func New(config Config) (*MetUpd, error) {
 	var err error
 
-	var n *non.Non
+	var cre *create.Create
 	{
-		c := non.Config{
+		c := create.Config{
 			Logger: config.Logger,
 			Redigo: config.Redigo,
 		}
 
-		n, err = non.New(c)
+		cre, err = create.New(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 	}
 
-	s := &Search{
-		Non: n,
+	m := &MetUpd{
+		Create: cre,
 	}
 
-	return s, nil
+	return m, nil
 }
