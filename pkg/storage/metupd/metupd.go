@@ -1,11 +1,11 @@
-package any
+package metupd
 
 import (
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/storage/metric/search/any/update"
+	"github.com/venturemark/apiserver/pkg/storage/metupd/create"
 )
 
 type Config struct {
@@ -13,29 +13,29 @@ type Config struct {
 	Redigo redigo.Interface
 }
 
-type Any struct {
-	Update *update.Update
+type Metric struct {
+	Create *create.Create
 }
 
-func New(config Config) (*Any, error) {
+func New(config Config) (*Metric, error) {
 	var err error
 
-	var u *update.Update
+	var c *create.Create
 	{
-		c := update.Config{
+		c := create.Config{
 			Logger: config.Logger,
 			Redigo: config.Redigo,
 		}
 
-		u, err = update.New(c)
+		c, err = create.New(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 	}
 
-	a := &Any{
-		Update: u,
+	m := &Metric{
+		Create: c,
 	}
 
-	return a, nil
+	return m, nil
 }

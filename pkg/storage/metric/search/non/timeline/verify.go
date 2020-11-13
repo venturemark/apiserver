@@ -53,7 +53,7 @@ func (t *Timeline) Verify(obj *metric.SearchI) bool {
 			// With this particular search implementation we require only
 			// timeline IDs to be given. If any timeline ID property is empty,
 			// we decline service for this request.
-			if p.TimelineId == "" {
+			if p.Timeline == "" {
 				return false
 			}
 		}
@@ -63,7 +63,7 @@ func (t *Timeline) Verify(obj *metric.SearchI) bool {
 		var l []string
 
 		for _, p := range obj.Filter.Property {
-			l = append(l, p.TimelineId)
+			l = append(l, p.Timeline)
 		}
 
 		// We do not want to do unnecessary work. We want clients to be aware of

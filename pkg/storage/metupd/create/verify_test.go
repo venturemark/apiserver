@@ -1,4 +1,4 @@
-package timeline
+package create
 
 import (
 	"strconv"
@@ -64,7 +64,7 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 							Timestamp: "1605025038",
 						},
 						{
-							TimelineId: "tml-al9qy",
+							Timeline: "tml-al9qy",
 						},
 					},
 				},
@@ -80,11 +80,11 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 					},
 					Property: []*metric.SearchI_Filter_Property{
 						{
-							TimelineId: "tml-al9qy",
-							Timestamp:  "1605025038",
+							Timeline:  "tml-al9qy",
+							Timestamp: "1605025038",
 						},
 						{
-							TimelineId: "tml-al9qy",
+							Timeline: "tml-al9qy",
 						},
 					},
 				},
@@ -101,10 +101,10 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 					},
 					Property: []*metric.SearchI_Filter_Property{
 						{
-							TimelineId: "tml-al9qy",
+							Timeline: "tml-al9qy",
 						},
 						{
-							TimelineId: "tml-i45kj",
+							Timeline: "tml-i45kj",
 						},
 					},
 				},
@@ -120,13 +120,13 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 					},
 					Property: []*metric.SearchI_Filter_Property{
 						{
-							TimelineId: "tml-al9qy",
+							Timeline: "tml-al9qy",
 						},
 						{
-							TimelineId: "tml-al9qy",
+							Timeline: "tml-al9qy",
 						},
 						{
-							TimelineId: "tml-al9qy",
+							Timeline: "tml-al9qy",
 						},
 					},
 				},
@@ -141,7 +141,7 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 					},
 					Property: []*metric.SearchI_Filter_Property{
 						{
-							TimelineId: "tml-al9qy",
+							Timeline: "tml-al9qy",
 						},
 					},
 				},
@@ -188,7 +188,7 @@ func Test_Timeline_Verify_Valid(t *testing.T) {
 					},
 					Property: []*metric.SearchI_Filter_Property{
 						{
-							TimelineId: "tml-kj3h4",
+							Timeline: "tml-kj3h4",
 						},
 					},
 				},
@@ -203,13 +203,13 @@ func Test_Timeline_Verify_Valid(t *testing.T) {
 					},
 					Property: []*metric.SearchI_Filter_Property{
 						{
-							TimelineId: "tml-al9qy",
+							Timeline: "tml-al9qy",
 						},
 						{
-							TimelineId: "tml-i45kj",
+							Timeline: "tml-i45kj",
 						},
 						{
-							TimelineId: "tml-kj3h4",
+							Timeline: "tml-kj3h4",
 						},
 					},
 				},
