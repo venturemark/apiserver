@@ -13,28 +13,28 @@ type Config struct {
 	Redigo redigo.Interface
 }
 
-type Metric struct {
+type MetUpd struct {
 	Create *create.Create
 }
 
-func New(config Config) (*Metric, error) {
+func New(config Config) (*MetUpd, error) {
 	var err error
 
-	var c *create.Create
+	var cre *create.Create
 	{
 		c := create.Config{
 			Logger: config.Logger,
 			Redigo: config.Redigo,
 		}
 
-		c, err = create.New(c)
+		cre, err = create.New(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 	}
 
-	m := &Metric{
-		Create: c,
+	m := &MetUpd{
+		Create: cre,
 	}
 
 	return m, nil

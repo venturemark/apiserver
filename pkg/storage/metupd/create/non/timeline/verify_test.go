@@ -1,49 +1,49 @@
-package create
+package timeline
 
 import (
 	"strconv"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/venturemark/apigengo/pkg/pbf/metric"
+	"github.com/venturemark/apigengo/pkg/pbf/metupd"
 	loggerfake "github.com/xh3b4sd/logger/fake"
 	redigofake "github.com/xh3b4sd/redigo/fake"
 )
 
 func Test_Timeline_Verify_Invalid(t *testing.T) {
 	testCases := []struct {
-		obj *metric.SearchI
+		obj *metupd.CreateI
 	}{
-		// Case 0 ensures that search input without filter is not valid.
+		// Case 0 ensures that create input without filter is not valid.
 		{
-			obj: &metric.SearchI{},
+			obj: &metupd.CreateI{},
 		},
-		// Case 1 ensures that search input with an empty filter object is not
+		// Case 1 ensures that create input with an empty filter object is not
 		// valid.
 		{
-			obj: &metric.SearchI{
-				Filter: &metric.SearchI_Filter{},
+			obj: &metupd.CreateI{
+				Filter: &metupd.SearchI_Filter{},
 			},
 		},
-		// Case 2 ensures that search input with empty operator and property
+		// Case 2 ensures that create input with empty operator and property
 		// objects is not valid.
 		{
-			obj: &metric.SearchI{
-				Filter: &metric.SearchI_Filter{
+			obj: &metupd.CreateI{
+				Filter: &metupd.SearchI_Filter{
 					Operator: []string{},
-					Property: []*metric.SearchI_Filter_Property{},
+					Property: []*metupd.SearchI_Filter_Property{},
 				},
 			},
 		},
-		// Case 3 ensures that search input with timestamp properties is not
+		// Case 3 ensures that create input with timestamp properties is not
 		// valid.
 		{
-			obj: &metric.SearchI{
-				Filter: &metric.SearchI_Filter{
+			obj: &metupd.CreateI{
+				Filter: &metupd.SearchI_Filter{
 					Operator: []string{
 						"any",
 					},
-					Property: []*metric.SearchI_Filter_Property{
+					Property: []*metupd.SearchI_Filter_Property{
 						{
 							Timestamp: "1605025038",
 						},
@@ -51,15 +51,15 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 				},
 			},
 		},
-		// Case 4 ensures that search input with timestamp properties is not
+		// Case 4 ensures that create input with timestamp properties is not
 		// valid.
 		{
-			obj: &metric.SearchI{
-				Filter: &metric.SearchI_Filter{
+			obj: &metupd.CreateI{
+				Filter: &metupd.SearchI_Filter{
 					Operator: []string{
 						"any",
 					},
-					Property: []*metric.SearchI_Filter_Property{
+					Property: []*metupd.SearchI_Filter_Property{
 						{
 							Timestamp: "1605025038",
 						},
@@ -70,15 +70,15 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 				},
 			},
 		},
-		// Case 5 ensures that search input with timestamp properties is not
+		// Case 5 ensures that create input with timestamp properties is not
 		// valid.
 		{
-			obj: &metric.SearchI{
-				Filter: &metric.SearchI_Filter{
+			obj: &metupd.CreateI{
+				Filter: &metupd.SearchI_Filter{
 					Operator: []string{
 						"any",
 					},
-					Property: []*metric.SearchI_Filter_Property{
+					Property: []*metupd.SearchI_Filter_Property{
 						{
 							Timeline:  "tml-al9qy",
 							Timestamp: "1605025038",
@@ -90,16 +90,16 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 				},
 			},
 		},
-		// Case 6 ensures that search input with multiple operators is not
+		// Case 6 ensures that create input with multiple operators is not
 		// valid.
 		{
-			obj: &metric.SearchI{
-				Filter: &metric.SearchI_Filter{
+			obj: &metupd.CreateI{
+				Filter: &metupd.SearchI_Filter{
 					Operator: []string{
 						"any",
 						"any",
 					},
-					Property: []*metric.SearchI_Filter_Property{
+					Property: []*metupd.SearchI_Filter_Property{
 						{
 							Timeline: "tml-al9qy",
 						},
@@ -110,15 +110,15 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 				},
 			},
 		},
-		// Case 7 ensures that search input with duplicated properties is not
+		// Case 7 ensures that create input with duplicated properties is not
 		// valid.
 		{
-			obj: &metric.SearchI{
-				Filter: &metric.SearchI_Filter{
+			obj: &metupd.CreateI{
+				Filter: &metupd.SearchI_Filter{
 					Operator: []string{
 						"any",
 					},
-					Property: []*metric.SearchI_Filter_Property{
+					Property: []*metupd.SearchI_Filter_Property{
 						{
 							Timeline: "tml-al9qy",
 						},
@@ -132,14 +132,14 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 				},
 			},
 		},
-		// Case 8 ensures that search input with a single property is not valid.
+		// Case 8 ensures that create input with a single property is not valid.
 		{
-			obj: &metric.SearchI{
-				Filter: &metric.SearchI_Filter{
+			obj: &metupd.CreateI{
+				Filter: &metupd.SearchI_Filter{
 					Operator: []string{
 						"any",
 					},
-					Property: []*metric.SearchI_Filter_Property{
+					Property: []*metupd.SearchI_Filter_Property{
 						{
 							Timeline: "tml-al9qy",
 						},
@@ -177,16 +177,16 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 
 func Test_Timeline_Verify_Valid(t *testing.T) {
 	testCases := []struct {
-		obj *metric.SearchI
+		obj *metupd.CreateI
 	}{
-		// Case 0 ensures that search input can be considered valid.
+		// Case 0 ensures that create input can be considered valid.
 		{
-			obj: &metric.SearchI{
-				Filter: &metric.SearchI_Filter{
+			obj: &metupd.CreateI{
+				Filter: &metupd.SearchI_Filter{
 					Operator: []string{
 						"any",
 					},
-					Property: []*metric.SearchI_Filter_Property{
+					Property: []*metupd.SearchI_Filter_Property{
 						{
 							Timeline: "tml-kj3h4",
 						},
@@ -194,14 +194,14 @@ func Test_Timeline_Verify_Valid(t *testing.T) {
 				},
 			},
 		},
-		// Case 1 ensures that search input can be considered valid.
+		// Case 1 ensures that create input can be considered valid.
 		{
-			obj: &metric.SearchI{
-				Filter: &metric.SearchI_Filter{
+			obj: &metupd.CreateI{
+				Filter: &metupd.SearchI_Filter{
 					Operator: []string{
 						"any",
 					},
-					Property: []*metric.SearchI_Filter_Property{
+					Property: []*metupd.SearchI_Filter_Property{
 						{
 							Timeline: "tml-al9qy",
 						},

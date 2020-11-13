@@ -1,4 +1,4 @@
-package create
+package timeline
 
 import (
 	"github.com/xh3b4sd/logger"
@@ -11,12 +11,12 @@ type Config struct {
 	Redigo redigo.Interface
 }
 
-type MetUpd struct {
+type Timeline struct {
 	logger logger.Interface
 	regigo redigo.Interface
 }
 
-func New(config Config) (*MetUpd, error) {
+func New(config Config) (*Timeline, error) {
 	if config.Logger == nil {
 		return nil, tracer.Maskf(invalidConfigError, "%T.Logger must not be empty", config)
 	}
@@ -24,10 +24,10 @@ func New(config Config) (*MetUpd, error) {
 		return nil, tracer.Maskf(invalidConfigError, "%T.Redigo must not be empty", config)
 	}
 
-	m := &MetUpd{
+	t := &Timeline{
 		logger: config.Logger,
 		regigo: config.Redigo,
 	}
 
-	return m, nil
+	return t, nil
 }
