@@ -19,45 +19,21 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 		{
 			obj: &metupd.CreateI{},
 		},
-		// Case 1 ensures that create input with only a single datapoint is not
-		// valid.
+		// Case 1 ensures that create input without text is not valid.
 		{
 			obj: &metupd.CreateI{
-				Datapoint: []int64{
-					1604959525,
-				},
-				Text:     "Lorem ipsum ...",
-				Timeline: "tml-al9qy",
-			},
-		},
-		// Case 2 ensures that create input with too many datapoints is not
-		// valid.
-		{
-			obj: &metupd.CreateI{
-				Datapoint: []int64{
-					1604959525,
-					85,
-					2387,
-				},
-				Text:     "Lorem ipsum ...",
-				Timeline: "tml-al9qy",
-			},
-		},
-		// Case 3 ensures that create input without text is not valid.
-		{
-			obj: &metupd.CreateI{
-				Datapoint: []int64{
-					1604959525,
+				Yaxis: []int64{
+					32,
 					85,
 				},
 				Timeline: "tml-al9qy",
 			},
 		},
-		// Case 4 ensures that create input without timeline is not valid.
+		// Case 2 ensures that create input without timeline is not valid.
 		{
 			obj: &metupd.CreateI{
-				Datapoint: []int64{
-					1604959525,
+				Yaxis: []int64{
+					32,
 					85,
 				},
 				Text: "Lorem ipsum ...",
@@ -95,22 +71,35 @@ func Test_Timeline_Verify_Valid(t *testing.T) {
 	testCases := []struct {
 		obj *metupd.CreateI
 	}{
-		// Case 0 ensures that create input can be considered valid.
+		// Case 0 ensures that create input with only a single datapoint is
+		// valid.
 		{
 			obj: &metupd.CreateI{
-				Datapoint: []int64{
-					1605025038,
+				Yaxis: []int64{
+					32,
+				},
+				Text:     "Lorem ipsum ...",
+				Timeline: "tml-al9qy",
+			},
+		},
+		// Case 1 ensures that create input with multiple datapoints is valid.
+		{
+			obj: &metupd.CreateI{
+				Yaxis: []int64{
+					32,
 					85,
 				},
 				Text:     "Lorem ipsum ...",
 				Timeline: "tml-al9qy",
 			},
 		},
-		// Case 0 ensures that create input can be considered valid.
+		// Case 2 ensures that create input with multiple datapoints is valid.
 		{
 			obj: &metupd.CreateI{
-				Datapoint: []int64{
-					1604959525,
+				Yaxis: []int64{
+					32,
+					556,
+					1,
 					2500,
 				},
 				Text:     "foo bar #hashtag",

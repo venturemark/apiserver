@@ -6,9 +6,9 @@ import (
 
 func (t *Timeline) Verify(obj *metupd.CreateI) bool {
 	{
-		// Creating metric updates requires two datapoints. If the client
-		// does not provide that we fail.
-		if len(obj.Datapoint) != 2 {
+		// Creating metric updates requires at least one coordinate on the y
+		// axis. If the client does not provide that we fail.
+		if len(obj.Yaxis) == 0 {
 			return false
 		}
 	}
