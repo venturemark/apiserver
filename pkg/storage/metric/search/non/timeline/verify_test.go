@@ -42,7 +42,7 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 				Filter: &metric.SearchI_Filter{
 					Property: []*metric.SearchI_Filter_Property{
 						{
-							Timestamp: "1605025038",
+							Timestamp: 1605025038,
 						},
 					},
 				},
@@ -55,7 +55,7 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 				Filter: &metric.SearchI_Filter{
 					Property: []*metric.SearchI_Filter_Property{
 						{
-							Timestamp: "1605025038",
+							Timestamp: 1605025038,
 						},
 						{
 							Timeline: "tml-al9qy",
@@ -72,7 +72,7 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 					Property: []*metric.SearchI_Filter_Property{
 						{
 							Timeline:  "tml-al9qy",
-							Timestamp: "1605025038",
+							Timestamp: 1605025038,
 						},
 						{
 							Timeline: "tml-al9qy",

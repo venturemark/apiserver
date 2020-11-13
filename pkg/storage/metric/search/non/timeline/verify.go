@@ -41,7 +41,7 @@ func (t *Timeline) Verify(obj *metric.SearchI) bool {
 		for _, p := range obj.Filter.Property {
 			// It is not allowed to provide timestamp properties with the search
 			// request of this particular search implementation.
-			if p.Timestamp != "" {
+			if p.Timestamp != 0 {
 				return false
 			}
 			// With this particular search implementation we require only a

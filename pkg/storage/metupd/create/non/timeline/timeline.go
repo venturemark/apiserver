@@ -13,7 +13,7 @@ type Config struct {
 
 type Timeline struct {
 	logger logger.Interface
-	regigo redigo.Interface
+	redigo redigo.Interface
 }
 
 func New(config Config) (*Timeline, error) {
@@ -26,7 +26,7 @@ func New(config Config) (*Timeline, error) {
 
 	t := &Timeline{
 		logger: config.Logger,
-		regigo: config.Redigo,
+		redigo: config.Redigo,
 	}
 
 	return t, nil
