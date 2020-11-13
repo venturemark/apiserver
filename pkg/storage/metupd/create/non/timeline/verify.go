@@ -27,11 +27,11 @@ func (t *Timeline) Verify(obj *metupd.CreateI) bool {
 		}
 	}
 
-	{
+	{ // nolint: gosimple
 		// Creating metric updates requires a timeline ID to be provided with
 		// which the metric and the update can be associated with. If the
 		// timeline ID is empty, we decline service for this request.
-		if p.Timeline == "" {
+		if obj.Timeline == "" {
 			return false
 		}
 	}

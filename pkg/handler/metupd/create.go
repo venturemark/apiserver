@@ -10,9 +10,9 @@ import (
 func (h *Handler) Create(ctx context.Context, obj *metupd.CreateI) (*metupd.CreateO, error) {
 	// Create metric updates associated with the given timeline.
 	{
-		ok := h.storage.MetUpd.Create.Verify(obj)
+		ok := h.storage.MetUpd.Create.Non.Timeline.Verify(obj)
 		if ok {
-			res, err := h.storage.MetUpd.Create.Search(obj)
+			res, err := h.storage.MetUpd.Create.Non.Timeline.Create(obj)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}

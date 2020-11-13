@@ -16,6 +16,7 @@ type Config struct {
 
 type Storage struct {
 	Metric *metric.Metric
+	MetUpd *metupd.MetUpd
 }
 
 func New(config Config) (*Storage, error) {
@@ -34,7 +35,7 @@ func New(config Config) (*Storage, error) {
 		}
 	}
 
-	var metupdStorage *metupd.Metric
+	var metupdStorage *metupd.MetUpd
 	{
 		c := metupd.Config{
 			Logger: config.Logger,

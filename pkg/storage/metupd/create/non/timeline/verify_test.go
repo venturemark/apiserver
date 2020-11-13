@@ -14,137 +14,53 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 	testCases := []struct {
 		obj *metupd.CreateI
 	}{
-		// Case 0 ensures that create input without filter is not valid.
+		// Case 0 ensures that create input without any information provided is
+		// not valid.
 		{
 			obj: &metupd.CreateI{},
 		},
-		// Case 1 ensures that create input with an empty filter object is not
+		// Case 1 ensures that create input with only a single datapoint is not
 		// valid.
 		{
 			obj: &metupd.CreateI{
-				Filter: &metupd.SearchI_Filter{},
-			},
-		},
-		// Case 2 ensures that create input with empty operator and property
-		// objects is not valid.
-		{
-			obj: &metupd.CreateI{
-				Filter: &metupd.SearchI_Filter{
-					Operator: []string{},
-					Property: []*metupd.SearchI_Filter_Property{},
+				Datapoint: []int64{
+					1604959525,
 				},
+				Text:     "Lorem ipsum ...",
+				Timeline: "tml-al9qy",
 			},
 		},
-		// Case 3 ensures that create input with timestamp properties is not
+		// Case 2 ensures that create input with too many datapoints is not
 		// valid.
 		{
 			obj: &metupd.CreateI{
-				Filter: &metupd.SearchI_Filter{
-					Operator: []string{
-						"any",
-					},
-					Property: []*metupd.SearchI_Filter_Property{
-						{
-							Timestamp: "1605025038",
-						},
-					},
+				Datapoint: []int64{
+					1604959525,
+					85,
+					2387,
 				},
+				Text:     "Lorem ipsum ...",
+				Timeline: "tml-al9qy",
 			},
 		},
-		// Case 4 ensures that create input with timestamp properties is not
-		// valid.
+		// Case 3 ensures that create input without text is not valid.
 		{
 			obj: &metupd.CreateI{
-				Filter: &metupd.SearchI_Filter{
-					Operator: []string{
-						"any",
-					},
-					Property: []*metupd.SearchI_Filter_Property{
-						{
-							Timestamp: "1605025038",
-						},
-						{
-							Timeline: "tml-al9qy",
-						},
-					},
+				Datapoint: []int64{
+					1604959525,
+					85,
 				},
+				Timeline: "tml-al9qy",
 			},
 		},
-		// Case 5 ensures that create input with timestamp properties is not
-		// valid.
+		// Case 4 ensures that create input without timeline is not valid.
 		{
 			obj: &metupd.CreateI{
-				Filter: &metupd.SearchI_Filter{
-					Operator: []string{
-						"any",
-					},
-					Property: []*metupd.SearchI_Filter_Property{
-						{
-							Timeline:  "tml-al9qy",
-							Timestamp: "1605025038",
-						},
-						{
-							Timeline: "tml-al9qy",
-						},
-					},
+				Datapoint: []int64{
+					1604959525,
+					85,
 				},
-			},
-		},
-		// Case 6 ensures that create input with multiple operators is not
-		// valid.
-		{
-			obj: &metupd.CreateI{
-				Filter: &metupd.SearchI_Filter{
-					Operator: []string{
-						"any",
-						"any",
-					},
-					Property: []*metupd.SearchI_Filter_Property{
-						{
-							Timeline: "tml-al9qy",
-						},
-						{
-							Timeline: "tml-i45kj",
-						},
-					},
-				},
-			},
-		},
-		// Case 7 ensures that create input with duplicated properties is not
-		// valid.
-		{
-			obj: &metupd.CreateI{
-				Filter: &metupd.SearchI_Filter{
-					Operator: []string{
-						"any",
-					},
-					Property: []*metupd.SearchI_Filter_Property{
-						{
-							Timeline: "tml-al9qy",
-						},
-						{
-							Timeline: "tml-al9qy",
-						},
-						{
-							Timeline: "tml-al9qy",
-						},
-					},
-				},
-			},
-		},
-		// Case 8 ensures that create input with a single property is not valid.
-		{
-			obj: &metupd.CreateI{
-				Filter: &metupd.SearchI_Filter{
-					Operator: []string{
-						"any",
-					},
-					Property: []*metupd.SearchI_Filter_Property{
-						{
-							Timeline: "tml-al9qy",
-						},
-					},
-				},
+				Text: "Lorem ipsum ...",
 			},
 		},
 	}
@@ -182,37 +98,23 @@ func Test_Timeline_Verify_Valid(t *testing.T) {
 		// Case 0 ensures that create input can be considered valid.
 		{
 			obj: &metupd.CreateI{
-				Filter: &metupd.SearchI_Filter{
-					Operator: []string{
-						"any",
-					},
-					Property: []*metupd.SearchI_Filter_Property{
-						{
-							Timeline: "tml-kj3h4",
-						},
-					},
+				Datapoint: []int64{
+					1605025038,
+					85,
 				},
+				Text:     "Lorem ipsum ...",
+				Timeline: "tml-al9qy",
 			},
 		},
-		// Case 1 ensures that create input can be considered valid.
+		// Case 0 ensures that create input can be considered valid.
 		{
 			obj: &metupd.CreateI{
-				Filter: &metupd.SearchI_Filter{
-					Operator: []string{
-						"any",
-					},
-					Property: []*metupd.SearchI_Filter_Property{
-						{
-							Timeline: "tml-al9qy",
-						},
-						{
-							Timeline: "tml-i45kj",
-						},
-						{
-							Timeline: "tml-kj3h4",
-						},
-					},
+				Datapoint: []int64{
+					1604959525,
+					2500,
 				},
+				Text:     "foo bar #hashtag",
+				Timeline: "tml-i45kj",
 			},
 		},
 	}

@@ -23,24 +23,18 @@ func (t *Timeline) Verify(obj *metric.SearchI) bool {
 	}
 
 	{
-		// Search requests without operator should be prohibited. The client
-		// needs to tell us exactly what we need to do.
-		if len(obj.Filter.Operator) != 1 {
-			return false
-		}
-
-		// This particular search implementation is to search for any matching
-		// property we can find. Anything else but the any operator is
-		// prohibited.
-		if obj.Filter.Operator[0] != "any" {
+		// Search requests must not provide any operator for this
+		// implementation. The client tells us exactly what we need to do with
+		// the single timeline ID they provide.
+		if len(obj.Filter.Operator) != 0 {
 			return false
 		}
 	}
 
 	{
-		// Searching without having any property given we can use to search for
-		// does not work. We always need to receive at least one property.
-		if len(obj.Filter.Property) < 2 {
+		// Searching using this implementation requires only a single timeline
+		// ID to be given.
+		if len(obj.Filter.Property) != 1 {
 			return false
 		}
 
@@ -50,51 +44,14 @@ func (t *Timeline) Verify(obj *metric.SearchI) bool {
 			if p.Timestamp != "" {
 				return false
 			}
-			// With this particular search implementation we require only
-			// timeline IDs to be given. If any timeline ID property is empty,
-			// we decline service for this request.
+			// With this particular search implementation we require only a
+			// single timeline ID to be given. If the timeline ID property is
+			// empty, we decline service for this request.
 			if p.Timeline == "" {
 				return false
 			}
 		}
 	}
 
-	{
-		var l []string
-
-		for _, p := range obj.Filter.Property {
-			l = append(l, p.Timeline)
-		}
-
-		// We do not want to do unnecessary work. We want clients to be aware of
-		// the search requests they are sending. Therefore we deny any
-		// duplicated properties.
-		if !unique(l) {
-			return false
-		}
-	}
-
 	return true
-}
-
-func unique(l []string) bool {
-	for _, s := range l {
-		if count(l, s) > 1 {
-			return false
-		}
-	}
-
-	return true
-}
-
-func count(l []string, s string) int {
-	var c int
-
-	for _, i := range l {
-		if i == s {
-			c++
-		}
-	}
-
-	return c
 }

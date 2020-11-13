@@ -1,7 +1,7 @@
 package timeline
 
 import (
-	"github.com/venturemark/apigengo/pkg/pbf/metric"
+	"github.com/venturemark/apigengo/pkg/pbf/metupd"
 )
 
 // Create provides a filter primitive to lookup metrics associated with a
@@ -28,6 +28,6 @@ import (
 // us to search for objects while having support for the "bet" operator. One
 // example is to show updates and metrics within a certain timerange.
 //
-func (t *Timeline) Create(obj *metric.CreateI) (*metric.CreateO, error) {
-	return &metric.CreateO{}, nil
+func (t *Timeline) Create(obj *metupd.CreateI) (*metupd.CreateO, error) {
+	return &metupd.CreateO{}, nil
 }

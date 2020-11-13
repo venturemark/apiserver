@@ -40,9 +40,6 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 		{
 			obj: &metric.SearchI{
 				Filter: &metric.SearchI_Filter{
-					Operator: []string{
-						"any",
-					},
 					Property: []*metric.SearchI_Filter_Property{
 						{
 							Timestamp: "1605025038",
@@ -56,9 +53,6 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 		{
 			obj: &metric.SearchI{
 				Filter: &metric.SearchI_Filter{
-					Operator: []string{
-						"any",
-					},
 					Property: []*metric.SearchI_Filter_Property{
 						{
 							Timestamp: "1605025038",
@@ -75,9 +69,6 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 		{
 			obj: &metric.SearchI{
 				Filter: &metric.SearchI_Filter{
-					Operator: []string{
-						"any",
-					},
 					Property: []*metric.SearchI_Filter_Property{
 						{
 							Timeline:  "tml-al9qy",
@@ -90,15 +81,11 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 				},
 			},
 		},
-		// Case 6 ensures that search input with multiple operators is not
+		// Case 6 ensures that search input with multiple timelines is not
 		// valid.
 		{
 			obj: &metric.SearchI{
 				Filter: &metric.SearchI_Filter{
-					Operator: []string{
-						"any",
-						"any",
-					},
 					Property: []*metric.SearchI_Filter_Property{
 						{
 							Timeline: "tml-al9qy",
@@ -110,8 +97,7 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 				},
 			},
 		},
-		// Case 7 ensures that search input with duplicated properties is not
-		// valid.
+		// Case 7 ensures that search input with operators is not valid.
 		{
 			obj: &metric.SearchI{
 				Filter: &metric.SearchI_Filter{
@@ -122,22 +108,18 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 						{
 							Timeline: "tml-al9qy",
 						},
-						{
-							Timeline: "tml-al9qy",
-						},
-						{
-							Timeline: "tml-al9qy",
-						},
 					},
 				},
 			},
 		},
-		// Case 8 ensures that search input with a single property is not valid.
+		// Case 8 ensures that search input with operators is not valid.
 		{
 			obj: &metric.SearchI{
 				Filter: &metric.SearchI_Filter{
 					Operator: []string{
 						"any",
+						"bet",
+						"not",
 					},
 					Property: []*metric.SearchI_Filter_Property{
 						{
@@ -183,9 +165,6 @@ func Test_Timeline_Verify_Valid(t *testing.T) {
 		{
 			obj: &metric.SearchI{
 				Filter: &metric.SearchI_Filter{
-					Operator: []string{
-						"any",
-					},
 					Property: []*metric.SearchI_Filter_Property{
 						{
 							Timeline: "tml-kj3h4",
@@ -198,18 +177,9 @@ func Test_Timeline_Verify_Valid(t *testing.T) {
 		{
 			obj: &metric.SearchI{
 				Filter: &metric.SearchI_Filter{
-					Operator: []string{
-						"any",
-					},
 					Property: []*metric.SearchI_Filter_Property{
 						{
-							Timeline: "tml-al9qy",
-						},
-						{
 							Timeline: "tml-i45kj",
-						},
-						{
-							Timeline: "tml-kj3h4",
 						},
 					},
 				},
