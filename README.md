@@ -59,9 +59,11 @@ Usage:
   apiserver daemon [flags]
 
 Flags:
-  -h, --help          help for daemon
-      --host string   The host for binding the grpc server to. (default "127.0.0.1")
-      --port string   The port for binding the grpc server to. (default "7777")
+      --apiserver-host string   The host for binding the grpc apiserver to. (default "127.0.0.1")
+      --apiserver-port string   The port for binding the grpc apiserver to. (default "7777")
+  -h, --help                    help for daemon
+      --redis-host string       The host for connecting with redis. (default "127.0.0.1")
+      --redis-port string       The port for connecting with redis. (default "6379")
 ```
 
 ```

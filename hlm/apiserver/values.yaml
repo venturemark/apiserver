@@ -1,7 +1,7 @@
 port: 7777
 cluster:
-  name: "kia02"
-  zone: "aws.venturemark.co"
+  name: ""
+  zone: ""
 image:
   registry: "ghcr.io"
   organization: "venturemark"
