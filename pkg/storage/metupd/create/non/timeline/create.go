@@ -2,6 +2,7 @@ package timeline
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/venturemark/apigengo/pkg/pbf/metupd"
@@ -28,20 +29,19 @@ func (t *Timeline) Create(obj *metupd.CreateI) (*metupd.CreateO, error) {
 	}
 
 	// We store metrics in a sorted set. The elements of the sorted set are
-	// concatenated strings of n, x and y. Here n is the unix timestamp
-	// referring to the time right now. We track n as part of the element within
-	// the sorted set to guarantee to have a unique element even if the
-	// datapoints on a timeline ever appear twice. Future considerations should
-	// take redis streams into account for having a more suitable datatype. Here
-	// x by convention is the datapoint of the x axis of a graph. Here y by
-	// convention is the datapoint of the y axis of a graph. The scores of the
-	// sorted set are unix timestamps.
+	// concatenated strings of n and potentially multiple y coordinates. Here n
+	// is the unix timestamp referring to the time right now at creation time.
+	// We track n as part of the element within the sorted set to guarantee a
+	// unique element, even if the user's coordinates on a timeline ever appear
+	// twice. Future considerations should take redis streams into account for
+	// having a more suitable datatype. The scores of the sorted set are unix
+	// timestamps.
 	//
-	//     tml:tml-al9qy:met    [n,x,y] [n,x,y] ...
+	//     tml:tml-al9qy:met    [n,y,y] [n,y,y] ...
 	//
 	{
 		k := fmt.Sprintf("tml:%s:met", obj.Timeline)
-		e := fmt.Sprintf("%d,%d,%d", now, obj.Datapoint[0], obj.Datapoint[1])
+		e := joinYaxis(now, obj.Yaxis...)
 		s := float64(now)
 
 		err = t.redigo.Scored().Create(k, e, s)
@@ -67,4 +67,16 @@ func (t *Timeline) Create(obj *metupd.CreateI) (*metupd.CreateO, error) {
 	}
 
 	return &metupd.CreateO{Timestamp: now}, nil
+}
+
+func joinYaxis(now int64, yaxis ...int64) string {
+	l := []string{
+		fmt.Sprintf("%d", now),
+	}
+
+	for _, y := range yaxis {
+		l = append(l, fmt.Sprintf("%d", y))
+	}
+
+	return strings.Join(l, ",")
 }

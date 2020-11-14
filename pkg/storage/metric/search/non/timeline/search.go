@@ -20,55 +20,69 @@ func (t *Timeline) Search(obj *metric.SearchI) (*metric.SearchO, error) {
 	// having support for chunking.
 	//
 	// With redis we use ZRANGEBYSCORE which allows us to search for objects
-	// while having support for the "bet" operator. One example is to show
+	// while having support for the "bet" operator later. One example is to show
 	// metrics within a certain timerange.
 	//
+	// The data structure of the sorted set looks schematically similar to the
+	// example below.
 	//
-	//     tml:tml-al9qy:met    [n,x,y] [n,x,y] ...
+	//     tml:tml-al9qy:met    [n,y,y] [n,y,y] ...
 	//
 	var str []string
 	{
 		k := fmt.Sprintf("tml:%s:met", obj.Filter.Property[0].Timeline)
 
-		str, err = t.redigo.Scored().Search(k, 1000)
+		str, err = t.redigo.Scored().Search(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 	}
 
 	// We store metrics in a sorted set. The elements of the sorted set are
-	// concatenated strings of n, x and y. Here n is the unix timestamp. Here x
-	// by convention is the datapoint of the x axis of a graph. Here y by
-	// convention is the datapoint of the y axis of a graph. The scores of the
-	// sorted set are unix timestamps.
+	// concatenated strings of n and potentially multiple y coordinates. Here n
+	// is the unix timestamp of metric creation. Here any y coordinate
+	// represents a datapoint relevant to the user.
 	var res []*metric.SearchO_Result
-	for i := 0; i < len(str); i += 2 {
-		l := strings.Split(str[i], ",")
-
-		n, err := strconv.Atoi(l[0])
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-		x, err := strconv.Atoi(l[1])
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-		y, err := strconv.Atoi(l[2])
+	for _, s := range str {
+		now, yaxis, err := splitYaxis(s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 
 		r := &metric.SearchO_Result{
-			Datapoint: []int64{
-				int64(x),
-				int64(y),
-			},
+			Yaxis:     yaxis,
 			Timeline:  obj.Filter.Property[0].Timeline,
-			Timestamp: int64(n),
+			Timestamp: now,
 		}
 
 		res = append(res, r)
 	}
 
 	return &metric.SearchO{Result: res}, nil
+}
+
+func splitYaxis(s string) (int64, []int64, error) {
+	l := strings.Split(s, ",")
+
+	var n int64
+	{
+		i, err := strconv.Atoi(l[0])
+		if err != nil {
+			return 0, nil, tracer.Mask(err)
+		}
+
+		n = int64(i)
+	}
+
+	var y []int64
+	for _, p := range l[1:] {
+		i, err := strconv.Atoi(p)
+		if err != nil {
+			return 0, nil, tracer.Mask(err)
+		}
+
+		y = append(y, int64(i))
+	}
+
+	return n, y, nil
 }
