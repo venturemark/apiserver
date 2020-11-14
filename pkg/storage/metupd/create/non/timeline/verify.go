@@ -41,6 +41,10 @@ func (t *Timeline) Verify(obj *metupd.CreateI) (bool, error) {
 	}
 
 	{
+		// We always check the latest item of the sorted set to check the amount
+		// of datapoints on the y axis. Due to this very check the consistency
+		// of the sorted set is ensured, which means that lookup up a single
+		// element of the sorted set is sufficient.
 		k := fmt.Sprintf("tml:%s:met", obj.Timeline)
 
 		s, err := t.redigo.Scored().Search(k, 0, 1)
@@ -48,6 +52,12 @@ func (t *Timeline) Verify(obj *metupd.CreateI) (bool, error) {
 			return false, tracer.Mask(err)
 		}
 
+		// The elements of the sorted set are comma separated. Before comparing
+		// the amount of y axis coordinates we need to remove the unix timestamp
+		// from the list of elements, which is why we do -1 below. Then we
+		// compare the amount of y axis coordinates given by the user input with
+		// what we found in the sorted set. These two numbers must always match.
+		// Otherwise the graphs on a timeline become incomprehensible.
 		var c int
 		var y int
 		if len(s) == 1 {
