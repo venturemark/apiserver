@@ -66,7 +66,7 @@ spec:
         # based on the port forwarding configured in the kind cluster. In our
         # virtual service here we do match traffic based on this port in order
         # to do proper routing when everything comes from localhost.
-        - port: 30003
+        - port: 30007
         {{- end }}
       route:
         - destination:
