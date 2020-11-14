@@ -10,7 +10,7 @@ import (
 	redigofake "github.com/xh3b4sd/redigo/fake"
 )
 
-func Test_Timeline_Verify_Invalid(t *testing.T) {
+func Test_Timeline_Verify_Bool_False(t *testing.T) {
 	testCases := []struct {
 		obj *metric.SearchI
 	}{
@@ -148,7 +148,10 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 				}
 			}
 
-			ok := tml.Verify(tc.obj)
+			ok, err := tml.Verify(tc.obj)
+			if err != nil {
+				t.Fatal(err)
+			}
 
 			if ok != false {
 				t.Fatalf("\n\n%s\n", cmp.Diff(ok, false))
@@ -157,7 +160,7 @@ func Test_Timeline_Verify_Invalid(t *testing.T) {
 	}
 }
 
-func Test_Timeline_Verify_Valid(t *testing.T) {
+func Test_Timeline_Verify_Bool_True(t *testing.T) {
 	testCases := []struct {
 		obj *metric.SearchI
 	}{
@@ -204,7 +207,10 @@ func Test_Timeline_Verify_Valid(t *testing.T) {
 				}
 			}
 
-			ok := tml.Verify(tc.obj)
+			ok, err := tml.Verify(tc.obj)
+			if err != nil {
+				t.Fatal(err)
+			}
 
 			if ok != true {
 				t.Fatalf("\n\n%s\n", cmp.Diff(ok, true))
