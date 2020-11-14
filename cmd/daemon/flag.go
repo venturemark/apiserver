@@ -34,10 +34,10 @@ func (f *flag) Validate() error {
 	}
 
 	{
-		if f.ApiServer.Host == "" {
+		if f.Redis.Host == "" {
 			return tracer.Maskf(invalidFlagError, "--redis-host must not be empty")
 		}
-		if f.ApiServer.Port == "" {
+		if f.Redis.Port == "" {
 			return tracer.Maskf(invalidFlagError, "--redis-port must not be empty")
 		}
 	}
