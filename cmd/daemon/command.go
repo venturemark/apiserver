@@ -3,11 +3,7 @@ package daemon
 import (
 	"github.com/spf13/cobra"
 	"github.com/xh3b4sd/logger"
-	"github.com/xh3b4sd/redigo"
-	"github.com/xh3b4sd/redigo/client"
 	"github.com/xh3b4sd/tracer"
-
-	"github.com/venturemark/apiserver/pkg/storage"
 )
 
 const (
@@ -25,39 +21,13 @@ func New(config Config) (*cobra.Command, error) {
 		return nil, tracer.Maskf(invalidConfigError, "%T.Logger must not be empty", config)
 	}
 
-	var err error
-
-	var r redigo.Interface
-	{
-		c := client.Config{}
-
-		r, err = client.New(c)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
-	var s *storage.Storage
-	{
-		c := storage.Config{
-			Logger: config.Logger,
-			Redigo: r,
-		}
-
-		s, err = storage.New(c)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
 	var c *cobra.Command
 	{
 		f := &flag{}
 
 		r := &runner{
-			flag:    f,
-			logger:  config.Logger,
-			storage: s,
+			flag:   f,
+			logger: config.Logger,
 		}
 
 		c = &cobra.Command{

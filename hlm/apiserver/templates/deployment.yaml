@@ -17,6 +17,9 @@ spec:
       containers:
         - name: "{{ .Release.Name }}"
           image: "{{ .Values.image.registry }}/{{ .Values.image.organization }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          args:
+            - daemon
+            - --redis-host="redis"
           ports:
             - name: "grpc"
               containerPort: {{ .Values.port }}
