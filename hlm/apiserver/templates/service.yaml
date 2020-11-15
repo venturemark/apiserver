@@ -19,4 +19,4 @@ spec:
     app.kubernetes.io/name: "{{ .Release.Name }}"
   ports:
     - name: "grpc"
-      port: {{ .Values.port }}
+      port: {{ .Values.apiserver.port }}

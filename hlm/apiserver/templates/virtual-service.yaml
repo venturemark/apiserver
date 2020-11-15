@@ -72,4 +72,4 @@ spec:
         - destination:
             host: "{{ .Release.Name }}"
             port:
-              number: {{ .Values.port }}
+              number: {{ .Values.apiserver.port }}

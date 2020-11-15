@@ -1,4 +1,6 @@
-port: 7777
+apiserver:
+  port: 7777
+  replica: 4
 cluster:
   name: ""
   zone: ""

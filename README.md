@@ -21,7 +21,7 @@ grpcurl apiserver.kia02.aws.venturemark.co:443 post.API/Search
 ### OSX
 
 ```
-helm -n infra install apiserver ./hlm/apiserver --set "image.tag=f8585a447ff9f226afbfc41b30f100eec3875b07"
+helm -n infra install apiserver ./hlm/apiserver --set "apiserver.replica=1" --set "image.tag=f8585a447ff9f226afbfc41b30f100eec3875b07"
 ```
 
 ```
