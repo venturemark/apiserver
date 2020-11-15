@@ -1,7 +1,9 @@
-port: 7777
+apiserver:
+  port: 7777
+  replica: 4
 cluster:
-  name: "kia02"
-  zone: "aws.venturemark.co"
+  name: ""
+  zone: ""
 image:
   registry: "ghcr.io"
   organization: "venturemark"

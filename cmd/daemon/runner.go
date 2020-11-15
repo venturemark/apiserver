@@ -2,9 +2,12 @@ package daemon
 
 import (
 	"context"
+	"net"
 
 	"github.com/spf13/cobra"
 	"github.com/xh3b4sd/logger"
+	"github.com/xh3b4sd/redigo"
+	"github.com/xh3b4sd/redigo/client"
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/handler"
@@ -15,9 +18,8 @@ import (
 )
 
 type runner struct {
-	flag    *flag
-	logger  logger.Interface
-	storage *storage.Storage
+	flag   *flag
+	logger logger.Interface
 }
 
 func (r *runner) Run(cmd *cobra.Command, args []string) error {
@@ -39,11 +41,36 @@ func (r *runner) Run(cmd *cobra.Command, args []string) error {
 func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) error {
 	var err error
 
+	var redisClient redigo.Interface
+	{
+		c := client.Config{
+			Address: net.JoinHostPort(r.flag.Redis.Host, r.flag.Redis.Port),
+		}
+
+		redisClient, err = client.New(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
+
+	var redisStorage *storage.Storage
+	{
+		c := storage.Config{
+			Logger: r.logger,
+			Redigo: redisClient,
+		}
+
+		redisStorage, err = storage.New(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
+
 	var metricHandler *metric.Handler
 	{
 		c := metric.HandlerConfig{
 			Logger:  r.logger,
-			Storage: r.storage,
+			Storage: redisStorage,
 		}
 
 		metricHandler, err = metric.NewHandler(c)
@@ -56,7 +83,7 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 	{
 		c := metupd.HandlerConfig{
 			Logger:  r.logger,
-			Storage: r.storage,
+			Storage: redisStorage,
 		}
 
 		metupdHandler, err = metupd.NewHandler(c)
@@ -74,8 +101,8 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 				metupdHandler,
 			},
 
-			Host: r.flag.Host,
-			Port: r.flag.Port,
+			Host: r.flag.ApiServer.Host,
+			Port: r.flag.ApiServer.Port,
 		}
 
 		g, err = grpc.NewServer(c)

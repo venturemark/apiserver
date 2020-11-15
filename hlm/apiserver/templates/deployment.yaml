@@ -5,7 +5,7 @@ metadata:
   labels:
     app.kubernetes.io/name: "{{ .Release.Name }}"
 spec:
-  replicas: 4
+  replicas: {{ .Values.apiserver.replica }}
   selector:
     matchLabels:
       app.kubernetes.io/name: "{{ .Release.Name }}"
@@ -17,8 +17,11 @@ spec:
       containers:
         - name: "{{ .Release.Name }}"
           image: "{{ .Values.image.registry }}/{{ .Values.image.organization }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          args:
+            - daemon
+            - --redis-host=redis-master.infra.svc.cluster.local
           ports:
             - name: "grpc"
-              containerPort: {{ .Values.port }}
+              containerPort: {{ .Values.apiserver.port }}
       imagePullSecrets:
         - name: "pull-secret"
