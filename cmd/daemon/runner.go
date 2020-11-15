@@ -41,6 +41,22 @@ func (r *runner) Run(cmd *cobra.Command, args []string) error {
 func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) error {
 	var err error
 
+	{
+		var res []string
+
+		host := r.flag.Redis.Host
+
+		r.logger.Log(ctx, "level", "info", "message", "resolving host", "host", host)
+		res, err = net.LookupHost(host)
+		if err != nil {
+			r.logger.Log(ctx, "level", "error", "message", "resolving failed", "stack", tracer.JSON(err), "host", host)
+		}
+
+		for _, a := range res {
+			r.logger.Log(ctx, "level", "info", "message", "resolved host", "host", host, "address", a)
+		}
+	}
+
 	var redisClient redigo.Interface
 	{
 		c := client.Config{
