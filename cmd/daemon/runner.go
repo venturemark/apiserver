@@ -13,6 +13,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/handler"
 	"github.com/venturemark/apiserver/pkg/handler/metric"
 	"github.com/venturemark/apiserver/pkg/handler/metupd"
+	"github.com/venturemark/apiserver/pkg/handler/update"
 	"github.com/venturemark/apiserver/pkg/server/grpc"
 	"github.com/venturemark/apiserver/pkg/storage"
 )
@@ -92,6 +93,19 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 		}
 	}
 
+	var updateHandler *update.Handler
+	{
+		c := update.HandlerConfig{
+			Logger:  r.logger,
+			Storage: redisStorage,
+		}
+
+		updateHandler, err = update.NewHandler(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
+
 	var g *grpc.Server
 	{
 		c := grpc.ServerConfig{
@@ -99,6 +113,7 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 			Handlers: []handler.Interface{
 				metricHandler,
 				metupdHandler,
+				updateHandler,
 			},
 
 			Host: r.flag.ApiServer.Host,
