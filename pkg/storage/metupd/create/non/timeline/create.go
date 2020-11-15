@@ -31,7 +31,8 @@ func (t *Timeline) Create(obj *metupd.CreateI) (*metupd.CreateO, error) {
 	// We store metrics in a sorted set. The elements of the sorted set are
 	// concatenated strings of n and potentially multiple y coordinates. Here n
 	// is the unix timestamp referring to the time right now at creation time.
-	// We track n as part of the element within the sorted set to guarantee a
+	// Here any y coordinate represents a datapoint relevant to the user. We
+	// track n as part of the element within the sorted set to guarantee a
 	// unique element, even if the user's coordinates on a timeline ever appear
 	// twice. Future considerations should take redis streams into account for
 	// having a more suitable datatype. The scores of the sorted set are unix
@@ -51,13 +52,19 @@ func (t *Timeline) Create(obj *metupd.CreateI) (*metupd.CreateO, error) {
 	}
 
 	// We store updates in a sorted set. The elements of the sorted set are
-	// strings of the user's natural language in written form.
+	// concatenated strings of n and t. Here n is the unix timestamp referring
+	// to the time right now at creation time. Here t is the user's natural
+	// language in written form. We track n as part of the element within the
+	// sorted set to guarantee a unique element, even if the user's coordinates
+	// on a timeline ever appear twice. Future considerations should take redis
+	// streams into account for having a more suitable datatype. The scores of
+	// the sorted set are unix timestamps.
 	//
-	//     tml:tml-al9qy:upd    [Lorem ipsum ...] [Lorem ipsum ...] ...
+	//     tml:tml-al9qy:upd    [n,t] [n,t] ...
 	//
 	{
 		k := fmt.Sprintf("tml:%s:upd", obj.Timeline)
-		e := obj.Text
+		e := fmt.Sprintf("%d,%s", now, obj.Text)
 		s := float64(now)
 
 		err = t.redigo.Scored().Create(k, e, s)

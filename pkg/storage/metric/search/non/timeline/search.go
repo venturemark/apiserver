@@ -44,7 +44,7 @@ func (t *Timeline) Search(obj *metric.SearchI) (*metric.SearchO, error) {
 	// represents a datapoint relevant to the user.
 	var res []*metric.SearchO_Result
 	for _, s := range str {
-		now, yaxis, err := splitYaxis(s)
+		now, yaxis, err := splitElement(s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -61,7 +61,7 @@ func (t *Timeline) Search(obj *metric.SearchI) (*metric.SearchO, error) {
 	return &metric.SearchO{Result: res}, nil
 }
 
-func splitYaxis(s string) (int64, []int64, error) {
+func splitElement(s string) (int64, []int64, error) {
 	l := strings.Split(s, ",")
 
 	var n int64
