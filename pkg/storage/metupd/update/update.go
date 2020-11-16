@@ -1,11 +1,11 @@
-package create
+package update
 
 import (
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/storage/metupd/create/non"
+	"github.com/venturemark/apiserver/pkg/storage/metupd/update/non"
 )
 
 type Config struct {
@@ -13,11 +13,11 @@ type Config struct {
 	Redigo redigo.Interface
 }
 
-type Create struct {
+type Update struct {
 	Non *non.Non
 }
 
-func New(config Config) (*Create, error) {
+func New(config Config) (*Update, error) {
 	var err error
 
 	var n *non.Non
@@ -33,9 +33,9 @@ func New(config Config) (*Create, error) {
 		}
 	}
 
-	c := &Create{
+	u := &Update{
 		Non: n,
 	}
 
-	return c, nil
+	return u, nil
 }

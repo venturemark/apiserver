@@ -193,12 +193,12 @@ github.com/stretchr/testify v1.5.1 h1:nOGnQDM7FYENwehXlg/kFVnos3rEvtKTjRvOWSzb6H
 github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5cxcmMvtA=
 github.com/subosito/gotenv v1.2.0/go.mod h1:N0PQaV/YGNqwC0u51sEeR/aUtSLEXKX9iv69rRypqCw=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
-github.com/venturemark/apigengo v0.0.0-20201115190543-a3079e2a05e4 h1:u0y6kOjCOtOoFm6tNzhhcuSe5Jt2aNILdOMa4/KZo3g=
-github.com/venturemark/apigengo v0.0.0-20201115190543-a3079e2a05e4/go.mod h1:1H03FtN0jnnENa+gdfCRwOTrJVG6c8ztI4EWHRGpD4A=
+github.com/venturemark/apigengo v0.0.0-20201116185925-58bdee7b1746 h1:4DveHNWXHe2Dpj0FYMB6gLN0mAo8KHCPOpA5ZgtHHSw=
+github.com/venturemark/apigengo v0.0.0-20201116185925-58bdee7b1746/go.mod h1:1H03FtN0jnnENa+gdfCRwOTrJVG6c8ztI4EWHRGpD4A=
 github.com/xh3b4sd/logger v0.1.2 h1:zEE3obzyrGofvTNbT+T2U654e9XwqmGbzyktdRB1BR8=
 github.com/xh3b4sd/logger v0.1.2/go.mod h1:/mTz2elyBeH3rPq5vEqAJRWYt/6huhY/b3Hrzych2GE=
-github.com/xh3b4sd/redigo v0.2.0 h1:wldR7i3j0wMjOwNK4OYuTI/sog6gfXwhH5sI4vEwoXI=
-github.com/xh3b4sd/redigo v0.2.0/go.mod h1:BILWOYa0jGb1rACFyBQCKdoj9LAkSErq8xyi7sDiaMk=
+github.com/xh3b4sd/redigo v0.2.1-0.20201116184302-0980f1ebb2c0 h1:H6n72EvGIoDYsCUX4vU9HZkNBsLWvEqC7Za0RYPZqmU=
+github.com/xh3b4sd/redigo v0.2.1-0.20201116184302-0980f1ebb2c0/go.mod h1:BILWOYa0jGb1rACFyBQCKdoj9LAkSErq8xyi7sDiaMk=
 github.com/xh3b4sd/tracer v0.3.1 h1:wv4Cy/u/xLXLUJeKQWeiR+aU4mywj2f8PkQVda1EXKQ=
 github.com/xh3b4sd/tracer v0.3.1/go.mod h1:ZOLvBVLrmNx3GLCL7j0vEGMuI3r5ltLFcmDjG/3nV7g=
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=

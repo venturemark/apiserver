@@ -1,11 +1,11 @@
-package create
+package non
 
 import (
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/storage/metupd/create/non"
+	"github.com/venturemark/apiserver/pkg/storage/metupd/update/non/timeline"
 )
 
 type Config struct {
@@ -13,29 +13,29 @@ type Config struct {
 	Redigo redigo.Interface
 }
 
-type Create struct {
-	Non *non.Non
+type Non struct {
+	Timeline *timeline.Timeline
 }
 
-func New(config Config) (*Create, error) {
+func New(config Config) (*Non, error) {
 	var err error
 
-	var n *non.Non
+	var t *timeline.Timeline
 	{
-		c := non.Config{
+		c := timeline.Config{
 			Logger: config.Logger,
 			Redigo: config.Redigo,
 		}
 
-		n, err = non.New(c)
+		t, err = timeline.New(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 	}
 
-	c := &Create{
-		Non: n,
+	n := &Non{
+		Timeline: t,
 	}
 
-	return c, nil
+	return n, nil
 }
