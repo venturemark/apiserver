@@ -11,16 +11,27 @@ import (
 	redigofake "github.com/xh3b4sd/redigo/fake"
 )
 
-func Test_Timeline_Verify_Bool_False(t *testing.T) {
+func Test_Timeline_Verify_Input_False(t *testing.T) {
 	testCases := []struct {
 		obj *metupd.UpdateI
 	}{
-		// Case 0 ensures that create input without any information provided is
+		// Case 0 ensures that update input without any information provided is
 		// not valid.
 		{
 			obj: &metupd.UpdateI{},
 		},
-		// Case 1 ensures that create input without text is not valid.
+		// Case 1 ensures that update input without timeline is not valid.
+		{
+			obj: &metupd.UpdateI{
+				Yaxis: []int64{
+					32,
+					85,
+				},
+				Text:      "Lorem ipsum ...",
+				Timestamp: 1605025038,
+			},
+		},
+		// Case 2 ensures that update input without timestamp is not valid.
 		{
 			obj: &metupd.UpdateI{
 				Yaxis: []int64{
@@ -28,16 +39,15 @@ func Test_Timeline_Verify_Bool_False(t *testing.T) {
 					85,
 				},
 				Timeline: "tml-al9qy",
+				Text:     "Lorem ipsum ...",
 			},
 		},
-		// Case 2 ensures that create input without timeline is not valid.
+		// Case 3 ensures that update input without datapoints and text is not
+		// valid.
 		{
 			obj: &metupd.UpdateI{
-				Yaxis: []int64{
-					32,
-					85,
-				},
-				Text: "Lorem ipsum ...",
+				Timeline:  "tml-al9qy",
+				Timestamp: 1605025038,
 			},
 		},
 	}
@@ -65,39 +75,41 @@ func Test_Timeline_Verify_Bool_False(t *testing.T) {
 			}
 
 			if ok != false {
-				t.Fatalf("\n\n%s\n", cmp.Diff(ok, false))
+				t.Fatalf("\n\n%s\n", cmp.Diff(false, ok))
 			}
 		})
 	}
 }
 
-func Test_Timeline_Verify_Bool_True(t *testing.T) {
+func Test_Timeline_Verify_Input_True(t *testing.T) {
 	testCases := []struct {
 		obj *metupd.UpdateI
 	}{
-		// Case 0 ensures that create input with only a single datapoint is
+		// Case 0 ensures that update input with only a single datapoint is
 		// valid.
 		{
 			obj: &metupd.UpdateI{
 				Yaxis: []int64{
 					32,
 				},
-				Text:     "Lorem ipsum ...",
-				Timeline: "tml-al9qy",
+				Text:      "Lorem ipsum ...",
+				Timeline:  "tml-al9qy",
+				Timestamp: 1605025038,
 			},
 		},
-		// Case 1 ensures that create input with multiple datapoints is valid.
+		// Case 1 ensures that update input with multiple datapoints is valid.
 		{
 			obj: &metupd.UpdateI{
 				Yaxis: []int64{
 					32,
 					85,
 				},
-				Text:     "Lorem ipsum ...",
-				Timeline: "tml-al9qy",
+				Text:      "Lorem ipsum ...",
+				Timeline:  "tml-al9qy",
+				Timestamp: 1605025038,
 			},
 		},
-		// Case 2 ensures that create input with multiple datapoints is valid.
+		// Case 2 ensures that update input with multiple datapoints is valid.
 		{
 			obj: &metupd.UpdateI{
 				Yaxis: []int64{
@@ -106,8 +118,28 @@ func Test_Timeline_Verify_Bool_True(t *testing.T) {
 					1,
 					2500,
 				},
-				Text:     "foo bar #hashtag",
-				Timeline: "tml-i45kj",
+				Text:      "foo bar #hashtag",
+				Timeline:  "tml-i45kj",
+				Timestamp: 1605025038,
+			},
+		},
+		// Case 3 ensures that update input without text is valid.
+		{
+			obj: &metupd.UpdateI{
+				Yaxis: []int64{
+					32,
+					85,
+				},
+				Timeline:  "tml-al9qy",
+				Timestamp: 1605025038,
+			},
+		},
+		// Case 4 ensures that update input without datapoints is valid.
+		{
+			obj: &metupd.UpdateI{
+				Text:      "Lorem ipsum ...",
+				Timeline:  "tml-al9qy",
+				Timestamp: 1605025038,
 			},
 		},
 	}
@@ -135,18 +167,18 @@ func Test_Timeline_Verify_Bool_True(t *testing.T) {
 			}
 
 			if ok != true {
-				t.Fatalf("\n\n%s\n", cmp.Diff(ok, true))
+				t.Fatalf("\n\n%s\n", cmp.Diff(true, ok))
 			}
 		})
 	}
 }
 
-func Test_Timeline_Verify_Search_False(t *testing.T) {
+func Test_Timeline_Verify_Redis_False(t *testing.T) {
 	testCases := []struct {
 		obj        *metupd.UpdateI
 		searchFake func() ([]string, error)
 	}{
-		// Case 0 ensures that create input with too many y axis coordinates is
+		// Case 0 ensures that update input with too many y axis coordinates is
 		// not valid.
 		{
 			obj: &metupd.UpdateI{
@@ -154,14 +186,15 @@ func Test_Timeline_Verify_Search_False(t *testing.T) {
 					32,
 					85,
 				},
-				Text:     "Lorem ipsum ...",
-				Timeline: "tml-al9qy",
+				Text:      "Lorem ipsum ...",
+				Timeline:  "tml-al9qy",
+				Timestamp: 1605025038,
 			},
 			searchFake: func() ([]string, error) {
 				return []string{"1,2"}, nil
 			},
 		},
-		// Case 1 ensures that create input with too many y axis coordinates is
+		// Case 1 ensures that update input with too many y axis coordinates is
 		// not valid.
 		{
 			obj: &metupd.UpdateI{
@@ -171,28 +204,29 @@ func Test_Timeline_Verify_Search_False(t *testing.T) {
 					53,
 					12,
 				},
-				Text:     "Lorem ipsum ...",
-				Timeline: "tml-al9qy",
+				Timeline:  "tml-al9qy",
+				Timestamp: 1605025038,
 			},
 			searchFake: func() ([]string, error) {
 				return []string{"1,2"}, nil
 			},
 		},
-		// Case 2 ensures that create input with too few y axis coordinates is
+		// Case 2 ensures that update input with too few y axis coordinates is
 		// not valid.
 		{
 			obj: &metupd.UpdateI{
 				Yaxis: []int64{
 					32,
 				},
-				Text:     "Lorem ipsum ...",
-				Timeline: "tml-al9qy",
+				Text:      "Lorem ipsum ...",
+				Timeline:  "tml-al9qy",
+				Timestamp: 1605025038,
 			},
 			searchFake: func() ([]string, error) {
 				return []string{"1,2,3,4"}, nil
 			},
 		},
-		// Case 3 ensures that create input with too few y axis coordinates is
+		// Case 3 ensures that update input with too few y axis coordinates is
 		// not valid.
 		{
 			obj: &metupd.UpdateI{
@@ -200,8 +234,8 @@ func Test_Timeline_Verify_Search_False(t *testing.T) {
 					32,
 					85,
 				},
-				Text:     "Lorem ipsum ...",
-				Timeline: "tml-al9qy",
+				Timeline:  "tml-al9qy",
+				Timestamp: 1605025038,
 			},
 			searchFake: func() ([]string, error) {
 				return []string{"1,2,3,4"}, nil
@@ -244,12 +278,12 @@ func Test_Timeline_Verify_Search_False(t *testing.T) {
 	}
 }
 
-func Test_Timeline_Verify_Search_True(t *testing.T) {
+func Test_Timeline_Verify_Redis_True(t *testing.T) {
 	testCases := []struct {
 		obj        *metupd.UpdateI
 		searchFake func() ([]string, error)
 	}{
-		// Case 0 ensures that create input with the correct amount of y axis
+		// Case 0 ensures that update input with the correct amount of y axis
 		// coordinates is valid.
 		{
 			obj: &metupd.UpdateI{
@@ -257,14 +291,15 @@ func Test_Timeline_Verify_Search_True(t *testing.T) {
 					32,
 					85,
 				},
-				Text:     "Lorem ipsum ...",
-				Timeline: "tml-al9qy",
+				Text:      "Lorem ipsum ...",
+				Timeline:  "tml-al9qy",
+				Timestamp: 1605025038,
 			},
 			searchFake: func() ([]string, error) {
 				return []string{"1,2,3"}, nil
 			},
 		},
-		// Case 1 ensures that create input with the correct amount of y axis
+		// Case 1 ensures that update input with the correct amount of y axis
 		// coordinates is valid.
 		{
 			obj: &metupd.UpdateI{
@@ -272,8 +307,8 @@ func Test_Timeline_Verify_Search_True(t *testing.T) {
 					100,
 					150,
 				},
-				Text:     "Lorem ipsum ...",
-				Timeline: "tml-al9qy",
+				Timeline:  "tml-al9qy",
+				Timestamp: 1605025038,
 			},
 			searchFake: func() ([]string, error) {
 				return []string{"1,2,3"}, nil

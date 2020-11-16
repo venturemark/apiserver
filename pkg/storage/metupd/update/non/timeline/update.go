@@ -22,9 +22,10 @@ func (t *Timeline) Update(obj *metupd.UpdateI) (*metupd.UpdateO, error) {
 	// complex. An error will be returned if the sorted set or its alleged
 	// element does not exist. The bool met will be false if the metrics to
 	// update did in fact not change. Then no update will be performed under the
-	// hood.
+	// hood. Note that we should only perform the update if we are certain there
+	// was information provided for the update in the first place.
 	var met bool
-	{
+	if len(obj.Yaxis) != 0 {
 		k := fmt.Sprintf("tml:%s:met", obj.Timeline)
 		e := joinYaxis(obj.Timestamp, obj.Yaxis...)
 		s := float64(obj.Timestamp)
@@ -40,9 +41,10 @@ func (t *Timeline) Update(obj *metupd.UpdateI) (*metupd.UpdateO, error) {
 	// complex. An error will be returned if the sorted set or its alleged
 	// element does not exist. The bool upd will be false if the update to
 	// update did in fact not change. Then no update will be performed under the
-	// hood.
+	// hood. Note that we should only perform the update if we are certain there
+	// was information provided for the update in the first place.
 	var upd bool
-	{
+	if obj.Text != "" {
 		k := fmt.Sprintf("tml:%s:upd", obj.Timeline)
 		e := fmt.Sprintf("%d,%s", obj.Timestamp, obj.Text)
 		s := float64(obj.Timestamp)

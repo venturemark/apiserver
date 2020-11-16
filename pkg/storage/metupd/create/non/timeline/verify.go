@@ -15,32 +15,7 @@ func (t *Timeline) Verify(obj *metupd.CreateI) (bool, error) {
 		if len(obj.Yaxis) == 0 {
 			return false, nil
 		}
-	}
 
-	{
-		// Creating metric updates requires some text to be provided. Without
-		// text we cannot allow a metric update to be created.
-		if obj.Text == "" {
-			return false, nil
-		}
-
-		// Creating metric updates is limited to text with up to 280 characters.
-		// Nobody should be able to create metric updates with longer text.
-		if len(obj.Text) > 280 {
-			return false, nil
-		}
-	}
-
-	{
-		// Creating metric updates requires a timeline ID to be provided with
-		// which the metric and the update can be associated with. If the
-		// timeline ID is empty, we decline service for this request.
-		if obj.Timeline == "" {
-			return false, nil
-		}
-	}
-
-	{
 		// We always check the latest item of the sorted set to check the amount
 		// of datapoints on the y axis. Due to this very check the consistency
 		// of the sorted set is ensured, which means that lookup up a single
@@ -66,6 +41,29 @@ func (t *Timeline) Verify(obj *metupd.CreateI) (bool, error) {
 		}
 
 		if c != y {
+			return false, nil
+		}
+	}
+
+	{
+		// Creating metric updates requires some text to be provided. Without
+		// text we cannot allow a metric update to be created.
+		if obj.Text == "" {
+			return false, nil
+		}
+
+		// Creating metric updates is limited to text with up to 280 characters.
+		// Nobody should be able to create metric updates with longer text.
+		if len(obj.Text) > 280 {
+			return false, nil
+		}
+	}
+
+	{
+		// Creating metric updates requires a timeline ID to be provided with
+		// which the metric and the update can be associated with. If the
+		// timeline ID is empty, we decline service for this request.
+		if obj.Timeline == "" {
 			return false, nil
 		}
 	}
