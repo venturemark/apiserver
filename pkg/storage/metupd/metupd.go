@@ -6,6 +6,7 @@ import (
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/storage/metupd/create"
+	"github.com/venturemark/apiserver/pkg/storage/metupd/update"
 )
 
 type Config struct {
@@ -15,6 +16,7 @@ type Config struct {
 
 type MetUpd struct {
 	Create *create.Create
+	Update *update.Update
 }
 
 func New(config Config) (*MetUpd, error) {
@@ -33,8 +35,22 @@ func New(config Config) (*MetUpd, error) {
 		}
 	}
 
+	var upd *update.Update
+	{
+		c := update.Config{
+			Logger: config.Logger,
+			Redigo: config.Redigo,
+		}
+
+		upd, err = update.New(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	m := &MetUpd{
 		Create: cre,
+		Update: upd,
 	}
 
 	return m, nil
