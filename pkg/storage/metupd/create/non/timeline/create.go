@@ -3,7 +3,6 @@ package timeline
 import (
 	"fmt"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/venturemark/apigengo/pkg/pbf/metupd"
@@ -11,6 +10,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
+	"github.com/venturemark/apiserver/pkg/value/metric/timeline/data"
 )
 
 // Create provides a storage primitive to persist metric updates associated with
@@ -42,7 +42,7 @@ func (t *Timeline) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	// even if the user's coordinates on a timeline ever appear twice.
 	{
 		k := fmt.Sprintf(key.Timeline, req.Obj.Metadata[metadata.Timeline])
-		e := joinElement(now, req.Obj.Property.Data...)
+		e := data.Join(now, toInterface(req.Obj.Property.Data))
 		s := float64(now)
 
 		err = t.redigo.Scored().Create(k, e, s)
@@ -82,22 +82,12 @@ func (t *Timeline) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	return res, nil
 }
 
-func joinElement(now int64, dat ...*metupd.CreateI_Obj_Property_Data) string {
-	l := []string{
-		strconv.Itoa(int(now)),
-	}
+func toInterface(dat []*metupd.CreateI_Obj_Property_Data) []data.Interface {
+	var l []data.Interface
 
 	for _, d := range dat {
-		s := []string{
-			d.Space,
-		}
-
-		for _, d := range d.Value {
-			l = append(l, strconv.Itoa(int(d)))
-		}
-
-		l = append(l, strings.Join(s, ","))
+		l = append(l, d)
 	}
 
-	return strings.Join(l, ":")
+	return l
 }

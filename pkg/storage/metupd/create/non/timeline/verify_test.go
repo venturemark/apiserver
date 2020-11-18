@@ -120,6 +120,100 @@ func Test_Timeline_Verify_Input_False(t *testing.T) {
 				},
 			},
 		},
+		// Case 6 ensures that create input with different amounts of datapoints
+		// per dimension is not valid.
+		{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "x",
+								Value: []int64{
+									32,
+								},
+							},
+							{
+								Space: "y",
+								Value: []int64{
+									32,
+									85,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
+				},
+			},
+		},
+		// Case 7 ensures that create input with a duplicated dimensional space
+		// is not valid.
+		{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "y",
+								Value: []int64{
+									32,
+								},
+							},
+							{
+								Space: "y",
+								Value: []int64{
+									32,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
+				},
+			},
+		},
+		// Case 8 ensures that create input with the reserved dimensional space
+		// t is not valid.
+		{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "x",
+								Value: []int64{
+									73,
+									91,
+								},
+							},
+							{
+								Space: "y",
+								Value: []int64{
+									22,
+									94,
+								},
+							},
+							{
+								Space: "t",
+								Value: []int64{
+									20,
+									16,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
+				},
+			},
+		},
 	}
 
 	for i, tc := range testCases {
@@ -223,6 +317,73 @@ func Test_Timeline_Verify_Input_True(t *testing.T) {
 				},
 			},
 		},
+		// Case 3 ensures that create input with multiple dimensional spaces is
+		// valid.
+		{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "x",
+								Value: []int64{
+									32,
+									85,
+								},
+							},
+							{
+								Space: "y",
+								Value: []int64{
+									32,
+									85,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
+				},
+			},
+		},
+		// Case 4 ensures that create input with multiple dimensional spaces is
+		// valid.
+		{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "x",
+								Value: []int64{
+									73,
+									91,
+								},
+							},
+							{
+								Space: "y",
+								Value: []int64{
+									22,
+									94,
+								},
+							},
+							{
+								Space: "z",
+								Value: []int64{
+									20,
+									16,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
+				},
+			},
+		},
 	}
 
 	for i, tc := range testCases {
@@ -282,7 +443,7 @@ func Test_Timeline_Verify_Search_False(t *testing.T) {
 				},
 			},
 			searchFake: func() ([]string, error) {
-				return []string{"1,2"}, nil
+				return []string{"0:y,1"}, nil
 			},
 		},
 		// Case 1 ensures that create input with too many y axis coordinates is
@@ -310,7 +471,7 @@ func Test_Timeline_Verify_Search_False(t *testing.T) {
 				},
 			},
 			searchFake: func() ([]string, error) {
-				return []string{"1,2"}, nil
+				return []string{"0:y,1,2"}, nil
 			},
 		},
 		// Case 2 ensures that create input with too few y axis coordinates is
@@ -335,7 +496,7 @@ func Test_Timeline_Verify_Search_False(t *testing.T) {
 				},
 			},
 			searchFake: func() ([]string, error) {
-				return []string{"1,2,3,4"}, nil
+				return []string{"0:y,1,2,3,4"}, nil
 			},
 		},
 		// Case 3 ensures that create input with too few y axis coordinates is
@@ -361,7 +522,29 @@ func Test_Timeline_Verify_Search_False(t *testing.T) {
 				},
 			},
 			searchFake: func() ([]string, error) {
-				return []string{"1,2,3,4"}, nil
+				return []string{"0:y,1,2,3,4"}, nil
+			},
+		},
+		// Case 4 ensures that create input with dimensional space identified
+		// by anything other than a single character is not valid.
+		{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "toolong",
+								Value: []int64{
+									32,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
+				},
 			},
 		},
 	}
@@ -429,7 +612,7 @@ func Test_Timeline_Verify_Search_True(t *testing.T) {
 				},
 			},
 			searchFake: func() ([]string, error) {
-				return []string{"1,2,3"}, nil
+				return []string{"0:y,1,2"}, nil
 			},
 		},
 		// Case 1 ensures that create input with the correct amount of y axis
@@ -457,7 +640,44 @@ func Test_Timeline_Verify_Search_True(t *testing.T) {
 				},
 			},
 			searchFake: func() ([]string, error) {
-				return []string{"1,2,3,4"}, nil
+				return []string{"0:y,1,2,3,4"}, nil
+			},
+		},
+		// Case 2 ensures that create input with the correct amount of y axis
+		// coordinates is valid.
+		{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "x",
+								Value: []int64{
+									32,
+									85,
+									1,
+									2500,
+								},
+							},
+							{
+								Space: "y",
+								Value: []int64{
+									32,
+									85,
+									1,
+									2500,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
+				},
+			},
+			searchFake: func() ([]string, error) {
+				return []string{"0:x,1,2,3,4", "0:y,1,2,3,4"}, nil
 			},
 		},
 	}
