@@ -21,10 +21,10 @@ docker run --rm -p 127.0.0.1:6379:6379 redis
 
 
 Searching for metrics the first time against the apiserver does not result in
-any data, since non got created yet. Note you need `grpcurl` installed.
+any data, since none got created yet. Note you need `grpcurl` installed.
 
 ```
-$ grpcurl -plaintext -d '{"filter":{"property":[{"timeline":"tml-al9qy"}]}}' 127.0.0.1:7777 metric.API.Search
+$ grpcurl -d '{"obj":[{"metadata":{"venturemark.co/timeline":"tml-kn433"}}]}' -plaintext 127.0.0.1:7777 metric.API.Search
 {
 
 }
@@ -36,27 +36,85 @@ Creating the first metric update against the apiserver can be done like this.
 Right now only the timestamp of creation is returned.
 
 ```
-$ grpcurl -plaintext -d '{"yaxis":[5,40],"text":"Lorem ipsum ...","timeline":"tml-al9qy"}' 127.0.0.1:7777 metupd.API.Create
+$ grpcurl -d '{"obj":{"metadata":{"venturemark.co/timeline":"tml-kn433"},"property":{"data":[{"space":"y","value":[23]}],"text":"foo bar baz"}}}' -plaintext 127.0.0.1:7777 metupd.API.Create
 {
-  "timestamp": "1605311478"
+  "obj": {
+    "metadata": {
+      "venturemark.co/unixtime": "1605741130"
+    }
+  }
 }
 ```
 
 
 
-Searching for metrics again shows the metric object we just created.
+Searching for metrics again shows the metric object we just created. Note the
+automatically injected dimension t tracking the unix timestamp of each datapoint
+emitted.
 
 ```
-$ grpcurl -plaintext -d '{"filter":{"property":[{"timeline":"tml-al9qy"}]}}' 127.0.0.1:7777 metric.API.Search
+$ grpcurl -d '{"obj":[{"metadata":{"venturemark.co/timeline":"tml-kn433"}}]}' -plaintext 127.0.0.1:7777 metric.API.Search
 {
-  "result": [
+  "obj": [
     {
-      "yaxis": [
-        "5",
-        "40"
-      ],
-      "timeline": "tml-al9qy",
-      "timestamp": "1605311478"
+      "metadata": {
+        "venturemark.co/timeline": "tml-kn433",
+        "venturemark.co/unixtime": "1605741130"
+      },
+      "property": {
+        "data": [
+          {
+            "space": "t",
+            "value": [
+              "1605741130"
+            ]
+          },
+          {
+            "space": "y",
+            "value": [
+              "23"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+
+
+Updating the text of a metric update is shown below. Note the response metadata
+indicating which property got updated.
+
+```
+$ grpcurl -d '{"obj":{"metadata":{"venturemark.co/timeline":"tml-kn433","venturemark.co/unixtime": "1605741130"},"property":{"text":"changed"}}}' -plaintext 127.0.0.1:7777 metupd.API.Update
+{
+  "obj": {
+    "metadata": {
+      "update.venturemark.co/status": "updated"
+    }
+  }
+}
+```
+
+
+
+Searching for the text of a metric update shows the updated content after the
+update call above.
+
+```
+$ grpcurl -d '{"obj":[{"metadata":{"venturemark.co/timeline":"tml-kn433"}}]}' -plaintext 127.0.0.1:7777 update.API.Search
+{
+  "obj": [
+    {
+      "metadata": {
+        "venturemark.co/timeline": "tml-kn433",
+        "venturemark.co/unixtime": "1605741130"
+      },
+      "property": {
+        "text": "changed"
+      }
     }
   ]
 }

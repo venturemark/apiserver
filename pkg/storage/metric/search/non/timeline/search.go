@@ -54,6 +54,9 @@ func (t *Timeline) Search(req *metric.SearchI) (*metric.SearchO, error) {
 					metadata.Timeline: req.Obj[0].Metadata[metadata.Timeline],
 					metadata.Unixtime: strconv.Itoa(int(uni)),
 				},
+				Property: &metric.SearchO_Obj_Property{
+					Data: []*metric.SearchO_Obj_Property_Data{},
+				},
 			}
 
 			for _, v := range val {

@@ -16,7 +16,7 @@ func Join(now int64, val []Interface) string {
 		}
 
 		for _, v := range v.GetValue() {
-			l = append(l, strconv.Itoa(int(v)))
+			s = append(s, strconv.Itoa(int(v)))
 		}
 
 		l = append(l, strings.Join(s, ","))

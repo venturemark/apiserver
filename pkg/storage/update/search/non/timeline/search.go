@@ -27,7 +27,7 @@ func (t *Timeline) Search(req *update.SearchI) (*update.SearchO, error) {
 	// updates within a certain timerange.
 	var str []string
 	{
-		k := fmt.Sprintf(key.TimelineMetric, req.Obj[0].Metadata[metadata.Timeline])
+		k := fmt.Sprintf(key.TimelineUpdate, req.Obj[0].Metadata[metadata.Timeline])
 		str, err = t.redigo.Scored().Search(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
