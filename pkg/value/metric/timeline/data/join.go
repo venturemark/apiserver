@@ -5,18 +5,18 @@ import (
 	"strings"
 )
 
-func Join(now int64, dat []Interface) string {
+func Join(now int64, val []Interface) string {
 	l := []string{
 		strconv.Itoa(int(now)),
 	}
 
-	for _, d := range dat {
+	for _, v := range val {
 		s := []string{
-			d.GetSpace(),
+			v.GetSpace(),
 		}
 
-		for _, d := range d.GetValue() {
-			l = append(l, strconv.Itoa(int(d)))
+		for _, v := range v.GetValue() {
+			l = append(l, strconv.Itoa(int(v)))
 		}
 
 		l = append(l, strings.Join(s, ","))

@@ -113,12 +113,12 @@ func (t *Timeline) Verify(req *metupd.UpdateI) (bool, error) {
 				return false, tracer.Mask(err)
 			}
 			if len(s) == 1 {
-				_, v, err := data.Split(s[0])
+				_, val, err := data.Split(s[0])
 				if err != nil {
 					return false, tracer.Mask(err)
 				}
 
-				c := len(v[0].GetValue())
+				c := len(val[0].GetValue())
 				y := len(req.Obj.Property.Data[0].Value)
 				if c != y {
 					return false, nil
