@@ -39,7 +39,7 @@ func (t *Timeline) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
 	// was information provided for the update in the first place.
 	var met bool
 	if len(req.Obj.Property.Data) != 0 {
-		k := fmt.Sprintf(key.Timeline, req.Obj.Metadata[metadata.Timeline])
+		k := fmt.Sprintf(key.TimelineMetric, req.Obj.Metadata[metadata.Timeline])
 		e := data.Join(now, toInterface(req.Obj.Property.Data))
 		s := float64(now)
 
@@ -58,7 +58,7 @@ func (t *Timeline) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
 	// was information provided for the update in the first place.
 	var upd bool
 	if req.Obj.Property.Text != "" {
-		k := fmt.Sprintf("tml:%s:upd", req.Obj.Metadata[metadata.Timeline])
+		k := fmt.Sprintf(key.TimelineUpdate, req.Obj.Metadata[metadata.Timeline])
 		e := fmt.Sprintf("%s,%s", req.Obj.Metadata[metadata.Unixtime], req.Obj.Property.Text)
 		s := float64(now)
 

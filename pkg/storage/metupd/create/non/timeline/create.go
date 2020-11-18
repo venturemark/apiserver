@@ -41,7 +41,7 @@ func (t *Timeline) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	// part of the element within the sorted set to guarantee a unique element,
 	// even if the user's coordinates on a timeline ever appear twice.
 	{
-		k := fmt.Sprintf(key.Timeline, req.Obj.Metadata[metadata.Timeline])
+		k := fmt.Sprintf(key.TimelineMetric, req.Obj.Metadata[metadata.Timeline])
 		e := data.Join(now, toInterface(req.Obj.Property.Data))
 		s := float64(now)
 
@@ -58,7 +58,7 @@ func (t *Timeline) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	// sorted set to guarantee a unique element, even if the user's coordinates
 	// on a timeline ever appear twice.
 	{
-		k := fmt.Sprintf("tml:%s:upd", req.Obj.Metadata[metadata.Timeline])
+		k := fmt.Sprintf(key.TimelineUpdate, req.Obj.Metadata[metadata.Timeline])
 		e := fmt.Sprintf("%d,%s", now, req.Obj.Property.Text)
 		s := float64(now)
 

@@ -107,7 +107,7 @@ func (t *Timeline) Verify(req *metupd.UpdateI) (bool, error) {
 			// of datapoints on the y axis. Due to this very check the consistency
 			// of the sorted set is ensured, which means that lookup up a single
 			// element of the sorted set is sufficient.
-			k := fmt.Sprintf(key.Timeline, req.Obj.Metadata[metadata.Timeline])
+			k := fmt.Sprintf(key.TimelineMetric, req.Obj.Metadata[metadata.Timeline])
 			s, err := t.redigo.Scored().Search(k, 0, 1)
 			if err != nil {
 				return false, tracer.Mask(err)

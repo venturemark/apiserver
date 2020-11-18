@@ -27,7 +27,7 @@ func (t *Timeline) Search(req *metric.SearchI) (*metric.SearchO, error) {
 	// metrics within a certain timerange.
 	var str []string
 	{
-		k := fmt.Sprintf(key.Timeline, req.Obj[0].Metadata[key.Timeline])
+		k := fmt.Sprintf(key.TimelineMetric, req.Obj[0].Metadata[metadata.Timeline])
 		str, err = t.redigo.Scored().Search(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -51,7 +51,7 @@ func (t *Timeline) Search(req *metric.SearchI) (*metric.SearchO, error) {
 
 			o := &metric.SearchO_Obj{
 				Metadata: map[string]string{
-					metadata.Timeline: req.Obj[0].Metadata[key.Timeline],
+					metadata.Timeline: req.Obj[0].Metadata[metadata.Timeline],
 					metadata.Unixtime: strconv.Itoa(int(uni)),
 				},
 			}

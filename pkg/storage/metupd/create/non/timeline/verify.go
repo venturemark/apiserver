@@ -88,7 +88,7 @@ func (t *Timeline) Verify(req *metupd.CreateI) (bool, error) {
 		// timeline become incomprehensible. Note that the consistency of the
 		// dimensions given is already verified above. This means we can resort
 		// to only verify the first dimension given.
-		k := fmt.Sprintf(key.Timeline, req.Obj.Metadata[metadata.Timeline])
+		k := fmt.Sprintf(key.TimelineMetric, req.Obj.Metadata[metadata.Timeline])
 		s, err := t.redigo.Scored().Search(k, 0, 1)
 		if err != nil {
 			return false, tracer.Mask(err)

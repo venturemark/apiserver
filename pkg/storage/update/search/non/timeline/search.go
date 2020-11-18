@@ -7,13 +7,16 @@ import (
 
 	"github.com/venturemark/apigengo/pkg/pbf/update"
 	"github.com/xh3b4sd/tracer"
+
+	"github.com/venturemark/apiserver/pkg/key"
+	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
 // Search provides a filter primitive to lookup updates associated with a
 // timeline. A timeline refers to many updates. Updates can be found considering
 // their scope and time of creation. For more information about technical
 // details see the inline documentation.
-func (t *Timeline) Search(obj *update.SearchI) (*update.SearchO, error) {
+func (t *Timeline) Search(req *update.SearchI) (*update.SearchO, error) {
 	var err error
 
 	// With redis we use ZREVRANGE which allows us to search for objects while
@@ -22,16 +25,9 @@ func (t *Timeline) Search(obj *update.SearchI) (*update.SearchO, error) {
 	// With redis we use ZRANGEBYSCORE which allows us to search for objects
 	// while having support for the "bet" operator later. One example is to show
 	// updates within a certain timerange.
-	//
-	// The data structure of the sorted set looks schematically similar to the
-	// example below.
-	//
-	//     tml:tml-al9qy:upd    [n,t] [n,t] ...
-	//
 	var str []string
 	{
-		k := fmt.Sprintf("tml:%s:upd", obj.Filter.Property[0].Timeline)
-
+		k := fmt.Sprintf(key.TimelineMetric, req.Obj[0].Metadata[metadata.Timeline])
 		str, err = t.redigo.Scored().Search(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -39,25 +35,33 @@ func (t *Timeline) Search(obj *update.SearchI) (*update.SearchO, error) {
 	}
 
 	// We store updates in a sorted set. The elements of the sorted set are
-	// concatenated strings of n and t. Here n is the unix timestamp of update
-	// creation. Here t is the user's natural language in written form.
-	var res []*update.SearchO_Result
-	for _, s := range str {
-		now, text, err := splitElement(s)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
+	// concatenated strings of the unix timestamp of update creation and the
+	// user's natural language in written form.
+	var res *update.SearchO
+	{
+		res = &update.SearchO{}
 
-		r := &update.SearchO_Result{
-			Text:      text,
-			Timeline:  obj.Filter.Property[0].Timeline,
-			Timestamp: now,
-		}
+		for _, s := range str {
+			uni, val, err := splitElement(s)
+			if err != nil {
+				return nil, tracer.Mask(err)
+			}
 
-		res = append(res, r)
+			o := &update.SearchO_Obj{
+				Metadata: map[string]string{
+					metadata.Timeline: req.Obj[0].Metadata[metadata.Timeline],
+					metadata.Unixtime: strconv.Itoa(int(uni)),
+				},
+				Property: &update.SearchO_Obj_Property{
+					Text: val,
+				},
+			}
+
+			res.Obj = append(res.Obj, o)
+		}
 	}
 
-	return &update.SearchO{Result: res}, nil
+	return res, nil
 }
 
 func splitElement(s string) (int64, string, error) {
