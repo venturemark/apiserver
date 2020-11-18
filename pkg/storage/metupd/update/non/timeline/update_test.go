@@ -1,6 +1,7 @@
 package timeline
 
 import (
+	"reflect"
 	"strconv"
 	"testing"
 
@@ -9,73 +10,125 @@ import (
 	loggerfake "github.com/xh3b4sd/logger/fake"
 	"github.com/xh3b4sd/redigo"
 	redigofake "github.com/xh3b4sd/redigo/fake"
+
+	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
 func Test_Timeline_Update_Redis(t *testing.T) {
 	testCases := []struct {
-		obj        *metupd.UpdateI
+		req        *metupd.UpdateI
 		updateFake func() (bool, error)
-		met        bool
-		upd        bool
+		res        *metupd.UpdateO
 	}{
-		// Case 0 ensures that update input with yaxis and text updates yaxis
-		// and text each.
+		// Case 0 ensures that update input with data and text causes updates on
+		// data and text each.
 		{
-			obj: &metupd.UpdateI{
-				Yaxis: []int64{
-					32,
-					85,
+			req: &metupd.UpdateI{
+				Obj: &metupd.UpdateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+						metadata.Unixtime: "1605025038",
+					},
+					Property: &metupd.UpdateI_Obj_Property{
+						Data: []*metupd.UpdateI_Obj_Property_Data{
+							{
+								Space: "y",
+								Value: []int64{
+									32,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
 				},
-				Text:      "Lorem ipsum ...",
-				Timeline:  "tml-al9qy",
-				Timestamp: 1605025038,
 			},
 			updateFake: testReturn(true, true),
-			met:        true,
-			upd:        true,
-		},
-		// Case 1 ensures that update input with only yaxis updates yaxis only.
-		// Note that eventhough the mocked redis client returns true for the
-		// text update, we should receive false.
-		{
-			obj: &metupd.UpdateI{
-				Yaxis: []int64{
-					32,
-					85,
+			res: &metupd.UpdateO{
+				Obj: &metupd.UpdateO_Obj{
+					Metadata: map[string]string{
+						metadata.MetricStatus: "updated",
+						metadata.UpdateStatus: "updated",
+					},
 				},
-				Timeline:  "tml-al9qy",
-				Timestamp: 1605025038,
 			},
-			updateFake: testReturn(true, true),
-			met:        true,
-			upd:        false,
 		},
-		// Case 2 ensures that update input with only text updates text only.
-		// Note that eventhough the mocked redis client returns true for the
-		// axis update, we should receive false.
+		// Case 1 ensures that update input with only data causes updates on
+		// data only. Note that eventhough the mocked redis client returns true
+		// for the text update, we should receive false.
 		{
-			obj: &metupd.UpdateI{
-				Text:      "Lorem ipsum ...",
-				Timeline:  "tml-al9qy",
-				Timestamp: 1605025038,
+			req: &metupd.UpdateI{
+				Obj: &metupd.UpdateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+						metadata.Unixtime: "1605025038",
+					},
+					Property: &metupd.UpdateI_Obj_Property{
+						Data: []*metupd.UpdateI_Obj_Property_Data{
+							{
+								Space: "y",
+								Value: []int64{
+									32,
+								},
+							},
+						},
+					},
+				},
 			},
 			updateFake: testReturn(true, true),
-			met:        false,
-			upd:        true,
+			res: &metupd.UpdateO{
+				Obj: &metupd.UpdateO_Obj{
+					Metadata: map[string]string{
+						metadata.MetricStatus: "updated",
+					},
+				},
+			},
 		},
-		// Case 3 ensures that update input with neither yaxis nor text updates
-		// none of these resources. In fact this situation should never happen
-		// since it is supposed to be covered by Timeline.Verify. Note that
-		// eventhough the mocked redis client returns true for either of the
-		// axis and the text update, we should receive false for both cases.
+		// Case 2 ensures that update input with only text causes updates on
+		// text only. Note that eventhough the mocked redis client returns true
+		// for the axis update, we should receive false.
 		{
-			obj: &metupd.UpdateI{
-				Timeline:  "tml-al9qy",
-				Timestamp: 1605025038,
+			req: &metupd.UpdateI{
+				Obj: &metupd.UpdateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+						metadata.Unixtime: "1605025038",
+					},
+					Property: &metupd.UpdateI_Obj_Property{
+						Text: "Lorem ipsum ...",
+					},
+				},
 			},
 			updateFake: testReturn(true, true),
-			met:        false,
-			upd:        false,
+			res: &metupd.UpdateO{
+				Obj: &metupd.UpdateO_Obj{
+					Metadata: map[string]string{
+						metadata.UpdateStatus: "updated",
+					},
+				},
+			},
+		},
+		// Case 3 ensures that update input with data nor text does not cause
+		// updates of any of these resources. In fact this situation should
+		// never happen since it is supposed to be covered by Timeline.Verify.
+		// Note that eventhough the mocked redis client returns true for either
+		// of the axis and the text update, we should receive false for both
+		// cases.
+		{
+			req: &metupd.UpdateI{
+				Obj: &metupd.UpdateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+						metadata.Unixtime: "1605025038",
+					},
+					Property: &metupd.UpdateI_Obj_Property{},
+				},
+			},
+			updateFake: testReturn(true, true),
+			res: &metupd.UpdateO{
+				Obj: &metupd.UpdateO_Obj{
+					Metadata: map[string]string{},
+				},
+			},
 		},
 	}
 
@@ -102,15 +155,12 @@ func Test_Timeline_Update_Redis(t *testing.T) {
 				}
 			}
 
-			obj, err := tml.Update(tc.obj)
+			res, err := tml.Update(tc.req)
 			if err != nil {
 				t.Fatal(err)
 			}
-			if tc.met != obj.Metric {
-				t.Fatalf("\n\n%s\n", cmp.Diff(tc.met, obj.Metric))
-			}
-			if tc.upd != obj.Update {
-				t.Fatalf("\n\n%s\n", cmp.Diff(tc.upd, obj.Metric))
+			if !reflect.DeepEqual(tc.res, res) {
+				t.Fatalf("\n\n%s\n", cmp.Diff(tc.res, res))
 			}
 		})
 	}

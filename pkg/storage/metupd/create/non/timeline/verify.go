@@ -13,16 +13,17 @@ import (
 
 func (t *Timeline) Verify(req *metupd.CreateI) (bool, error) {
 	{
-		// Creating metric updates requires a timeline ID to be provided. This
-		// is used as common denominator for the metric and the update resource
-		// respectively. If the timeline ID is not given with the object
-		// metadata, we decline service for this request.
 		if req.Obj == nil {
 			return false, nil
 		}
 		if req.Obj.Metadata == nil {
 			return false, nil
 		}
+
+		// Creating metric updates requires a timeline ID to be provided. This
+		// is used as common denominator for the metric and the update resource
+		// respectively. If the timeline ID is not given with the object
+		// metadata, we decline service for this request.
 		if req.Obj.Metadata[metadata.Timeline] == "" {
 			return false, nil
 		}
@@ -70,7 +71,7 @@ func (t *Timeline) Verify(req *metupd.CreateI) (bool, error) {
 		}
 
 		// The amount of all datapoints must be equal across dimensions
-		// provided. We do not permit inconsistencies with the request data.
+		// provided. We do not permit inconsistencies within the request data.
 		for i, d := range req.Obj.Property.Data {
 			if i == 0 {
 				continue
