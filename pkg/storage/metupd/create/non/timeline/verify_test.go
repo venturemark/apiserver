@@ -9,35 +9,115 @@ import (
 	loggerfake "github.com/xh3b4sd/logger/fake"
 	"github.com/xh3b4sd/redigo"
 	redigofake "github.com/xh3b4sd/redigo/fake"
+
+	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
-func Test_Timeline_Verify_Bool_False(t *testing.T) {
+func Test_Timeline_Verify_Input_False(t *testing.T) {
 	testCases := []struct {
-		obj *metupd.CreateI
+		req *metupd.CreateI
 	}{
 		// Case 0 ensures that create input without any information provided is
 		// not valid.
 		{
-			obj: &metupd.CreateI{},
+			req: &metupd.CreateI{},
 		},
-		// Case 1 ensures that create input without text is not valid.
+		// Case 1 ensures that create input without metadata is not valid.
 		{
-			obj: &metupd.CreateI{
-				Yaxis: []int64{
-					32,
-					85,
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "y",
+								Value: []int64{
+									32,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
 				},
-				Timeline: "tml-al9qy",
 			},
 		},
 		// Case 2 ensures that create input without timeline is not valid.
 		{
-			obj: &metupd.CreateI{
-				Yaxis: []int64{
-					32,
-					85,
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "y",
+								Value: []int64{
+									32,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
 				},
-				Text: "Lorem ipsum ...",
+			},
+		},
+		// Case 3 ensures that create input without text is not valid.
+		{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "y",
+								Value: []int64{
+									32,
+									85,
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		// Case 4 ensures that create input without dimensional space is not valid.
+		{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "",
+								Value: []int64{
+									32,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
+				},
+			},
+		},
+		// Case 5 ensures that create input without datapoints is not valid.
+		{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "y",
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
+				},
 			},
 		},
 	}
@@ -59,7 +139,7 @@ func Test_Timeline_Verify_Bool_False(t *testing.T) {
 				}
 			}
 
-			ok, err := tml.Verify(tc.obj)
+			ok, err := tml.Verify(tc.req)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -71,43 +151,76 @@ func Test_Timeline_Verify_Bool_False(t *testing.T) {
 	}
 }
 
-func Test_Timeline_Verify_Bool_True(t *testing.T) {
+func Test_Timeline_Verify_Input_True(t *testing.T) {
 	testCases := []struct {
-		obj *metupd.CreateI
+		req *metupd.CreateI
 	}{
 		// Case 0 ensures that create input with only a single datapoint is
 		// valid.
 		{
-			obj: &metupd.CreateI{
-				Yaxis: []int64{
-					32,
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "y",
+								Value: []int64{
+									32,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
 				},
-				Text:     "Lorem ipsum ...",
-				Timeline: "tml-al9qy",
 			},
 		},
 		// Case 1 ensures that create input with multiple datapoints is valid.
 		{
-			obj: &metupd.CreateI{
-				Yaxis: []int64{
-					32,
-					85,
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "y",
+								Value: []int64{
+									32,
+									85,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
 				},
-				Text:     "Lorem ipsum ...",
-				Timeline: "tml-al9qy",
 			},
 		},
 		// Case 2 ensures that create input with multiple datapoints is valid.
 		{
-			obj: &metupd.CreateI{
-				Yaxis: []int64{
-					32,
-					556,
-					1,
-					2500,
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "y",
+								Value: []int64{
+									32,
+									85,
+									1,
+									2500,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
 				},
-				Text:     "foo bar #hashtag",
-				Timeline: "tml-i45kj",
 			},
 		},
 	}
@@ -129,7 +242,7 @@ func Test_Timeline_Verify_Bool_True(t *testing.T) {
 				}
 			}
 
-			ok, err := tml.Verify(tc.obj)
+			ok, err := tml.Verify(tc.req)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -143,19 +256,30 @@ func Test_Timeline_Verify_Bool_True(t *testing.T) {
 
 func Test_Timeline_Verify_Search_False(t *testing.T) {
 	testCases := []struct {
-		obj        *metupd.CreateI
+		req        *metupd.CreateI
 		searchFake func() ([]string, error)
 	}{
 		// Case 0 ensures that create input with too many y axis coordinates is
 		// not valid.
 		{
-			obj: &metupd.CreateI{
-				Yaxis: []int64{
-					32,
-					85,
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "y",
+								Value: []int64{
+									32,
+									85,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
 				},
-				Text:     "Lorem ipsum ...",
-				Timeline: "tml-al9qy",
 			},
 			searchFake: func() ([]string, error) {
 				return []string{"1,2"}, nil
@@ -164,15 +288,26 @@ func Test_Timeline_Verify_Search_False(t *testing.T) {
 		// Case 1 ensures that create input with too many y axis coordinates is
 		// not valid.
 		{
-			obj: &metupd.CreateI{
-				Yaxis: []int64{
-					23,
-					93,
-					53,
-					12,
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "y",
+								Value: []int64{
+									32,
+									85,
+									1,
+									2500,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
 				},
-				Text:     "Lorem ipsum ...",
-				Timeline: "tml-al9qy",
 			},
 			searchFake: func() ([]string, error) {
 				return []string{"1,2"}, nil
@@ -181,12 +316,23 @@ func Test_Timeline_Verify_Search_False(t *testing.T) {
 		// Case 2 ensures that create input with too few y axis coordinates is
 		// not valid.
 		{
-			obj: &metupd.CreateI{
-				Yaxis: []int64{
-					32,
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "y",
+								Value: []int64{
+									32,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
 				},
-				Text:     "Lorem ipsum ...",
-				Timeline: "tml-al9qy",
 			},
 			searchFake: func() ([]string, error) {
 				return []string{"1,2,3,4"}, nil
@@ -195,13 +341,24 @@ func Test_Timeline_Verify_Search_False(t *testing.T) {
 		// Case 3 ensures that create input with too few y axis coordinates is
 		// not valid.
 		{
-			obj: &metupd.CreateI{
-				Yaxis: []int64{
-					32,
-					85,
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "y",
+								Value: []int64{
+									32,
+									85,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
 				},
-				Text:     "Lorem ipsum ...",
-				Timeline: "tml-al9qy",
 			},
 			searchFake: func() ([]string, error) {
 				return []string{"1,2,3,4"}, nil
@@ -232,7 +389,7 @@ func Test_Timeline_Verify_Search_False(t *testing.T) {
 				}
 			}
 
-			ok, err := tml.Verify(tc.obj)
+			ok, err := tml.Verify(tc.req)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -246,19 +403,30 @@ func Test_Timeline_Verify_Search_False(t *testing.T) {
 
 func Test_Timeline_Verify_Search_True(t *testing.T) {
 	testCases := []struct {
-		obj        *metupd.CreateI
+		req        *metupd.CreateI
 		searchFake func() ([]string, error)
 	}{
 		// Case 0 ensures that create input with the correct amount of y axis
 		// coordinates is valid.
 		{
-			obj: &metupd.CreateI{
-				Yaxis: []int64{
-					32,
-					85,
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "y",
+								Value: []int64{
+									32,
+									85,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
 				},
-				Text:     "Lorem ipsum ...",
-				Timeline: "tml-al9qy",
 			},
 			searchFake: func() ([]string, error) {
 				return []string{"1,2,3"}, nil
@@ -267,16 +435,29 @@ func Test_Timeline_Verify_Search_True(t *testing.T) {
 		// Case 1 ensures that create input with the correct amount of y axis
 		// coordinates is valid.
 		{
-			obj: &metupd.CreateI{
-				Yaxis: []int64{
-					100,
-					150,
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.Timeline: "tml-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Space: "y",
+								Value: []int64{
+									32,
+									85,
+									1,
+									2500,
+								},
+							},
+						},
+						Text: "Lorem ipsum ...",
+					},
 				},
-				Text:     "Lorem ipsum ...",
-				Timeline: "tml-al9qy",
 			},
 			searchFake: func() ([]string, error) {
-				return []string{"1,2,3"}, nil
+				return []string{"1,2,3,4"}, nil
 			},
 		},
 	}
@@ -304,7 +485,7 @@ func Test_Timeline_Verify_Search_True(t *testing.T) {
 				}
 			}
 
-			ok, err := tml.Verify(tc.obj)
+			ok, err := tml.Verify(tc.req)
 			if err != nil {
 				t.Fatal(err)
 			}
