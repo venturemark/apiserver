@@ -13,9 +13,7 @@ func Join(now float64, val []Interface) string {
 
 	var cop []Interface
 	{
-		for _, v := range val {
-			cop = append(cop, v)
-		}
+		cop = append(cop, val...)
 
 		sort.Slice(cop, func(i, j int) bool {
 			return cop[i].GetSpace() < cop[j].GetSpace()
