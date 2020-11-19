@@ -42,7 +42,7 @@ func (t *Timeline) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	// even if the user's coordinates on a timeline ever appear twice.
 	{
 		k := fmt.Sprintf(key.TimelineMetric, req.Obj.Metadata[metadata.Timeline])
-		e := data.Join(now, toInterface(req.Obj.Property.Data))
+		e := data.Join(float64(now), toInterface(req.Obj.Property.Data))
 		s := float64(now)
 
 		err = t.redigo.Scored().Create(k, e, s)
