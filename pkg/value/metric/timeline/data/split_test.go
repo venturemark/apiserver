@@ -52,6 +52,7 @@ func Test_Data_Split(t *testing.T) {
 
 				b = append(b, '\n', '\n')
 				b = strconv.AppendFloat(b, uni, 'f', -1, 64)
+				b = append(b, '\n')
 
 				actual = b
 			}
