@@ -1,14 +1,14 @@
 package data
 
-type wrapper struct {
-	space string
-	value []int64
+type Wrapper struct {
+	Space string
+	Value []float64
 }
 
-func (w wrapper) GetSpace() string {
-	return w.space
+func (w Wrapper) GetSpace() string {
+	return w.Space
 }
 
-func (w wrapper) GetValue() []int64 {
-	return w.value
+func (w Wrapper) GetValue() []float64 {
+	return w.Value
 }

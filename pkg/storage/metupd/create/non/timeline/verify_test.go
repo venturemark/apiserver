@@ -31,7 +31,7 @@ func Test_Timeline_Verify_Input_False(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									32,
 								},
 							},
@@ -50,7 +50,7 @@ func Test_Timeline_Verify_Input_False(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									32,
 								},
 							},
@@ -71,7 +71,7 @@ func Test_Timeline_Verify_Input_False(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									32,
 									85,
 								},
@@ -92,7 +92,7 @@ func Test_Timeline_Verify_Input_False(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "",
-								Value: []int64{
+								Value: []float64{
 									32,
 								},
 							},
@@ -132,13 +132,13 @@ func Test_Timeline_Verify_Input_False(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "x",
-								Value: []int64{
+								Value: []float64{
 									32,
 								},
 							},
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									32,
 									85,
 								},
@@ -161,13 +161,13 @@ func Test_Timeline_Verify_Input_False(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									32,
 								},
 							},
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									32,
 								},
 							},
@@ -189,21 +189,21 @@ func Test_Timeline_Verify_Input_False(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "x",
-								Value: []int64{
+								Value: []float64{
 									73,
 									91,
 								},
 							},
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									22,
 									94,
 								},
 							},
 							{
 								Space: "t",
-								Value: []int64{
+								Value: []float64{
 									20,
 									16,
 								},
@@ -261,7 +261,7 @@ func Test_Timeline_Verify_Input_True(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									32,
 								},
 							},
@@ -282,7 +282,7 @@ func Test_Timeline_Verify_Input_True(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									32,
 									85,
 								},
@@ -304,7 +304,7 @@ func Test_Timeline_Verify_Input_True(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									32,
 									85,
 									1,
@@ -329,14 +329,14 @@ func Test_Timeline_Verify_Input_True(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "x",
-								Value: []int64{
+								Value: []float64{
 									32,
 									85,
 								},
 							},
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									32,
 									85,
 								},
@@ -359,21 +359,21 @@ func Test_Timeline_Verify_Input_True(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "x",
-								Value: []int64{
+								Value: []float64{
 									73,
 									91,
 								},
 							},
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									22,
 									94,
 								},
 							},
 							{
 								Space: "z",
-								Value: []int64{
+								Value: []float64{
 									20,
 									16,
 								},
@@ -432,7 +432,7 @@ func Test_Timeline_Verify_Search_False(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									32,
 									85,
 								},
@@ -458,7 +458,7 @@ func Test_Timeline_Verify_Search_False(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									32,
 									85,
 									1,
@@ -486,7 +486,7 @@ func Test_Timeline_Verify_Search_False(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									32,
 								},
 							},
@@ -511,7 +511,7 @@ func Test_Timeline_Verify_Search_False(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									32,
 									85,
 								},
@@ -537,7 +537,7 @@ func Test_Timeline_Verify_Search_False(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "toolong",
-								Value: []int64{
+								Value: []float64{
 									32,
 								},
 							},
@@ -601,7 +601,7 @@ func Test_Timeline_Verify_Search_True(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									32,
 									85,
 								},
@@ -627,7 +627,7 @@ func Test_Timeline_Verify_Search_True(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									32,
 									85,
 									1,
@@ -655,7 +655,7 @@ func Test_Timeline_Verify_Search_True(t *testing.T) {
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "x",
-								Value: []int64{
+								Value: []float64{
 									32,
 									85,
 									1,
@@ -664,7 +664,7 @@ func Test_Timeline_Verify_Search_True(t *testing.T) {
 							},
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									32,
 									85,
 									1,
