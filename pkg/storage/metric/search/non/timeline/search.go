@@ -49,23 +49,24 @@ func (t *Timeline) Search(req *metric.SearchI) (*metric.SearchO, error) {
 				return nil, tracer.Mask(err)
 			}
 
-			o := &metric.SearchO_Obj{
-				Metadata: map[string]string{
-					metadata.Timeline: req.Obj[0].Metadata[metadata.Timeline],
-					metadata.Unixtime: strconv.Itoa(int(uni)),
-				},
-				Property: &metric.SearchO_Obj_Property{
-					Data: []*metric.SearchO_Obj_Property_Data{},
-				},
-			}
-
+			var dat []*metric.SearchO_Obj_Property_Data
 			for _, v := range val {
 				d := &metric.SearchO_Obj_Property_Data{
 					Space: v.GetSpace(),
 					Value: v.GetValue(),
 				}
 
-				o.Property.Data = append(o.Property.Data, d)
+				dat = append(dat, d)
+			}
+
+			o := &metric.SearchO_Obj{
+				Metadata: map[string]string{
+					metadata.Timeline: req.Obj[0].Metadata[metadata.Timeline],
+					metadata.Unixtime: strconv.Itoa(int(uni)),
+				},
+				Property: &metric.SearchO_Obj_Property{
+					Data: dat,
+				},
 			}
 
 			res.Obj = append(res.Obj, o)

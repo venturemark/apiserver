@@ -10,7 +10,8 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/value/metric/timeline/data"
+	mdat "github.com/venturemark/apiserver/pkg/value/metric/timeline/data"
+	udat "github.com/venturemark/apiserver/pkg/value/update/timeline/data"
 )
 
 // Create provides a storage primitive to persist metric updates associated with
@@ -28,9 +29,9 @@ func (t *Timeline) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	// with the other. This is then also how our discovery mechanisms are
 	// designed. Everything starts with time, which means that pseudo random IDs
 	// are irrelevant for us.
-	var now int64
+	var uni float64
 	{
-		now = time.Now().UTC().Unix()
+		uni = float64(time.Now().UTC().Unix())
 	}
 
 	// We store metrics in a sorted set. The elements of the sorted set are
@@ -42,8 +43,8 @@ func (t *Timeline) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	// even if the user's coordinates on a timeline ever appear twice.
 	{
 		k := fmt.Sprintf(key.TimelineMetric, req.Obj.Metadata[metadata.Timeline])
-		e := data.Join(float64(now), toInterface(req.Obj.Property.Data))
-		s := float64(now)
+		e := mdat.Join(uni, toInterface(req.Obj.Property.Data))
+		s := uni
 
 		err = t.redigo.Scored().Create(k, e, s)
 		if err != nil {
@@ -59,8 +60,8 @@ func (t *Timeline) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	// on a timeline ever appear twice.
 	{
 		k := fmt.Sprintf(key.TimelineUpdate, req.Obj.Metadata[metadata.Timeline])
-		e := fmt.Sprintf("%d,%s", now, req.Obj.Property.Text)
-		s := float64(now)
+		e := udat.Join(uni, req.Obj.Property.Text)
+		s := uni
 
 		err = t.redigo.Scored().Create(k, e, s)
 		if err != nil {
@@ -73,7 +74,7 @@ func (t *Timeline) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 		res = &metupd.CreateO{
 			Obj: &metupd.CreateO_Obj{
 				Metadata: map[string]string{
-					metadata.Unixtime: strconv.Itoa(int(now)),
+					metadata.Unixtime: strconv.Itoa(int(uni)),
 				},
 			},
 		}
@@ -82,8 +83,8 @@ func (t *Timeline) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	return res, nil
 }
 
-func toInterface(dat []*metupd.CreateI_Obj_Property_Data) []data.Interface {
-	var l []data.Interface
+func toInterface(dat []*metupd.CreateI_Obj_Property_Data) []mdat.Interface {
+	var l []mdat.Interface
 
 	for _, d := range dat {
 		l = append(l, d)
