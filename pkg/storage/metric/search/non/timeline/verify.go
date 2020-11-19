@@ -2,54 +2,39 @@ package timeline
 
 import (
 	"github.com/venturemark/apigengo/pkg/pbf/metric"
+
+	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
-func (t *Timeline) Verify(obj *metric.SearchI) (bool, error) {
+func (t *Timeline) Verify(req *metric.SearchI) (bool, error) {
 	{
-		// We need a filter. Any search request without it does not make sense,
-		// because we do then not even know what we should search for.
-		if obj.Filter == nil {
+		// Any search request with api specifics is not valid at this point. We
+		// will extend functionality here later.
+		if req.Api != nil {
 			return false, nil
 		}
 	}
 
 	{
-		// Chunking is not supported at this point. Any usage of something that
-		// is not implemented should be prohibited in order to not create the
-		// wrong expectations.
-		if obj.Filter.Chunking != nil {
+		// We need a single object with a single metadata label for the user's
+		// timeline in order to fullfil the search request. We will extend
+		// functionality here later.
+		if len(req.Obj) != 1 {
+			return false, nil
+		}
+		if len(req.Obj[0].Metadata) != 1 {
+			return false, nil
+		}
+		if req.Obj[0].Metadata[metadata.Timeline] == "" {
 			return false, nil
 		}
 	}
 
 	{
-		// Search requests must not provide any operator for this
-		// implementation. The client tells us exactly what we need to do with
-		// the single timeline ID they provide.
-		if len(obj.Filter.Operator) != 0 {
+		// Any search request with object property specifics is not valid at
+		// this point. We will extend functionality here later.
+		if req.Obj[0].Property != nil {
 			return false, nil
-		}
-	}
-
-	{
-		// Searching using this implementation requires only a single timeline
-		// ID to be given.
-		if len(obj.Filter.Property) != 1 {
-			return false, nil
-		}
-
-		for _, p := range obj.Filter.Property {
-			// It is not allowed to provide timestamp properties with the search
-			// request of this particular search implementation.
-			if p.Timestamp != 0 {
-				return false, nil
-			}
-			// With this particular search implementation we require only a
-			// single timeline ID to be given. If the timeline ID property is
-			// empty, we decline service for this request.
-			if p.Timeline == "" {
-				return false, nil
-			}
 		}
 	}
 

@@ -2,10 +2,14 @@ package timeline
 
 import (
 	"fmt"
-	"strings"
+	"strconv"
 
 	"github.com/venturemark/apigengo/pkg/pbf/metupd"
 	"github.com/xh3b4sd/tracer"
+
+	"github.com/venturemark/apiserver/pkg/key"
+	"github.com/venturemark/apiserver/pkg/metadata"
+	"github.com/venturemark/apiserver/pkg/value/metric/timeline/data"
 )
 
 // Update provides a storage primitive to modify metric updates associated with
@@ -14,8 +18,17 @@ import (
 // Metrics and updates can be found considering their scope and time of
 // creation. For more information about technical details see the inline
 // documentation.
-func (t *Timeline) Update(obj *metupd.UpdateI) (*metupd.UpdateO, error) {
+func (t *Timeline) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
 	var err error
+
+	var now int64
+	{
+		i, err := strconv.Atoi(req.Obj.Metadata[metadata.Unixtime])
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+		now = int64(i)
+	}
 
 	// When updating metric updates all assumptions are equal to creating metric
 	// updates. The update mechanism of elements within sorted sets is rather
@@ -25,10 +38,10 @@ func (t *Timeline) Update(obj *metupd.UpdateI) (*metupd.UpdateO, error) {
 	// hood. Note that we should only perform the update if we are certain there
 	// was information provided for the update in the first place.
 	var met bool
-	if len(obj.Yaxis) != 0 {
-		k := fmt.Sprintf("tml:%s:met", obj.Timeline)
-		e := joinYaxis(obj.Timestamp, obj.Yaxis...)
-		s := float64(obj.Timestamp)
+	if len(req.Obj.Property.Data) != 0 {
+		k := fmt.Sprintf(key.TimelineMetric, req.Obj.Metadata[metadata.Timeline])
+		e := data.Join(now, toInterface(req.Obj.Property.Data))
+		s := float64(now)
 
 		met, err = t.redigo.Scored().Update(k, e, s)
 		if err != nil {
@@ -44,10 +57,10 @@ func (t *Timeline) Update(obj *metupd.UpdateI) (*metupd.UpdateO, error) {
 	// hood. Note that we should only perform the update if we are certain there
 	// was information provided for the update in the first place.
 	var upd bool
-	if obj.Text != "" {
-		k := fmt.Sprintf("tml:%s:upd", obj.Timeline)
-		e := fmt.Sprintf("%d,%s", obj.Timestamp, obj.Text)
-		s := float64(obj.Timestamp)
+	if req.Obj.Property.Text != "" {
+		k := fmt.Sprintf(key.TimelineUpdate, req.Obj.Metadata[metadata.Timeline])
+		e := fmt.Sprintf("%s,%s", req.Obj.Metadata[metadata.Unixtime], req.Obj.Property.Text)
+		s := float64(now)
 
 		upd, err = t.redigo.Scored().Update(k, e, s)
 		if err != nil {
@@ -55,17 +68,31 @@ func (t *Timeline) Update(obj *metupd.UpdateI) (*metupd.UpdateO, error) {
 		}
 	}
 
-	return &metupd.UpdateO{Metric: met, Update: upd}, nil
+	var res *metupd.UpdateO
+	{
+		res = &metupd.UpdateO{
+			Obj: &metupd.UpdateO_Obj{
+				Metadata: map[string]string{},
+			},
+		}
+
+		if met {
+			res.Obj.Metadata[metadata.MetricStatus] = "updated"
+		}
+		if upd {
+			res.Obj.Metadata[metadata.UpdateStatus] = "updated"
+		}
+	}
+
+	return res, nil
 }
 
-func joinYaxis(now int64, yaxis ...int64) string {
-	l := []string{
-		fmt.Sprintf("%d", now),
+func toInterface(dat []*metupd.UpdateI_Obj_Property_Data) []data.Interface {
+	var l []data.Interface
+
+	for _, d := range dat {
+		l = append(l, d)
 	}
 
-	for _, y := range yaxis {
-		l = append(l, fmt.Sprintf("%d", y))
-	}
-
-	return strings.Join(l, ",")
+	return l
 }
