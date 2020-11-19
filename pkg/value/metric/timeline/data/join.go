@@ -1,22 +1,32 @@
 package data
 
 import (
+	"sort"
 	"strconv"
 	"strings"
 )
 
-func Join(now int64, val []Interface) string {
+func Join(now float64, val []Interface) string {
 	l := []string{
 		strconv.Itoa(int(now)),
 	}
 
-	for _, v := range val {
+	var cop []Interface
+	{
+		cop = append(cop, val...)
+
+		sort.Slice(cop, func(i, j int) bool {
+			return cop[i].GetSpace() < cop[j].GetSpace()
+		})
+	}
+
+	for _, c := range cop {
 		s := []string{
-			v.GetSpace(),
+			c.GetSpace(),
 		}
 
-		for _, v := range v.GetValue() {
-			s = append(s, strconv.Itoa(int(v)))
+		for _, v := range c.GetValue() {
+			s = append(s, strconv.FormatFloat(v, 'f', -1, 64))
 		}
 
 		l = append(l, strings.Join(s, ","))

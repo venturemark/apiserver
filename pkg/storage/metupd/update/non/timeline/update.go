@@ -40,7 +40,7 @@ func (t *Timeline) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
 	var met bool
 	if len(req.Obj.Property.Data) != 0 {
 		k := fmt.Sprintf(key.TimelineMetric, req.Obj.Metadata[metadata.Timeline])
-		e := data.Join(now, toInterface(req.Obj.Property.Data))
+		e := data.Join(float64(now), toInterface(req.Obj.Property.Data))
 		s := float64(now)
 
 		met, err = t.redigo.Scored().Update(k, e, s)
