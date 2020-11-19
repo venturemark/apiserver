@@ -15,7 +15,9 @@ import (
 var update = flag.Bool("update", false, "update .golden files")
 
 // Test_Data_Split tests parsing of data elements of a sorted set associated
-// with a timeline.
+// with a timeline. Note that these tests do also verify the validity of
+// floating point numbers as well as the injection of the reserved dimensional
+// space t. Here t is time, tracking the unix timestamp for each datapoint.
 //
 //     go test ./pkg/value/metric/timeline/data -run Test_Data_Split -update
 //
