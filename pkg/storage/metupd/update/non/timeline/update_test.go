@@ -33,7 +33,7 @@ func Test_Timeline_Update_Redis(t *testing.T) {
 						Data: []*metupd.UpdateI_Obj_Property_Data{
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									32,
 								},
 							},
@@ -66,7 +66,7 @@ func Test_Timeline_Update_Redis(t *testing.T) {
 						Data: []*metupd.UpdateI_Obj_Property_Data{
 							{
 								Space: "y",
-								Value: []int64{
+								Value: []float64{
 									32,
 								},
 							},
