@@ -3,13 +3,13 @@ package timeline
 import (
 	"fmt"
 	"strconv"
-	"strings"
 
 	"github.com/venturemark/apigengo/pkg/pbf/update"
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
+	"github.com/venturemark/apiserver/pkg/value/update/timeline/data"
 )
 
 // Search provides a filter primitive to lookup updates associated with a
@@ -42,7 +42,7 @@ func (t *Timeline) Search(req *update.SearchI) (*update.SearchO, error) {
 		res = &update.SearchO{}
 
 		for _, s := range str {
-			uni, val, err := splitElement(s)
+			uni, val, err := data.Split(s)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
@@ -62,25 +62,4 @@ func (t *Timeline) Search(req *update.SearchI) (*update.SearchO, error) {
 	}
 
 	return res, nil
-}
-
-func splitElement(s string) (int64, string, error) {
-	l := strings.Split(s, ",")
-
-	var n int64
-	{
-		i, err := strconv.Atoi(l[0])
-		if err != nil {
-			return 0, "", tracer.Mask(err)
-		}
-
-		n = int64(i)
-	}
-
-	var t string
-	{
-		t = l[1]
-	}
-
-	return n, t, nil
 }

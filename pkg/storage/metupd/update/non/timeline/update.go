@@ -9,7 +9,8 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/value/metric/timeline/data"
+	mdat "github.com/venturemark/apiserver/pkg/value/metric/timeline/data"
+	udat "github.com/venturemark/apiserver/pkg/value/update/timeline/data"
 )
 
 // Update provides a storage primitive to modify metric updates associated with
@@ -21,13 +22,12 @@ import (
 func (t *Timeline) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
 	var err error
 
-	var now int64
+	var uni float64
 	{
-		i, err := strconv.Atoi(req.Obj.Metadata[metadata.Unixtime])
+		uni, err = strconv.ParseFloat(req.Obj.Metadata[metadata.Unixtime], 64)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
-		now = int64(i)
 	}
 
 	// When updating metric updates all assumptions are equal to creating metric
@@ -40,8 +40,8 @@ func (t *Timeline) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
 	var met bool
 	if len(req.Obj.Property.Data) != 0 {
 		k := fmt.Sprintf(key.TimelineMetric, req.Obj.Metadata[metadata.Timeline])
-		e := data.Join(float64(now), toInterface(req.Obj.Property.Data))
-		s := float64(now)
+		e := mdat.Join(uni, toInterface(req.Obj.Property.Data))
+		s := uni
 
 		met, err = t.redigo.Scored().Update(k, e, s)
 		if err != nil {
@@ -59,8 +59,8 @@ func (t *Timeline) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
 	var upd bool
 	if req.Obj.Property.Text != "" {
 		k := fmt.Sprintf(key.TimelineUpdate, req.Obj.Metadata[metadata.Timeline])
-		e := fmt.Sprintf("%s,%s", req.Obj.Metadata[metadata.Unixtime], req.Obj.Property.Text)
-		s := float64(now)
+		e := udat.Join(uni, req.Obj.Property.Text)
+		s := uni
 
 		upd, err = t.redigo.Scored().Update(k, e, s)
 		if err != nil {
@@ -87,8 +87,8 @@ func (t *Timeline) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
 	return res, nil
 }
 
-func toInterface(dat []*metupd.UpdateI_Obj_Property_Data) []data.Interface {
-	var l []data.Interface
+func toInterface(dat []*metupd.UpdateI_Obj_Property_Data) []mdat.Interface {
+	var l []mdat.Interface
 
 	for _, d := range dat {
 		l = append(l, d)
