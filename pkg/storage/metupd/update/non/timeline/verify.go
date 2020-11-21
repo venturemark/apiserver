@@ -52,15 +52,6 @@ func (t *Timeline) Verify(req *metupd.UpdateI) (bool, error) {
 	}
 
 	{
-		// Updating metric updates requires either of the resources to be given.
-		// It is not valid to request the update of any resource without
-		// providing any of these resources.
-		if len(req.Obj.Property.Data) == 0 && req.Obj.Property.Text == "" {
-			return false, nil
-		}
-	}
-
-	{
 		// Updating metrics is optional when updating metric updates. Somebody
 		// may just wish to update their updates.
 		if len(req.Obj.Property.Data) != 0 {
