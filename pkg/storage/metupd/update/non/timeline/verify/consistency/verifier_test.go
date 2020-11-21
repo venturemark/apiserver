@@ -17,14 +17,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 		req        *metupd.UpdateI
 		searchFake func() ([]string, error)
 	}{
-		// Case 0 ensures that empty update input is not valid.
-		{
-			req: &metupd.UpdateI{},
-			searchFake: func() ([]string, error) {
-				return []string{"0:y,1"}, nil
-			},
-		},
-		// Case 1 ensures that update input with too many datapoints is
+		// Case 0 ensures that update input with too many datapoints is
 		// not valid.
 		{
 			req: &metupd.UpdateI{
@@ -48,7 +41,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 				return []string{"0:y,1"}, nil
 			},
 		},
-		// Case 2 ensures that update input with too many datapoints is
+		// Case 1 ensures that update input with too many datapoints is
 		// not valid.
 		{
 			req: &metupd.UpdateI{
@@ -74,7 +67,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 				return []string{"0:y,1,2"}, nil
 			},
 		},
-		// Case 3 ensures that update input with too few datapoints is
+		// Case 2 ensures that update input with too few datapoints is
 		// not valid.
 		{
 			req: &metupd.UpdateI{
@@ -97,7 +90,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 				return []string{"0:y,1,2,3,4"}, nil
 			},
 		},
-		// Case 4 ensures that update input with too few datapoints is
+		// Case 3 ensures that update input with too few datapoints is
 		// not valid.
 		{
 			req: &metupd.UpdateI{
@@ -162,7 +155,23 @@ func Test_Consistency_Verify_True(t *testing.T) {
 		req        *metupd.UpdateI
 		searchFake func() ([]string, error)
 	}{
-		// Case 0 ensures that update input without data is valid, because an
+		// Case 0 ensures that empty update input is valid.
+		{
+			req: &metupd.UpdateI{},
+			searchFake: func() ([]string, error) {
+				return []string{"0:y,1"}, nil
+			},
+		},
+		// Case 1 ensures that empty update input is valid.
+		{
+			req: &metupd.UpdateI{
+				Obj: &metupd.UpdateI_Obj{},
+			},
+			searchFake: func() ([]string, error) {
+				return []string{"0:y,1"}, nil
+			},
+		},
+		// Case 2 ensures that update input without data is valid, because an
 		// update request might only be meant to update the text of a metric
 		// update.
 		{
@@ -177,7 +186,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 				return []string{"0:y,1"}, nil
 			},
 		},
-		// Case 1 ensures that update input without data is valid, because an
+		// Case 3 ensures that update input without data is valid, because an
 		// update request might only be meant to update the text of a metric
 		// update.
 		{
@@ -193,7 +202,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 				return []string{"0:y,1"}, nil
 			},
 		},
-		// Case 2 ensures that update input with the correct amount of
+		// Case 4 ensures that update input with the correct amount of
 		// datapoints is valid.
 		{
 			req: &metupd.UpdateI{
@@ -217,7 +226,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 				return []string{"0:y,1,2"}, nil
 			},
 		},
-		// Case 3 ensures that update input with the correct amount of
+		// Case 5 ensures that update input with the correct amount of
 		// datapoints is valid.
 		{
 			req: &metupd.UpdateI{
@@ -243,7 +252,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 				return []string{"0:y,1,2,3,4"}, nil
 			},
 		},
-		// Case 4 ensures that update input with the correct amount of
+		// Case 6 ensures that update input with the correct amount of
 		// datapoints is valid.
 		{
 			req: &metupd.UpdateI{
