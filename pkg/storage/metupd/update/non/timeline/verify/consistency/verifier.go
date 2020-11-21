@@ -38,11 +38,17 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 // this would lead to data inconsistencies.
 func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 	{
+		// If no data is provided it may not be an update request to modify
+		// data. It may only be an update request to modify text. This is then
+		// handled by another verifier.
 		if req.Obj == nil {
-			return false, nil
+			return true, nil
 		}
-		if req.Obj.Metadata == nil {
-			return false, nil
+		if req.Obj.Property == nil {
+			return true, nil
+		}
+		if req.Obj.Property.Data == nil {
+			return true, nil
 		}
 	}
 
@@ -52,18 +58,6 @@ func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 		// timeline ID is empty, we decline service for this request.
 		if req.Obj.Metadata[metadata.Timeline] == "" {
 			return false, nil
-		}
-	}
-
-	{
-		// If no data is provided it may not be an update request to modify
-		// data. It may only be an update request to modify text. This is then
-		// handled by another verifier.
-		if req.Obj.Property == nil {
-			return true, nil
-		}
-		if req.Obj.Property.Data == nil {
-			return true, nil
 		}
 	}
 
