@@ -44,11 +44,17 @@ func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 		if req.Obj.Metadata == nil {
 			return false, nil
 		}
+	}
+
+	{
+		// If no data is provided it may not be an update request to modify
+		// data. It may only be an update request to modify text. This is then
+		// handled by another verifier.
 		if req.Obj.Property == nil {
-			return false, nil
+			return true, nil
 		}
 		if req.Obj.Property.Data == nil {
-			return false, nil
+			return true, nil
 		}
 	}
 
