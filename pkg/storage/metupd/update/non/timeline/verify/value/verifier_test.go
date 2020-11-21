@@ -128,6 +128,90 @@ func Test_Value_Verify_False(t *testing.T) {
 				},
 			},
 		},
+		// Case 6 ensures that update input with inconsistent data is not valid.
+		{
+			req: &metupd.UpdateI{
+				Obj: &metupd.UpdateI_Obj{
+					Property: &metupd.UpdateI_Obj_Property{
+						Data: []*metupd.UpdateI_Obj_Property_Data{
+							{
+								Value: []float64{
+									83,
+								},
+							},
+							{
+								Value: []float64{
+									15,
+									8.3,
+								},
+							},
+							{
+								Value: []float64{
+									33.4,
+									44,
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		// Case 7 ensures that update input with inconsistent data is not valid.
+		{
+			req: &metupd.UpdateI{
+				Obj: &metupd.UpdateI_Obj{
+					Property: &metupd.UpdateI_Obj_Property{
+						Data: []*metupd.UpdateI_Obj_Property_Data{
+							{
+								Value: []float64{
+									83,
+									15,
+								},
+							},
+							{
+								Value: []float64{
+									8.3,
+									33.4,
+								},
+							},
+							{
+								Value: []float64{
+									44,
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		// Case 8 ensures that update input with inconsistent data is not valid.
+		{
+			req: &metupd.UpdateI{
+				Obj: &metupd.UpdateI_Obj{
+					Property: &metupd.UpdateI_Obj_Property{
+						Data: []*metupd.UpdateI_Obj_Property_Data{
+							{
+								Value: []float64{
+									83,
+									15,
+								},
+							},
+							{
+								Value: []float64{
+									33.4,
+								},
+							},
+							{
+								Value: []float64{
+									8.3,
+									44,
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 	}
 
 	for i, tc := range testCases {
