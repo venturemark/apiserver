@@ -1,53 +1,47 @@
-package update
+package text
 
 import (
 	"strconv"
+	"strings"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/venturemark/apigengo/pkg/pbf/metupd"
 )
 
-func Test_Update_Verify_False(t *testing.T) {
+func Test_Text_Verify_False(t *testing.T) {
 	testCases := []struct {
 		req *metupd.UpdateI
 	}{
-		// Case 0 ensures that empty update input is not valid.
-		{
-			req: &metupd.UpdateI{},
-		},
-		// Case 1 ensures that empty update input is not valid.
-		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{},
-			},
-		},
-		// Case 2 ensures that empty update input is not valid.
-		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{},
-				},
-			},
-		},
-		// Case 3 ensures that update input with empty data is not valid.
+		// Case 0 ensures that update input with too long of a text data is not
+		// valid.
 		{
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{},
+						Text: strings.Repeat("0123456789", 29),
 					},
 				},
 			},
 		},
-		// Case 4 ensures that update input with empty data and empty text is
-		// not valid.
+		// Case 1 ensures that update input with too long of a text data is not
+		// valid.
 		{
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{},
-						Text: "",
+						Text: strings.Repeat("0123456789", 40),
+					},
+				},
+			},
+		},
+		// Case 2 ensures that update input with too long of a text data is not
+		// valid.
+		{
+			req: &metupd.UpdateI{
+				Obj: &metupd.UpdateI_Obj{
+					Property: &metupd.UpdateI_Obj_Property{
+						Text: strings.Repeat("0123456789", 100),
 					},
 				},
 			},
@@ -80,30 +74,54 @@ func Test_Update_Verify_False(t *testing.T) {
 	}
 }
 
-func Test_Update_Verify_True(t *testing.T) {
+func Test_Text_Verify_True(t *testing.T) {
 	testCases := []struct {
 		req *metupd.UpdateI
 	}{
-		// Case 0 ensures that update input with data is valid.
+		// Case 0 ensures that empty update input is valid.
+		{
+			req: &metupd.UpdateI{},
+		},
+		// Case 1 ensures that empty update input is valid.
+		{
+			req: &metupd.UpdateI{
+				Obj: &metupd.UpdateI_Obj{},
+			},
+		},
+		// Case 2 ensures that empty update input is valid.
+		{
+			req: &metupd.UpdateI{
+				Obj: &metupd.UpdateI_Obj{
+					Property: &metupd.UpdateI_Obj_Property{},
+				},
+			},
+		},
+		// Case 3 ensures that update input with text data is valid.
 		{
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
-							{},
-						},
+						Text: strings.Repeat("0123456789", 1),
 					},
 				},
 			},
 		},
-		// Case 1 ensures that update input without data is valid, because an
-		// update request might only be meant to update the text of a metric
-		// update.
+		// Case 4 ensures that update input with text data is valid.
 		{
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Property: &metupd.UpdateI_Obj_Property{
-						Text: "Lorem ipsum ...",
+						Text: strings.Repeat("0123456789", 10),
+					},
+				},
+			},
+		},
+		// Case 5 ensures that update input with text data is valid.
+		{
+			req: &metupd.UpdateI{
+				Obj: &metupd.UpdateI_Obj{
+					Property: &metupd.UpdateI_Obj_Property{
+						Text: strings.Repeat("0123456789", 28),
 					},
 				},
 			},
