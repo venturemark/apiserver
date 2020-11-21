@@ -5,13 +5,13 @@ import (
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/verifier/metupd"
-	"github.com/venturemark/apiserver/pkg/verifier/metupd/consistency"
-	"github.com/venturemark/apiserver/pkg/verifier/metupd/space"
-	"github.com/venturemark/apiserver/pkg/verifier/metupd/text"
-	"github.com/venturemark/apiserver/pkg/verifier/metupd/time"
 	"github.com/venturemark/apiserver/pkg/verifier/metupd/update"
-	"github.com/venturemark/apiserver/pkg/verifier/metupd/value"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/update/consistency"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/update/empty"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/update/space"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/update/text"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/update/time"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/update/value"
 )
 
 type Config struct {
@@ -23,7 +23,7 @@ type Timeline struct {
 	logger logger.Interface
 	redigo redigo.Interface
 
-	verify []metupd.Interface
+	verify []update.Interface
 }
 
 func New(config Config) (*Timeline, error) {
@@ -80,11 +80,11 @@ func New(config Config) (*Timeline, error) {
 		}
 	}
 
-	var updateVerifier *update.Verifier
+	var emptyVerifier *empty.Verifier
 	{
-		c := update.VerifierConfig{}
+		c := empty.VerifierConfig{}
 
-		updateVerifier, err = update.NewVerifier(c)
+		emptyVerifier, err = empty.NewVerifier(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -104,12 +104,12 @@ func New(config Config) (*Timeline, error) {
 		logger: config.Logger,
 		redigo: config.Redigo,
 
-		verify: []metupd.Interface{
+		verify: []update.Interface{
 			consistencyVerifier,
+			emptyVerifier,
 			spaceVerifier,
 			textVerifier,
 			timeVerifier,
-			updateVerifier,
 			valueVerifier,
 		},
 	}
