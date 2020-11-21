@@ -8,6 +8,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/storage/metupd/update/non/timeline/verify/consistency"
 	"github.com/venturemark/apiserver/pkg/storage/metupd/update/non/timeline/verify/time"
 	"github.com/venturemark/apiserver/pkg/storage/metupd/update/non/timeline/verify/update"
+	"github.com/venturemark/apiserver/pkg/storage/metupd/update/non/timeline/verify/value"
 )
 
 type Config struct {
@@ -66,6 +67,16 @@ func New(config Config) (*Timeline, error) {
 		}
 	}
 
+	var valueVerifier *value.Verifier
+	{
+		c := value.VerifierConfig{}
+
+		valueVerifier, err = value.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	t := &Timeline{
 		logger: config.Logger,
 		redigo: config.Redigo,
@@ -74,6 +85,7 @@ func New(config Config) (*Timeline, error) {
 			consistencyVerifier,
 			timeVerifier,
 			updateVerifier,
+			valueVerifier,
 		},
 	}
 

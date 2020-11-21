@@ -55,15 +55,6 @@ func (t *Timeline) Verify(req *metupd.UpdateI) (bool, error) {
 		// Updating metrics is optional when updating metric updates. Somebody
 		// may just wish to update their updates.
 		if len(req.Obj.Property.Data) != 0 {
-			// We do this step separately for reasons of performance and impact on
-			// the operational system. We do not need to execute any further checks
-			// if the provided datastructure is already insufficient.
-			for _, d := range req.Obj.Property.Data {
-				if len(d.Value) == 0 {
-					return false, nil
-				}
-			}
-
 			// Dimensional spaces must be identified with single character
 			// variables. Anything else other than x, y, z is invalid. Additionally
 			// the reserved dimensional space t must also not be supplied since the
@@ -85,17 +76,6 @@ func (t *Timeline) Verify(req *metupd.UpdateI) (bool, error) {
 					continue
 				}
 				if req.Obj.Property.Data[0].Space == d.Space {
-					return false, nil
-				}
-			}
-
-			// The amount of all datapoints must be equal across dimensions
-			// provided. We do not permit inconsistencies within the request data.
-			for i, d := range req.Obj.Property.Data {
-				if i == 0 {
-					continue
-				}
-				if len(req.Obj.Property.Data[0].Value) != len(d.Value) {
 					return false, nil
 				}
 			}

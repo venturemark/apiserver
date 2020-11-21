@@ -30,9 +30,7 @@ func Test_Time_Verify_False(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{},
 			},
-			searchFake: func() ([]string, error) {
-				return []string{"0:y,1"}, nil
-			},
+			now: uni.Add(3 * time.Minute),
 		},
 		// Case 2 ensures that update input without metadata is not valid.
 		{

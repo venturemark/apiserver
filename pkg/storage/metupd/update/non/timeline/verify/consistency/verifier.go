@@ -47,6 +47,15 @@ func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 	}
 
 	{
+		// Updating metric updates requires a timeline ID to be provided with
+		// which the metric and the update can be associated with. If the
+		// timeline ID is empty, we decline service for this request.
+		if req.Obj.Metadata[metadata.Timeline] == "" {
+			return false, nil
+		}
+	}
+
+	{
 		// If no data is provided it may not be an update request to modify
 		// data. It may only be an update request to modify text. This is then
 		// handled by another verifier.
@@ -55,15 +64,6 @@ func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 		}
 		if req.Obj.Property.Data == nil {
 			return true, nil
-		}
-	}
-
-	{
-		// Updating metric updates requires a timeline ID to be provided with
-		// which the metric and the update can be associated with. If the
-		// timeline ID is empty, we decline service for this request.
-		if req.Obj.Metadata[metadata.Timeline] == "" {
-			return false, nil
 		}
 	}
 
