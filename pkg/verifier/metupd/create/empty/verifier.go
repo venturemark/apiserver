@@ -1,4 +1,4 @@
-package update
+package empty
 
 import (
 	"github.com/venturemark/apigengo/pkg/pbf/metupd"
@@ -16,9 +16,8 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if there is any information given for modifying metrics or
-// updates. At least one of them must be updated with a request. Both of them
-// can be updated at the same time.
+// Verify checks if there is any information given for creating metric updates.
+// Succifient information for both of these resources must be provided.
 func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 	{
 		if req.Obj == nil {
@@ -30,10 +29,10 @@ func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 	}
 
 	{
-		// Updating metric updates requires at least one of the resources to be
-		// specified for modification. It is not valid to request the update of
-		// any resource without providing any of these resources.
-		if req.Obj.Property.Data == nil && req.Obj.Property.Text == "" {
+		// Creating metric updates requires the both of the resources to be
+		// specified. It is not valid to request the creation of metric updates
+		// without providing any information.
+		if req.Obj.Property.Data == nil || req.Obj.Property.Text == "" {
 			return false, nil
 		}
 	}

@@ -1,4 +1,4 @@
-package update
+package consistency
 
 import (
 	"errors"
