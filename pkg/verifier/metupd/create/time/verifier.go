@@ -32,7 +32,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 
 // Verify checks if a metric update is too old to be modified. We have a
 // theshold of 5 minutes after creation.
-func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
+func (v *Verifier) Verify(req *metupd.CreateI) (bool, error) {
 	{
 		if req.Obj == nil {
 			return false, nil

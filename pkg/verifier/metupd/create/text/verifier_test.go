@@ -11,14 +11,14 @@ import (
 
 func Test_Text_Verify_False(t *testing.T) {
 	testCases := []struct {
-		req *metupd.UpdateI
+		req *metupd.CreateI
 	}{
 		// Case 0 ensures that update input with too long of a text data is not
 		// valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
 						Text: strings.Repeat("0123456789", 29),
 					},
 				},
@@ -27,9 +27,9 @@ func Test_Text_Verify_False(t *testing.T) {
 		// Case 1 ensures that update input with too long of a text data is not
 		// valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
 						Text: strings.Repeat("0123456789", 40),
 					},
 				},
@@ -38,9 +38,9 @@ func Test_Text_Verify_False(t *testing.T) {
 		// Case 2 ensures that update input with too long of a text data is not
 		// valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
 						Text: strings.Repeat("0123456789", 100),
 					},
 				},
@@ -76,31 +76,31 @@ func Test_Text_Verify_False(t *testing.T) {
 
 func Test_Text_Verify_True(t *testing.T) {
 	testCases := []struct {
-		req *metupd.UpdateI
+		req *metupd.CreateI
 	}{
 		// Case 0 ensures that empty update input is valid.
 		{
-			req: &metupd.UpdateI{},
+			req: &metupd.CreateI{},
 		},
 		// Case 1 ensures that empty update input is valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{},
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{},
 			},
 		},
 		// Case 2 ensures that empty update input is valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{},
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{},
 				},
 			},
 		},
 		// Case 3 ensures that update input with text data is valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
 						Text: strings.Repeat("0123456789", 1),
 					},
 				},
@@ -108,9 +108,9 @@ func Test_Text_Verify_True(t *testing.T) {
 		},
 		// Case 4 ensures that update input with text data is valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
 						Text: strings.Repeat("0123456789", 10),
 					},
 				},
@@ -118,9 +118,9 @@ func Test_Text_Verify_True(t *testing.T) {
 		},
 		// Case 5 ensures that update input with text data is valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
 						Text: strings.Repeat("0123456789", 28),
 					},
 				},

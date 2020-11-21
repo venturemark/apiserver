@@ -10,32 +10,32 @@ import (
 
 func Test_Empty_Verify_False(t *testing.T) {
 	testCases := []struct {
-		req *metupd.UpdateI
+		req *metupd.CreateI
 	}{
 		// Case 0 ensures that empty update input is not valid.
 		{
-			req: &metupd.UpdateI{},
+			req: &metupd.CreateI{},
 		},
 		// Case 1 ensures that empty update input is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{},
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{},
 			},
 		},
 		// Case 2 ensures that empty update input is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{},
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{},
 				},
 			},
 		},
 		// Case 3 ensures that update input with empty data is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{},
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{},
 					},
 				},
 			},
@@ -43,10 +43,10 @@ func Test_Empty_Verify_False(t *testing.T) {
 		// Case 4 ensures that update input with empty data and empty text is
 		// not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{},
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{},
 						Text: "",
 					},
 				},
@@ -54,10 +54,10 @@ func Test_Empty_Verify_False(t *testing.T) {
 		},
 		// Case 5 ensures that update input with empty data is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{},
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{},
 						Text: "Lorem ipsum ...",
 					},
 				},
@@ -93,14 +93,14 @@ func Test_Empty_Verify_False(t *testing.T) {
 
 func Test_Empty_Verify_True(t *testing.T) {
 	testCases := []struct {
-		req *metupd.UpdateI
+		req *metupd.CreateI
 	}{
 		// Case 0 ensures that update input with data and text is valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{},
 						},
 						Text: "Lorem ipsum ...",
@@ -110,10 +110,10 @@ func Test_Empty_Verify_True(t *testing.T) {
 		},
 		// Case 1 ensures that update input with data and text is valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{},
 							{},
 							{},

@@ -20,7 +20,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 // is legitimate to not provide any text to be updated, if the update request
 // contains information to modify the data of a metric update. This is then
 // verified in other verifier implementations.
-func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
+func (v *Verifier) Verify(req *metupd.CreateI) (bool, error) {
 	{
 		// If no data is provided it may not be an update request to modify
 		// text. It may only be an update request to modify data. This is then

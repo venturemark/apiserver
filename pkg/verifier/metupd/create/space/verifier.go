@@ -28,7 +28,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 
 // Verify checks for dimensional spaces to be valid, if any data is provided
 // with the update request.
-func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
+func (v *Verifier) Verify(req *metupd.CreateI) (bool, error) {
 	{
 		// If no data is provided it may not be an update request to modify
 		// data. It may only be an update request to modify text. This is then

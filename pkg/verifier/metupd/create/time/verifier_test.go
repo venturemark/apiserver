@@ -15,27 +15,27 @@ func Test_Time_Verify_False(t *testing.T) {
 	uni := time.Unix(int64(1605025038), 0)
 
 	testCases := []struct {
-		req *metupd.UpdateI
+		req *metupd.CreateI
 		now time.Time
 	}{
 		// Case 0 ensures that update input without any information provided is
 		// not valid.
 		{
-			req: &metupd.UpdateI{},
+			req: &metupd.CreateI{},
 			now: uni.Add(3 * time.Minute),
 		},
 		// Case 1 ensures that update input without any information provided is
 		// not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{},
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{},
 			},
 			now: uni.Add(3 * time.Minute),
 		},
 		// Case 2 ensures that update input without metadata is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{},
 				},
 			},
@@ -44,8 +44,8 @@ func Test_Time_Verify_False(t *testing.T) {
 		// Case 3 ensures that update input with too old of a timestamp is not
 		// valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
 						metadata.Unixtime: toString(uni),
 					},
@@ -55,8 +55,8 @@ func Test_Time_Verify_False(t *testing.T) {
 		},
 		// Case 4 ensures that update input with too old of a timestamp is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
 						metadata.Unixtime: toString(uni),
 					},
@@ -66,8 +66,8 @@ func Test_Time_Verify_False(t *testing.T) {
 		},
 		// Case 5 ensures that update input with too old of a timestamp is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
 						metadata.Unixtime: toString(uni),
 					},
@@ -111,13 +111,13 @@ func Test_Time_Verify_True(t *testing.T) {
 	uni := time.Unix(int64(1605025038), 0)
 
 	testCases := []struct {
-		req *metupd.UpdateI
+		req *metupd.CreateI
 		now time.Time
 	}{
 		// Case 0 ensures that update input with a fresh timestamp is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
 						metadata.Unixtime: toString(uni),
 					},
@@ -127,8 +127,8 @@ func Test_Time_Verify_True(t *testing.T) {
 		},
 		// Case 1 ensures that update input with a fresh timestamp is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
 						metadata.Unixtime: toString(uni),
 					},
@@ -138,8 +138,8 @@ func Test_Time_Verify_True(t *testing.T) {
 		},
 		// Case 2 ensures that update input with a fresh timestamp is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
 						metadata.Unixtime: toString(uni),
 					},

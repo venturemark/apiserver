@@ -10,14 +10,14 @@ import (
 
 func Test_Space_Verify_False(t *testing.T) {
 	testCases := []struct {
-		req *metupd.UpdateI
+		req *metupd.CreateI
 	}{
 		// Case 0 ensures that update input with empty data is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{},
 						},
 					},
@@ -26,10 +26,10 @@ func Test_Space_Verify_False(t *testing.T) {
 		},
 		// Case 1 ensures that update input with empty data is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{},
 							{},
 							{},
@@ -40,10 +40,10 @@ func Test_Space_Verify_False(t *testing.T) {
 		},
 		// Case 2 ensures that update input with empty data is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "",
 							},
@@ -54,10 +54,10 @@ func Test_Space_Verify_False(t *testing.T) {
 		},
 		// Case 3 ensures that update input with empty data is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "",
 							},
@@ -74,10 +74,10 @@ func Test_Space_Verify_False(t *testing.T) {
 		},
 		// Case 4 ensures that update input with empty data is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "x",
 							},
@@ -94,10 +94,10 @@ func Test_Space_Verify_False(t *testing.T) {
 		},
 		// Case 5 ensures that update input with empty data is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "y",
 							},
@@ -112,10 +112,10 @@ func Test_Space_Verify_False(t *testing.T) {
 		// Case 6 ensures that update input with the reserved dimensional space
 		// t is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "t",
 							},
@@ -127,10 +127,10 @@ func Test_Space_Verify_False(t *testing.T) {
 		// Case 7 ensures that update input with the reserved dimensional space
 		// t is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "y",
 							},
@@ -148,10 +148,10 @@ func Test_Space_Verify_False(t *testing.T) {
 		// Case 8 ensures that update input with the duplicated dimensional
 		// spaces is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "x",
 							},
@@ -169,10 +169,10 @@ func Test_Space_Verify_False(t *testing.T) {
 		// duplications if the first space, here y, is not part of the
 		// duplication itself.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "y",
 							},
@@ -190,10 +190,10 @@ func Test_Space_Verify_False(t *testing.T) {
 		// Case 10 ensures that update input with the dimensional spaces
 		// identified with something else than single letters is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "9",
 							},
@@ -208,10 +208,10 @@ func Test_Space_Verify_False(t *testing.T) {
 		// Case 11 ensures that update input with the dimensional spaces
 		// identified with something else than single letters is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: " ",
 							},
@@ -223,10 +223,10 @@ func Test_Space_Verify_False(t *testing.T) {
 		// Case 12 ensures that update input with the dimensional spaces
 		// identified with something else than single letters is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "  f ",
 							},
@@ -238,10 +238,10 @@ func Test_Space_Verify_False(t *testing.T) {
 		// Case 13 ensures that update input with the dimensional spaces
 		// identified with something else than single letters is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "foo",
 							},
@@ -253,10 +253,10 @@ func Test_Space_Verify_False(t *testing.T) {
 		// Case 14 ensures that update input with the reserved dimensional space
 		// t is not valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "t",
 							},
@@ -295,24 +295,24 @@ func Test_Space_Verify_False(t *testing.T) {
 
 func Test_Space_Verify_True(t *testing.T) {
 	testCases := []struct {
-		req *metupd.UpdateI
+		req *metupd.CreateI
 	}{
 		// Case 0 ensures that empty update input is valid.
 		{
-			req: &metupd.UpdateI{},
+			req: &metupd.CreateI{},
 		},
 		// Case 1 ensures that empty update input is valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{},
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{},
 			},
 		},
 		// Case 2 ensures that update input with data is valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "x",
 							},
@@ -323,10 +323,10 @@ func Test_Space_Verify_True(t *testing.T) {
 		},
 		// Case 3 ensures that update input with data is valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "x",
 							},
@@ -343,10 +343,10 @@ func Test_Space_Verify_True(t *testing.T) {
 		},
 		// Case 4 ensures that update input with data is valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "g",
 							},
@@ -357,10 +357,10 @@ func Test_Space_Verify_True(t *testing.T) {
 		},
 		// Case 5 ensures that update input with data is valid.
 		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
 							{
 								Space: "g",
 							},
