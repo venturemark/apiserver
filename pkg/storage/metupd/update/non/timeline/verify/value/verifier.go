@@ -16,9 +16,10 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if there is any information given for modifying metrics or
-// updates. At least one of them must be updated with a request. Both of them
-// can be updated at the same time.
+// Verify checks for data to be consistent, if provided with the update request.
+// It is legitimate to not provide any data to be updated, if the update request
+// contains information to modify the text of a metric update. This is then
+// verified in other verifier implementations.
 func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 	{
 		if req.Obj == nil {

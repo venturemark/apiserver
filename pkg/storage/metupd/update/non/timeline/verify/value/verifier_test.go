@@ -8,7 +8,7 @@ import (
 	"github.com/venturemark/apigengo/pkg/pbf/metupd"
 )
 
-func Test_Consistency_Verify_False(t *testing.T) {
+func Test_Value_Verify_False(t *testing.T) {
 	testCases := []struct {
 		req *metupd.UpdateI
 	}{
@@ -166,7 +166,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 	}
 }
 
-func Test_Consistency_Verify_True(t *testing.T) {
+func Test_Value_Verify_True(t *testing.T) {
 	testCases := []struct {
 		req *metupd.UpdateI
 	}{

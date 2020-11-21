@@ -6,6 +6,7 @@ import (
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/storage/metupd/update/non/timeline/verify/consistency"
+	"github.com/venturemark/apiserver/pkg/storage/metupd/update/non/timeline/verify/space"
 	"github.com/venturemark/apiserver/pkg/storage/metupd/update/non/timeline/verify/time"
 	"github.com/venturemark/apiserver/pkg/storage/metupd/update/non/timeline/verify/update"
 	"github.com/venturemark/apiserver/pkg/storage/metupd/update/non/timeline/verify/value"
@@ -40,6 +41,16 @@ func New(config Config) (*Timeline, error) {
 		}
 
 		consistencyVerifier, err = consistency.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	var spaceVerifier *space.Verifier
+	{
+		c := space.VerifierConfig{}
+
+		spaceVerifier, err = space.NewVerifier(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -83,6 +94,7 @@ func New(config Config) (*Timeline, error) {
 
 		verify: []Verifier{
 			consistencyVerifier,
+			spaceVerifier,
 			timeVerifier,
 			updateVerifier,
 			valueVerifier,

@@ -51,36 +51,5 @@ func (t *Timeline) Verify(req *metupd.UpdateI) (bool, error) {
 		}
 	}
 
-	{
-		// Updating metrics is optional when updating metric updates. Somebody
-		// may just wish to update their updates.
-		if len(req.Obj.Property.Data) != 0 {
-			// Dimensional spaces must be identified with single character
-			// variables. Anything else other than x, y, z is invalid. Additionally
-			// the reserved dimensional space t must also not be supplied since the
-			// system provides that automatically.
-			for _, d := range req.Obj.Property.Data {
-				if len(d.Space) != 1 {
-					return false, nil
-				}
-				if d.Space == "t" {
-					return false, nil
-				}
-			}
-
-			// We do not permit updating datapoints for the same dimensional
-			// space twice. If the user tries to update a metric update with
-			// e.g. the dimension y not being unique, the request fails.
-			for i, d := range req.Obj.Property.Data {
-				if i == 0 {
-					continue
-				}
-				if req.Obj.Property.Data[0].Space == d.Space {
-					return false, nil
-				}
-			}
-		}
-	}
-
 	return true, nil
 }
