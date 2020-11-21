@@ -18,7 +18,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 
 // Verify checks if there is any information given for creating metric updates.
 // Succifient information for both of these resources must be provided.
-func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
+func (v *Verifier) Verify(req *metupd.CreateI) (bool, error) {
 	{
 		if req.Obj == nil {
 			return false, nil

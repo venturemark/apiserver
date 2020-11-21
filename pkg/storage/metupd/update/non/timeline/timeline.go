@@ -5,7 +5,7 @@ import (
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/verifier/metupd"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/update"
 	"github.com/venturemark/apiserver/pkg/verifier/metupd/update/consistency"
 	"github.com/venturemark/apiserver/pkg/verifier/metupd/update/empty"
 	"github.com/venturemark/apiserver/pkg/verifier/metupd/update/space"
@@ -23,7 +23,7 @@ type Timeline struct {
 	logger logger.Interface
 	redigo redigo.Interface
 
-	verify []metupd.Interface
+	verify []update.Interface
 }
 
 func New(config Config) (*Timeline, error) {
@@ -104,7 +104,7 @@ func New(config Config) (*Timeline, error) {
 		logger: config.Logger,
 		redigo: config.Redigo,
 
-		verify: []metupd.Interface{
+		verify: []update.Interface{
 			consistencyVerifier,
 			emptyVerifier,
 			spaceVerifier,
