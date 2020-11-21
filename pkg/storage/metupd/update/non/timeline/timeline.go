@@ -48,6 +48,16 @@ func New(config Config) (*Timeline, error) {
 		}
 	}
 
+	var emptyVerifier *empty.Verifier
+	{
+		c := empty.VerifierConfig{}
+
+		emptyVerifier, err = empty.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	var spaceVerifier *space.Verifier
 	{
 		c := space.VerifierConfig{}
@@ -75,16 +85,6 @@ func New(config Config) (*Timeline, error) {
 		}
 
 		timeVerifier, err = time.NewVerifier(c)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
-	var emptyVerifier *empty.Verifier
-	{
-		c := empty.VerifierConfig{}
-
-		emptyVerifier, err = empty.NewVerifier(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
