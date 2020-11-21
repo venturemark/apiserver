@@ -5,12 +5,13 @@ import (
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/storage/metupd/update/non/timeline/verify/consistency"
-	"github.com/venturemark/apiserver/pkg/storage/metupd/update/non/timeline/verify/space"
-	"github.com/venturemark/apiserver/pkg/storage/metupd/update/non/timeline/verify/text"
-	"github.com/venturemark/apiserver/pkg/storage/metupd/update/non/timeline/verify/time"
-	"github.com/venturemark/apiserver/pkg/storage/metupd/update/non/timeline/verify/update"
-	"github.com/venturemark/apiserver/pkg/storage/metupd/update/non/timeline/verify/value"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/consistency"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/space"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/text"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/time"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/update"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/value"
 )
 
 type Config struct {
@@ -22,7 +23,7 @@ type Timeline struct {
 	logger logger.Interface
 	redigo redigo.Interface
 
-	verify []Verifier
+	verify []metupd.Interface
 }
 
 func New(config Config) (*Timeline, error) {
@@ -103,7 +104,7 @@ func New(config Config) (*Timeline, error) {
 		logger: config.Logger,
 		redigo: config.Redigo,
 
-		verify: []Verifier{
+		verify: []metupd.Interface{
 			consistencyVerifier,
 			spaceVerifier,
 			textVerifier,

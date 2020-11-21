@@ -1,7 +1,7 @@
-package timeline
+package metupd
 
 import "github.com/venturemark/apigengo/pkg/pbf/metupd"
 
-type Verifier interface {
+type Interface interface {
 	Verify(req *metupd.UpdateI) (bool, error)
 }

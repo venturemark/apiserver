@@ -6,9 +6,10 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/venturemark/apigengo/pkg/pbf/metric"
-	"github.com/venturemark/apiserver/pkg/metadata"
 	loggerfake "github.com/xh3b4sd/logger/fake"
 	redigofake "github.com/xh3b4sd/redigo/fake"
+
+	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
 func Test_Timeline_Verify_Bool_False(t *testing.T) {
