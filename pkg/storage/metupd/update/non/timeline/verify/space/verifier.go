@@ -30,18 +30,12 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 // with the update request.
 func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 	{
-		if req.Obj == nil {
-			return false, nil
-		}
-		if req.Obj.Property == nil {
-			return false, nil
-		}
-	}
-
-	{
 		// If no data is provided it may not be an update request to modify
 		// data. It may only be an update request to modify text. This is then
 		// handled by another verifier.
+		if req.Obj == nil {
+			return true, nil
+		}
 		if req.Obj.Property == nil {
 			return true, nil
 		}

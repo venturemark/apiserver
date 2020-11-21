@@ -12,14 +12,30 @@ func Test_Value_Verify_False(t *testing.T) {
 	testCases := []struct {
 		req *metupd.UpdateI
 	}{
-		// Case 0 ensures that empty update input is not valid.
-		{
-			req: &metupd.UpdateI{},
-		},
-		// Case 1 ensures that empty update input is not valid.
+		// Case 0 ensures that update input with empty data is not valid.
 		{
 			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{},
+				Obj: &metupd.UpdateI_Obj{
+					Property: &metupd.UpdateI_Obj_Property{
+						Data: []*metupd.UpdateI_Obj_Property_Data{
+							{},
+						},
+					},
+				},
+			},
+		},
+		// Case 1 ensures that update input with empty data is not valid.
+		{
+			req: &metupd.UpdateI{
+				Obj: &metupd.UpdateI_Obj{
+					Property: &metupd.UpdateI_Obj_Property{
+						Data: []*metupd.UpdateI_Obj_Property_Data{
+							{},
+							{},
+							{},
+						},
+					},
+				},
 			},
 		},
 		// Case 2 ensures that update input with empty data is not valid.
@@ -28,7 +44,9 @@ func Test_Value_Verify_False(t *testing.T) {
 				Obj: &metupd.UpdateI_Obj{
 					Property: &metupd.UpdateI_Obj_Property{
 						Data: []*metupd.UpdateI_Obj_Property_Data{
-							{},
+							{
+								Value: []float64{},
+							},
 						},
 					},
 				},
@@ -40,34 +58,6 @@ func Test_Value_Verify_False(t *testing.T) {
 				Obj: &metupd.UpdateI_Obj{
 					Property: &metupd.UpdateI_Obj_Property{
 						Data: []*metupd.UpdateI_Obj_Property_Data{
-							{},
-							{},
-							{},
-						},
-					},
-				},
-			},
-		},
-		// Case 4 ensures that update input with empty data is not valid.
-		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
-							{
-								Value: []float64{},
-							},
-						},
-					},
-				},
-			},
-		},
-		// Case 5 ensures that update input with empty data is not valid.
-		{
-			req: &metupd.UpdateI{
-				Obj: &metupd.UpdateI_Obj{
-					Property: &metupd.UpdateI_Obj_Property{
-						Data: []*metupd.UpdateI_Obj_Property_Data{
 							{
 								Value: []float64{},
 							},
@@ -82,7 +72,7 @@ func Test_Value_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 6 ensures that update input with inconsistent data is not valid.
+		// Case 4 ensures that update input with inconsistent data is not valid.
 		{
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
@@ -111,7 +101,7 @@ func Test_Value_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 7 ensures that update input with inconsistent data is not valid.
+		// Case 5 ensures that update input with inconsistent data is not valid.
 		{
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
@@ -170,7 +160,17 @@ func Test_Value_Verify_True(t *testing.T) {
 	testCases := []struct {
 		req *metupd.UpdateI
 	}{
-		// Case 0 ensures that update input with data is valid.
+		// Case 0 ensures that empty update input is valid.
+		{
+			req: &metupd.UpdateI{},
+		},
+		// Case 1 ensures that empty update input is valid.
+		{
+			req: &metupd.UpdateI{
+				Obj: &metupd.UpdateI_Obj{},
+			},
+		},
+		// Case 2 ensures that update input with data is valid.
 		{
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
@@ -186,7 +186,7 @@ func Test_Value_Verify_True(t *testing.T) {
 				},
 			},
 		},
-		// Case 1 ensures that update input with data is valid.
+		// Case 3 ensures that update input with data is valid.
 		{
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
@@ -212,7 +212,7 @@ func Test_Value_Verify_True(t *testing.T) {
 				},
 			},
 		},
-		// Case 2 ensures that update input with data is valid.
+		// Case 4 ensures that update input with data is valid.
 		{
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
@@ -230,7 +230,7 @@ func Test_Value_Verify_True(t *testing.T) {
 				},
 			},
 		},
-		// Case 3 ensures that update input with data is valid.
+		// Case 5 ensures that update input with data is valid.
 		{
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
