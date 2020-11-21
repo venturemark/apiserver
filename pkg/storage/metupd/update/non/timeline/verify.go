@@ -1,14 +1,10 @@
 package timeline
 
 import (
-	"fmt"
-
 	"github.com/venturemark/apigengo/pkg/pbf/metupd"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/value/metric/timeline/data"
 )
 
 func (t *Timeline) Verify(req *metupd.UpdateI) (bool, error) {
@@ -109,28 +105,6 @@ func (t *Timeline) Verify(req *metupd.UpdateI) (bool, error) {
 					continue
 				}
 				if len(req.Obj.Property.Data[0].Value) != len(d.Value) {
-					return false, nil
-				}
-			}
-
-			// We always check the latest item of the sorted set to check the amount
-			// of datapoints on the y axis. Due to this very check the consistency
-			// of the sorted set is ensured, which means that lookup up a single
-			// element of the sorted set is sufficient.
-			k := fmt.Sprintf(key.TimelineMetric, req.Obj.Metadata[metadata.Timeline])
-			s, err := t.redigo.Scored().Search(k, 0, 1)
-			if err != nil {
-				return false, tracer.Mask(err)
-			}
-			if len(s) == 1 {
-				_, val, err := data.Split(s[0])
-				if err != nil {
-					return false, tracer.Mask(err)
-				}
-
-				c := len(val[0].GetValue())
-				y := len(req.Obj.Property.Data[0].Value)
-				if c != y {
 					return false, nil
 				}
 			}

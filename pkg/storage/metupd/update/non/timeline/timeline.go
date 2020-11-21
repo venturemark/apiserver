@@ -5,6 +5,7 @@ import (
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
 
+	"github.com/venturemark/apiserver/pkg/storage/metupd/update/non/timeline/verify/consistency"
 	"github.com/venturemark/apiserver/pkg/storage/metupd/update/non/timeline/verify/time"
 )
 
@@ -30,6 +31,18 @@ func New(config Config) (*Timeline, error) {
 
 	var err error
 
+	var consistencyVerifier *consistency.Verifier
+	{
+		c := consistency.VerifierConfig{
+			Redigo: config.Redigo,
+		}
+
+		consistencyVerifier, err = consistency.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	var timeVerifier *time.Verifier
 	{
 		c := time.VerifierConfig{
@@ -47,6 +60,7 @@ func New(config Config) (*Timeline, error) {
 		redigo: config.Redigo,
 
 		verify: []Verifier{
+			consistencyVerifier,
 			timeVerifier,
 		},
 	}

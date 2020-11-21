@@ -11,7 +11,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
-func Test_Time_Verify_Input_False(t *testing.T) {
+func Test_Time_Verify_False(t *testing.T) {
 	uni := time.Unix(int64(1605025038), 0)
 
 	testCases := []struct {
@@ -99,7 +99,7 @@ func Test_Time_Verify_Input_False(t *testing.T) {
 	}
 }
 
-func Test_Time_Verify_Input_True(t *testing.T) {
+func Test_Time_Verify_True(t *testing.T) {
 	uni := time.Unix(int64(1605025038), 0)
 
 	testCases := []struct {

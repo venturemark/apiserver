@@ -23,11 +23,11 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 		return nil, tracer.Maskf(invalidConfigError, "%T.Now must not be empty", config)
 	}
 
-	t := &Verifier{
+	v := &Verifier{
 		now: config.Now,
 	}
 
-	return t, nil
+	return v, nil
 }
 
 // Verify checks if a metric update is too old to be modified. We have a
@@ -40,10 +40,12 @@ func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 		if req.Obj.Metadata == nil {
 			return false, nil
 		}
+	}
 
-		// Updating metric updates requires a timeline ID to be provided with
-		// which the metric and the update can be associated with. If the
-		// timeline ID is empty, we decline service for this request.
+	{
+		// Updating metric updates requires a unix timestamp to be provided with
+		// which the metric and the update can be associated with. If the unix
+		// timestamp is empty, we decline service for this request.
 		if req.Obj.Metadata[metadata.Unixtime] == "" {
 			return false, nil
 		}
