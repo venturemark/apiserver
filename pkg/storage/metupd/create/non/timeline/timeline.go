@@ -10,7 +10,6 @@ import (
 	"github.com/venturemark/apiserver/pkg/verifier/metupd/create/empty"
 	"github.com/venturemark/apiserver/pkg/verifier/metupd/create/space"
 	"github.com/venturemark/apiserver/pkg/verifier/metupd/create/text"
-	"github.com/venturemark/apiserver/pkg/verifier/metupd/create/time"
 	"github.com/venturemark/apiserver/pkg/verifier/metupd/create/value"
 )
 
@@ -68,18 +67,6 @@ func New(config Config) (*Timeline, error) {
 		}
 	}
 
-	var timeVerifier *time.Verifier
-	{
-		c := time.VerifierConfig{
-			Now: now(),
-		}
-
-		timeVerifier, err = time.NewVerifier(c)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
 	var emptyVerifier *empty.Verifier
 	{
 		c := empty.VerifierConfig{}
@@ -109,7 +96,6 @@ func New(config Config) (*Timeline, error) {
 			emptyVerifier,
 			spaceVerifier,
 			textVerifier,
-			timeVerifier,
 			valueVerifier,
 		},
 	}
