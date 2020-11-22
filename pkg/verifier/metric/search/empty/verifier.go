@@ -2,6 +2,7 @@ package empty
 
 import (
 	"github.com/venturemark/apigengo/pkg/pbf/metric"
+
 	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
