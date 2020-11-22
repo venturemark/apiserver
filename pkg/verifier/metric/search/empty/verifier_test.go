@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/venturemark/apigengo/pkg/pbf/metric"
+
 	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
