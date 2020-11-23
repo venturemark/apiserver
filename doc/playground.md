@@ -66,7 +66,7 @@ $ grpcurl -d '{"obj":[{"metadata":{"venturemark.co/timeline":"tml-kn433"}}]}' -p
           {
             "space": "t",
             "value": [
-              1605741130
+              1.605741130e+09
             ]
           },
           {
