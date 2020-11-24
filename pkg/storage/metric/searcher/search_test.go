@@ -1,4 +1,4 @@
-package timeline
+package searcher
 
 import (
 	"reflect"
@@ -14,7 +14,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
-func Test_Timeline_Search_Redis(t *testing.T) {
+func Test_Searcher_Search_Redis(t *testing.T) {
 	testCases := []struct {
 		req *metric.SearchI
 		str []string
@@ -153,7 +153,7 @@ func Test_Timeline_Search_Redis(t *testing.T) {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			var err error
 
-			var tml *Timeline
+			var s *Searcher
 			{
 				c := Config{
 					Logger: loggerfake.New(),
@@ -168,13 +168,13 @@ func Test_Timeline_Search_Redis(t *testing.T) {
 					},
 				}
 
-				tml, err = New(c)
+				s, err = New(c)
 				if err != nil {
 					t.Fatal(err)
 				}
 			}
 
-			res, err := tml.Search(tc.req)
+			res, err := s.Search(tc.req)
 			if err != nil {
 				t.Fatal(err)
 			}
