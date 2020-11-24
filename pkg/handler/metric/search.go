@@ -11,13 +11,13 @@ func (h *Handler) Search(ctx context.Context, obj *metric.SearchI) (*metric.Sear
 	// Search for any metric associated with the given timeline. One timeline ID
 	// must be provided.
 	{
-		ok, err := h.storage.Metric.Search.Non.Timeline.Verify(obj)
+		ok, err := h.storage.Metric.Searcher.Verify(obj)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 
 		if ok {
-			res, err := h.storage.Metric.Search.Non.Timeline.Search(obj)
+			res, err := h.storage.Metric.Searcher.Search(obj)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}

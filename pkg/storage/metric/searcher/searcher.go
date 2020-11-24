@@ -1,4 +1,4 @@
-package timeline
+package searcher
 
 import (
 	"github.com/xh3b4sd/logger"
@@ -14,14 +14,14 @@ type Config struct {
 	Redigo redigo.Interface
 }
 
-type Timeline struct {
+type Searcher struct {
 	logger logger.Interface
 	redigo redigo.Interface
 
 	verify []search.Interface
 }
 
-func New(config Config) (*Timeline, error) {
+func New(config Config) (*Searcher, error) {
 	if config.Logger == nil {
 		return nil, tracer.Maskf(invalidConfigError, "%T.Logger must not be empty", config)
 	}
@@ -41,7 +41,7 @@ func New(config Config) (*Timeline, error) {
 		}
 	}
 
-	t := &Timeline{
+	s := &Searcher{
 		logger: config.Logger,
 		redigo: config.Redigo,
 
@@ -50,5 +50,5 @@ func New(config Config) (*Timeline, error) {
 		},
 	}
 
-	return t, nil
+	return s, nil
 }
