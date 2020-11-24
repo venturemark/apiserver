@@ -1,4 +1,4 @@
-package timeline
+package updater
 
 import (
 	"reflect"
@@ -14,7 +14,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
-func Test_Timeline_Update_Redis(t *testing.T) {
+func Test_Updater_Update_Redis(t *testing.T) {
 	testCases := []struct {
 		req        *metupd.UpdateI
 		updateFake func() (bool, error)
@@ -136,7 +136,7 @@ func Test_Timeline_Update_Redis(t *testing.T) {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			var err error
 
-			var tml *Timeline
+			var u *Updater
 			{
 				c := Config{
 					Logger: loggerfake.New(),
@@ -149,13 +149,13 @@ func Test_Timeline_Update_Redis(t *testing.T) {
 					},
 				}
 
-				tml, err = New(c)
+				u, err = New(c)
 				if err != nil {
 					t.Fatal(err)
 				}
 			}
 
-			res, err := tml.Update(tc.req)
+			res, err := u.Update(tc.req)
 			if err != nil {
 				t.Fatal(err)
 			}

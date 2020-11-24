@@ -1,4 +1,4 @@
-package timeline
+package updater
 
 import (
 	"fmt"
@@ -19,7 +19,7 @@ import (
 // Metrics and updates can be found considering their scope and time of
 // creation. For more information about technical details see the inline
 // documentation.
-func (t *Timeline) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
+func (u *Updater) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
 	var err error
 
 	var uni float64
@@ -43,7 +43,7 @@ func (t *Timeline) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
 		e := mel.Join(uni, toInterface(req.Obj.Property.Data))
 		s := uni
 
-		met, err = t.redigo.Scored().Update(k, e, s)
+		met, err = u.redigo.Scored().Update(k, e, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -62,7 +62,7 @@ func (t *Timeline) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
 		e := uel.Join(uni, req.Obj.Property.Text)
 		s := uni
 
-		upd, err = t.redigo.Scored().Update(k, e, s)
+		upd, err = u.redigo.Scored().Update(k, e, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
