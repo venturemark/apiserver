@@ -1,4 +1,4 @@
-package user
+package searcher
 
 import (
 	"fmt"
@@ -14,7 +14,7 @@ import (
 
 // Search provides a filter primitive to lookup timelines associated with a
 // user.
-func (t *User) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
+func (s *Searcher) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 	var err error
 
 	// With redis we use ZREVRANGE which allows us to search for objects while
@@ -22,7 +22,7 @@ func (t *User) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 	var str []string
 	{
 		k := fmt.Sprintf(key.UserTimeline, req.Obj[0].Metadata[metadata.User])
-		str, err = t.redigo.Scored().Search(k, 0, -1)
+		str, err = s.redigo.Scored().Search(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

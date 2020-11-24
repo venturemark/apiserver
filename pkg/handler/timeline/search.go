@@ -11,13 +11,13 @@ func (h *Handler) Search(ctx context.Context, obj *timeline.SearchI) (*timeline.
 	// Search for any timeline associated with the given user. One user ID must
 	// be provided.
 	{
-		ok, err := h.storage.Timeline.Search.Non.User.Verify(obj)
+		ok, err := h.storage.Timeline.Searcher.Verify(obj)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 
 		if ok {
-			res, err := h.storage.Timeline.Search.Non.User.Search(obj)
+			res, err := h.storage.Timeline.Searcher.Search(obj)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
