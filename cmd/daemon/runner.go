@@ -13,6 +13,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/handler"
 	"github.com/venturemark/apiserver/pkg/handler/metric"
 	"github.com/venturemark/apiserver/pkg/handler/metupd"
+	"github.com/venturemark/apiserver/pkg/handler/timeline"
 	"github.com/venturemark/apiserver/pkg/handler/update"
 	"github.com/venturemark/apiserver/pkg/server/grpc"
 	"github.com/venturemark/apiserver/pkg/storage"
@@ -93,6 +94,19 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 		}
 	}
 
+	var timelineHandler *timeline.Handler
+	{
+		c := timeline.HandlerConfig{
+			Logger:  r.logger,
+			Storage: redisStorage,
+		}
+
+		timelineHandler, err = timeline.NewHandler(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
+
 	var updateHandler *update.Handler
 	{
 		c := update.HandlerConfig{
@@ -113,6 +127,7 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 			Handlers: []handler.Interface{
 				metricHandler,
 				metupdHandler,
+				timelineHandler,
 				updateHandler,
 			},
 
