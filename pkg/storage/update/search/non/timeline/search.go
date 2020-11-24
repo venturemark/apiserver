@@ -9,7 +9,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/value/update/timeline/data"
+	"github.com/venturemark/apiserver/pkg/value/update/element"
 )
 
 // Search provides a filter primitive to lookup updates associated with a
@@ -42,7 +42,7 @@ func (t *Timeline) Search(req *update.SearchI) (*update.SearchO, error) {
 		res = &update.SearchO{}
 
 		for _, s := range str {
-			uni, val, err := data.Split(s)
+			uni, val, err := element.Split(s)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}

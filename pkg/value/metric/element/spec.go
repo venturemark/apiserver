@@ -1,4 +1,4 @@
-package data
+package element
 
 type Interface interface {
 	GetSpace() string
