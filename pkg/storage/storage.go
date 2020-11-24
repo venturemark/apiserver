@@ -7,6 +7,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/storage/metric"
 	"github.com/venturemark/apiserver/pkg/storage/metupd"
+	"github.com/venturemark/apiserver/pkg/storage/timeline"
 	"github.com/venturemark/apiserver/pkg/storage/update"
 )
 
@@ -16,9 +17,10 @@ type Config struct {
 }
 
 type Storage struct {
-	Metric *metric.Metric
-	MetUpd *metupd.MetUpd
-	Update *update.Update
+	Metric   *metric.Metric
+	MetUpd   *metupd.MetUpd
+	Timeline *timeline.Timeline
+	Update   *update.Update
 }
 
 func New(config Config) (*Storage, error) {
@@ -50,6 +52,19 @@ func New(config Config) (*Storage, error) {
 		}
 	}
 
+	var timelineStorage *timeline.Timeline
+	{
+		c := timeline.Config{
+			Logger: config.Logger,
+			Redigo: config.Redigo,
+		}
+
+		timelineStorage, err = timeline.New(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	var updateStorage *update.Update
 	{
 		c := update.Config{
@@ -64,9 +79,10 @@ func New(config Config) (*Storage, error) {
 	}
 
 	s := &Storage{
-		Metric: metricStorage,
-		MetUpd: metupdStorage,
-		Update: updateStorage,
+		Metric:   metricStorage,
+		MetUpd:   metupdStorage,
+		Timeline: timelineStorage,
+		Update:   updateStorage,
 	}
 
 	return s, nil
