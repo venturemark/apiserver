@@ -1,4 +1,4 @@
-package user
+package searcher
 
 import (
 	"github.com/xh3b4sd/logger"
@@ -14,14 +14,14 @@ type Config struct {
 	Redigo redigo.Interface
 }
 
-type User struct {
+type Searcher struct {
 	logger logger.Interface
 	redigo redigo.Interface
 
 	verify []search.Interface
 }
 
-func New(config Config) (*User, error) {
+func New(config Config) (*Searcher, error) {
 	if config.Logger == nil {
 		return nil, tracer.Maskf(invalidConfigError, "%T.Logger must not be empty", config)
 	}
@@ -41,7 +41,7 @@ func New(config Config) (*User, error) {
 		}
 	}
 
-	u := &User{
+	s := &Searcher{
 		logger: config.Logger,
 		redigo: config.Redigo,
 
@@ -50,5 +50,5 @@ func New(config Config) (*User, error) {
 		},
 	}
 
-	return u, nil
+	return s, nil
 }

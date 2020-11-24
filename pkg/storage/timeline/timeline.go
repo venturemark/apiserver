@@ -5,7 +5,7 @@ import (
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/storage/timeline/search"
+	"github.com/venturemark/apiserver/pkg/storage/timeline/searcher"
 )
 
 type Config struct {
@@ -14,27 +14,27 @@ type Config struct {
 }
 
 type Timeline struct {
-	Search *search.Search
+	Searcher *searcher.Searcher
 }
 
 func New(config Config) (*Timeline, error) {
 	var err error
 
-	var s *search.Search
+	var s *searcher.Searcher
 	{
-		c := search.Config{
+		c := searcher.Config{
 			Logger: config.Logger,
 			Redigo: config.Redigo,
 		}
 
-		s, err = search.New(c)
+		s, err = searcher.New(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 	}
 
 	t := &Timeline{
-		Search: s,
+		Searcher: s,
 	}
 
 	return t, nil
