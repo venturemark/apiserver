@@ -1,4 +1,4 @@
-package search
+package searcher
 
 import "github.com/venturemark/apigengo/pkg/pbf/timeline"
 
