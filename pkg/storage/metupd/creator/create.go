@@ -35,12 +35,12 @@ func (c *Creator) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	}
 
 	// We store metrics in a sorted set. The elements of the sorted set are
-	// concatenated strings of n and potentially multiple datapoints per
-	// dimensional space. Here n is the unix timestamp referring to the time
-	// right now at creation time. Here any y value represents a datapoint
-	// relevant to the user on the associated dimensional space. We track n as
-	// part of the element within the sorted set to guarantee a unique element,
-	// even if the user's coordinates on a timeline ever appear twice.
+	// concatenated strings of t and e. Here t is the unix timestamp referring
+	// to the time right now at creation time. Here e is a composision of any
+	// datapoint relevant to the user on the associated dimensional space. We
+	// track t as part of the element within the sorted set to guarantee a
+	// unique element, even if the user's coordinates on a timeline ever appear
+	// twice.
 	{
 		k := fmt.Sprintf(key.TimelineMetric, req.Obj.Metadata[metadata.Timeline])
 		e := mel.Join(uni, toInterface(req.Obj.Property.Data))
@@ -53,9 +53,9 @@ func (c *Creator) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	}
 
 	// We store updates in a sorted set. The elements of the sorted set are
-	// concatenated strings of n and t. Here n is the unix timestamp referring
-	// to the time right now at creation time. Here t is the user's natural
-	// language in written form. We track n as part of the element within the
+	// concatenated strings of t and e. Here t is the unix timestamp referring
+	// to the time right now at creation time. Here e is the user's natural
+	// language in written form. We track t as part of the element within the
 	// sorted set to guarantee a unique element, even if the user's coordinates
 	// on a timeline ever appear twice.
 	{
