@@ -1,4 +1,4 @@
-package timeline
+package creator
 
 import (
 	"fmt"
@@ -20,7 +20,7 @@ import (
 // Metrics and updates can be found considering their metadata and time of
 // creation. For more information about technical details see the inline
 // documentation.
-func (t *Timeline) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
+func (c *Creator) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	var err error
 
 	// We manage data on a timeline. Our main identifier is a unix timestamp in
@@ -46,7 +46,7 @@ func (t *Timeline) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 		e := mel.Join(uni, toInterface(req.Obj.Property.Data))
 		s := uni
 
-		err = t.redigo.Scored().Create(k, e, s)
+		err = c.redigo.Scored().Create(k, e, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -63,7 +63,7 @@ func (t *Timeline) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 		e := uel.Join(uni, req.Obj.Property.Text)
 		s := uni
 
-		err = t.redigo.Scored().Create(k, e, s)
+		err = c.redigo.Scored().Create(k, e, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
