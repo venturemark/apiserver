@@ -9,7 +9,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/value/metric/timeline/data"
+	"github.com/venturemark/apiserver/pkg/value/metric/element"
 )
 
 type VerifierConfig struct {
@@ -75,7 +75,7 @@ func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 				return false, tracer.Mask(err)
 			}
 			if len(s) == 1 {
-				_, val, err := data.Split(s[0])
+				_, val, err := element.Split(s[0])
 				if err != nil {
 					return false, tracer.Mask(err)
 				}

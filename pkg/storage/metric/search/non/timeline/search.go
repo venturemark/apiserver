@@ -9,7 +9,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/value/metric/timeline/data"
+	"github.com/venturemark/apiserver/pkg/value/metric/element"
 )
 
 // Search provides a filter primitive to lookup metrics associated with a
@@ -44,7 +44,7 @@ func (t *Timeline) Search(req *metric.SearchI) (*metric.SearchO, error) {
 		res = &metric.SearchO{}
 
 		for _, s := range str {
-			uni, val, err := data.Split(s)
+			uni, val, err := element.Split(s)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}

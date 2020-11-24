@@ -10,8 +10,8 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
-	mdat "github.com/venturemark/apiserver/pkg/value/metric/timeline/data"
-	udat "github.com/venturemark/apiserver/pkg/value/update/timeline/data"
+	mel "github.com/venturemark/apiserver/pkg/value/metric/element"
+	uel "github.com/venturemark/apiserver/pkg/value/update/element"
 )
 
 // Create provides a storage primitive to persist metric updates associated with
@@ -43,7 +43,7 @@ func (t *Timeline) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	// even if the user's coordinates on a timeline ever appear twice.
 	{
 		k := fmt.Sprintf(key.TimelineMetric, req.Obj.Metadata[metadata.Timeline])
-		e := mdat.Join(uni, toInterface(req.Obj.Property.Data))
+		e := mel.Join(uni, toInterface(req.Obj.Property.Data))
 		s := uni
 
 		err = t.redigo.Scored().Create(k, e, s)
@@ -60,7 +60,7 @@ func (t *Timeline) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	// on a timeline ever appear twice.
 	{
 		k := fmt.Sprintf(key.TimelineUpdate, req.Obj.Metadata[metadata.Timeline])
-		e := udat.Join(uni, req.Obj.Property.Text)
+		e := uel.Join(uni, req.Obj.Property.Text)
 		s := uni
 
 		err = t.redigo.Scored().Create(k, e, s)
@@ -83,8 +83,8 @@ func (t *Timeline) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	return res, nil
 }
 
-func toInterface(dat []*metupd.CreateI_Obj_Property_Data) []mdat.Interface {
-	var l []mdat.Interface
+func toInterface(dat []*metupd.CreateI_Obj_Property_Data) []mel.Interface {
+	var l []mel.Interface
 
 	for _, d := range dat {
 		l = append(l, d)
