@@ -1,4 +1,4 @@
-package timeline
+package searcher
 
 import (
 	"github.com/venturemark/apigengo/pkg/pbf/update"
@@ -6,7 +6,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
-func (t *Timeline) Verify(req *update.SearchI) (bool, error) {
+func (s *Searcher) Verify(req *update.SearchI) (bool, error) {
 	{
 		// Any search request with api specifics is not valid at this point. We
 		// will extend functionality here later.

@@ -1,4 +1,4 @@
-package timeline
+package searcher
 
 import (
 	"strconv"
@@ -12,7 +12,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
-func Test_Timeline_Verify_Bool_False(t *testing.T) {
+func Test_Searcher_Verify_Bool_False(t *testing.T) {
 	testCases := []struct {
 		req *update.SearchI
 	}{
@@ -152,20 +152,20 @@ func Test_Timeline_Verify_Bool_False(t *testing.T) {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			var err error
 
-			var tml *Timeline
+			var s *Searcher
 			{
 				c := Config{
 					Logger: loggerfake.New(),
 					Redigo: redigofake.New(),
 				}
 
-				tml, err = New(c)
+				s, err = New(c)
 				if err != nil {
 					t.Fatal(err)
 				}
 			}
 
-			ok, err := tml.Verify(tc.req)
+			ok, err := s.Verify(tc.req)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -177,7 +177,7 @@ func Test_Timeline_Verify_Bool_False(t *testing.T) {
 	}
 }
 
-func Test_Timeline_Verify_Bool_True(t *testing.T) {
+func Test_Searcher_Verify_Bool_True(t *testing.T) {
 	testCases := []struct {
 		req *update.SearchI
 	}{
@@ -211,20 +211,20 @@ func Test_Timeline_Verify_Bool_True(t *testing.T) {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			var err error
 
-			var tml *Timeline
+			var s *Searcher
 			{
 				c := Config{
 					Logger: loggerfake.New(),
 					Redigo: redigofake.New(),
 				}
 
-				tml, err = New(c)
+				s, err = New(c)
 				if err != nil {
 					t.Fatal(err)
 				}
 			}
 
-			ok, err := tml.Verify(tc.req)
+			ok, err := s.Verify(tc.req)
 			if err != nil {
 				t.Fatal(err)
 			}

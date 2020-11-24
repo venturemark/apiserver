@@ -1,4 +1,4 @@
-package timeline
+package searcher
 
 import (
 	"fmt"
@@ -16,7 +16,7 @@ import (
 // timeline. A timeline refers to many updates. Updates can be found considering
 // their scope and time of creation. For more information about technical
 // details see the inline documentation.
-func (t *Timeline) Search(req *update.SearchI) (*update.SearchO, error) {
+func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 	var err error
 
 	// With redis we use ZREVRANGE which allows us to search for objects while
@@ -28,7 +28,7 @@ func (t *Timeline) Search(req *update.SearchI) (*update.SearchO, error) {
 	var str []string
 	{
 		k := fmt.Sprintf(key.TimelineUpdate, req.Obj[0].Metadata[metadata.Timeline])
-		str, err = t.redigo.Scored().Search(k, 0, -1)
+		str, err = s.redigo.Scored().Search(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

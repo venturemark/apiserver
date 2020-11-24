@@ -11,13 +11,13 @@ func (h *Handler) Search(ctx context.Context, obj *update.SearchI) (*update.Sear
 	// Search for any update associated with the given timeline. One timeline ID
 	// must be provided.
 	{
-		ok, err := h.storage.Update.Search.Non.Timeline.Verify(obj)
+		ok, err := h.storage.Update.Searcher.Verify(obj)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 
 		if ok {
-			res, err := h.storage.Update.Search.Non.Timeline.Search(obj)
+			res, err := h.storage.Update.Searcher.Search(obj)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
