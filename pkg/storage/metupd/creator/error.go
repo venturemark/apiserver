@@ -1,4 +1,4 @@
-package timeline
+package creator
 
 import (
 	"errors"

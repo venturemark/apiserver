@@ -5,7 +5,7 @@ import (
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/storage/metupd/create"
+	"github.com/venturemark/apiserver/pkg/storage/metupd/creator"
 	"github.com/venturemark/apiserver/pkg/storage/metupd/update"
 )
 
@@ -15,21 +15,21 @@ type Config struct {
 }
 
 type MetUpd struct {
-	Create *create.Create
-	Update *update.Update
+	Creator *creator.Creator
+	Update  *update.Update
 }
 
 func New(config Config) (*MetUpd, error) {
 	var err error
 
-	var cre *create.Create
+	var cre *creator.Creator
 	{
-		c := create.Config{
+		c := creator.Config{
 			Logger: config.Logger,
 			Redigo: config.Redigo,
 		}
 
-		cre, err = create.New(c)
+		cre, err = creator.New(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -49,8 +49,8 @@ func New(config Config) (*MetUpd, error) {
 	}
 
 	m := &MetUpd{
-		Create: cre,
-		Update: upd,
+		Creator: cre,
+		Update:  upd,
 	}
 
 	return m, nil

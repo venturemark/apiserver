@@ -1,4 +1,4 @@
-package timeline
+package creator
 
 import (
 	"github.com/xh3b4sd/logger"
@@ -18,14 +18,14 @@ type Config struct {
 	Redigo redigo.Interface
 }
 
-type Timeline struct {
+type Creator struct {
 	logger logger.Interface
 	redigo redigo.Interface
 
 	verify []create.Interface
 }
 
-func New(config Config) (*Timeline, error) {
+func New(config Config) (*Creator, error) {
 	if config.Logger == nil {
 		return nil, tracer.Maskf(invalidConfigError, "%T.Logger must not be empty", config)
 	}
@@ -87,7 +87,7 @@ func New(config Config) (*Timeline, error) {
 		}
 	}
 
-	t := &Timeline{
+	c := &Creator{
 		logger: config.Logger,
 		redigo: config.Redigo,
 
@@ -100,5 +100,5 @@ func New(config Config) (*Timeline, error) {
 		},
 	}
 
-	return t, nil
+	return c, nil
 }
