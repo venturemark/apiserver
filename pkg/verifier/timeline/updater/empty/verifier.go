@@ -35,13 +35,13 @@ func (v *Verifier) Verify(req *timeline.UpdateI) (bool, error) {
 	}
 
 	{
-		if req.Obj.Metadata[metadata.Unixtime] == "" {
+		if req.Obj.Metadata[metadata.TimelineID] == "" {
 			return false, nil
 		}
 	}
 
 	{
-		if req.Obj.Metadata[metadata.User] == "" {
+		if req.Obj.Metadata[metadata.UserID] == "" {
 			return false, nil
 		}
 	}

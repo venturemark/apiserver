@@ -35,7 +35,7 @@ func (v *Verifier) Verify(req *timeline.CreateI) (bool, error) {
 	}
 
 	{
-		if req.Obj.Metadata[metadata.User] == "" {
+		if req.Obj.Metadata[metadata.UserID] == "" {
 			return false, nil
 		}
 	}

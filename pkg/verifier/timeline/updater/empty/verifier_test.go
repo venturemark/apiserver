@@ -49,13 +49,40 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 5 ensures that create input without object properties is not
+		// Case 5 ensures that create input without user ID is not valid.
+		{
+			req: &timeline.UpdateI{
+				Obj: &timeline.UpdateI_Obj{
+					Metadata: map[string]string{
+						metadata.TimelineID: "1606329189",
+					},
+					Property: &timeline.UpdateI_Obj_Property{
+						Name: "foo",
+					},
+				},
+			},
+		},
+		// Case 6 ensures that create input without timeline ID is not valid.
+		{
+			req: &timeline.UpdateI{
+				Obj: &timeline.UpdateI_Obj{
+					Metadata: map[string]string{
+						metadata.UserID: "usr-al9qy",
+					},
+					Property: &timeline.UpdateI_Obj_Property{
+						Name: "foo",
+					},
+				},
+			},
+		},
+		// Case 7 ensures that create input without object properties is not
 		// valid.
 		{
 			req: &timeline.UpdateI{
 				Obj: &timeline.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.User: "usr-al9qy",
+						metadata.TimelineID: "1606329189",
+						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &timeline.UpdateI_Obj_Property{},
 				},
@@ -98,7 +125,8 @@ func Test_Empty_Verify_True(t *testing.T) {
 			req: &timeline.UpdateI{
 				Obj: &timeline.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.User: "usr-al9qy",
+						metadata.TimelineID: "1606329189",
+						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &timeline.UpdateI_Obj_Property{
 						Name: "mmr",
@@ -111,7 +139,8 @@ func Test_Empty_Verify_True(t *testing.T) {
 			req: &timeline.UpdateI{
 				Obj: &timeline.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.User: "usr-kn433",
+						metadata.TimelineID: "1605559909",
+						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &timeline.UpdateI_Obj_Property{
 						Name: "MMR",

@@ -18,6 +18,11 @@ import (
 func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 	var err error
 
+	var usr string
+	{
+		usr = req.Obj.Metadata[metadata.UserID]
+	}
+
 	// We manage data on a timeline. Our main identifier is a unix timestamp in
 	// seconds is normalized to the UTC timezone. Our discovery mechanisms is
 	// designed based on this very unix timestamp. Everything starts with time,
@@ -33,7 +38,7 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 	// track t as part of the element within the sorted set to guarantee a
 	// unique element.
 	{
-		k := fmt.Sprintf(key.UserTimeline, req.Obj.Metadata[metadata.User])
+		k := fmt.Sprintf(key.Timeline, usr)
 		e := element.Join(uni, req.Obj.Property.Name)
 		s := uni
 
@@ -48,7 +53,7 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 		res = &timeline.CreateO{
 			Obj: &timeline.CreateO_Obj{
 				Metadata: map[string]string{
-					metadata.Unixtime: strconv.Itoa(int(uni)),
+					metadata.TimelineID: strconv.Itoa(int(uni)),
 				},
 			},
 		}

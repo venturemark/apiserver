@@ -55,7 +55,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 			req: &timeline.CreateI{
 				Obj: &timeline.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.User: "usr-al9qy",
+						metadata.UserID: "usr-al9qy",
 					},
 					Property: &timeline.CreateI_Obj_Property{},
 				},
@@ -98,7 +98,7 @@ func Test_Empty_Verify_True(t *testing.T) {
 			req: &timeline.CreateI{
 				Obj: &timeline.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.User: "usr-al9qy",
+						metadata.UserID: "usr-al9qy",
 					},
 					Property: &timeline.CreateI_Obj_Property{
 						Name: "mmr",
@@ -111,7 +111,7 @@ func Test_Empty_Verify_True(t *testing.T) {
 			req: &timeline.CreateI{
 				Obj: &timeline.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.User: "usr-kn433",
+						metadata.UserID: "usr-kn433",
 					},
 					Property: &timeline.CreateI_Obj_Property{
 						Name: "MMR",

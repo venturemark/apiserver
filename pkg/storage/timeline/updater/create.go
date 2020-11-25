@@ -17,12 +17,14 @@ import (
 func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 	var err error
 
-	var uni float64
+	var tml float64
+	var usr string
 	{
-		uni, err = strconv.ParseFloat(req.Obj.Metadata[metadata.Unixtime], 64)
+		tml, err = strconv.ParseFloat(req.Obj.Metadata[metadata.TimelineID], 64)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
+		usr = req.Obj.Metadata[metadata.UserID]
 	}
 
 	// We store timelines in a sorted set. The elements of the sorted set are
@@ -30,13 +32,13 @@ func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 	// to the time right now at creation time. Here e is the timeline name. We
 	// track t as part of the element within the sorted set to guarantee a
 	// unique element.
-	var tml bool
+	var tok bool
 	{
-		k := fmt.Sprintf(key.UserTimeline, req.Obj.Metadata[metadata.User])
-		e := element.Join(uni, req.Obj.Property.Name)
-		s := uni
+		k := fmt.Sprintf(key.Timeline, usr)
+		e := element.Join(tml, req.Obj.Property.Name)
+		s := tml
 
-		tml, err = u.redigo.Scored().Update(k, e, s)
+		tok, err = u.redigo.Scored().Update(k, e, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -50,7 +52,7 @@ func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 			},
 		}
 
-		if tml {
+		if tok {
 			res.Obj.Metadata[metadata.TimelineStatus] = "updated"
 		}
 	}
