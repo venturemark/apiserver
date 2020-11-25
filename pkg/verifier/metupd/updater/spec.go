@@ -1,4 +1,4 @@
-package update
+package updater
 
 import "github.com/venturemark/apigengo/pkg/pbf/metupd"
 
