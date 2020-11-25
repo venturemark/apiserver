@@ -5,13 +5,13 @@ import (
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/verifier/metupd/update"
-	"github.com/venturemark/apiserver/pkg/verifier/metupd/update/consistency"
-	"github.com/venturemark/apiserver/pkg/verifier/metupd/update/empty"
-	"github.com/venturemark/apiserver/pkg/verifier/metupd/update/space"
-	"github.com/venturemark/apiserver/pkg/verifier/metupd/update/text"
-	"github.com/venturemark/apiserver/pkg/verifier/metupd/update/time"
-	"github.com/venturemark/apiserver/pkg/verifier/metupd/update/value"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/updater"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/updater/consistency"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/updater/empty"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/updater/space"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/updater/text"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/updater/time"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/updater/value"
 )
 
 type Config struct {
@@ -23,7 +23,7 @@ type Updater struct {
 	logger logger.Interface
 	redigo redigo.Interface
 
-	verify []update.Interface
+	verify []updater.Interface
 }
 
 func New(config Config) (*Updater, error) {
@@ -104,7 +104,7 @@ func New(config Config) (*Updater, error) {
 		logger: config.Logger,
 		redigo: config.Redigo,
 
-		verify: []update.Interface{
+		verify: []updater.Interface{
 			consistencyVerifier,
 			emptyVerifier,
 			spaceVerifier,
