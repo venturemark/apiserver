@@ -17,13 +17,47 @@ func Test_Consistency_Verify_False(t *testing.T) {
 		req        *metupd.CreateI
 		searchFake func() ([]string, error)
 	}{
-		// Case 0 ensures that update input with too many datapoints is
+		// Case 0 ensures that empty create input is not valid.
+		{
+			req: &metupd.CreateI{},
+			searchFake: func() ([]string, error) {
+				return []string{"0:y,1"}, nil
+			},
+		},
+		// Case 1 ensures that empty create input is not valid.
+		{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{},
+			},
+			searchFake: func() ([]string, error) {
+				return []string{"0:y,1"}, nil
+			},
+		},
+		// Case 2 ensures that empty create input is not valid.
+		{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.TimelineID: "1606329189",
+						metadata.UserID:     "usr-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{},
+					},
+				},
+			},
+			searchFake: func() ([]string, error) {
+				return []string{"0:y,1"}, nil
+			},
+		},
+		// Case 3 ensures that create input with too many datapoints is
 		// not valid.
 		{
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.Timeline: "tml-al9qy",
+						metadata.TimelineID: "1606329189",
+						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{
@@ -41,13 +75,14 @@ func Test_Consistency_Verify_False(t *testing.T) {
 				return []string{"0:y,1"}, nil
 			},
 		},
-		// Case 1 ensures that update input with too many datapoints is
+		// Case 4 ensures that create input with too many datapoints is
 		// not valid.
 		{
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.Timeline: "tml-al9qy",
+						metadata.TimelineID: "1606329189",
+						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{
@@ -67,13 +102,14 @@ func Test_Consistency_Verify_False(t *testing.T) {
 				return []string{"0:y,1,2"}, nil
 			},
 		},
-		// Case 2 ensures that update input with too few datapoints is
+		// Case 5 ensures that create input with too few datapoints is
 		// not valid.
 		{
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.Timeline: "tml-al9qy",
+						metadata.TimelineID: "1606329189",
+						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{
@@ -90,13 +126,14 @@ func Test_Consistency_Verify_False(t *testing.T) {
 				return []string{"0:y,1,2,3,4"}, nil
 			},
 		},
-		// Case 3 ensures that update input with too few datapoints is
+		// Case 6 ensures that create input with too few datapoints is
 		// not valid.
 		{
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.Timeline: "tml-al9qy",
+						metadata.TimelineID: "1606329189",
+						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{
@@ -155,60 +192,14 @@ func Test_Consistency_Verify_True(t *testing.T) {
 		req        *metupd.CreateI
 		searchFake func() ([]string, error)
 	}{
-		// Case 0 ensures that empty update input is valid.
-		{
-			req: &metupd.CreateI{},
-			searchFake: func() ([]string, error) {
-				return []string{"0:y,1"}, nil
-			},
-		},
-		// Case 1 ensures that empty update input is valid.
-		{
-			req: &metupd.CreateI{
-				Obj: &metupd.CreateI_Obj{},
-			},
-			searchFake: func() ([]string, error) {
-				return []string{"0:y,1"}, nil
-			},
-		},
-		// Case 2 ensures that update input without data is valid, because an
-		// update request might only be meant to update the text of a metric
-		// update.
-		{
-			req: &metupd.CreateI{
-				Obj: &metupd.CreateI_Obj{
-					Metadata: map[string]string{
-						metadata.Timeline: "tml-al9qy",
-					},
-				},
-			},
-			searchFake: func() ([]string, error) {
-				return []string{"0:y,1"}, nil
-			},
-		},
-		// Case 3 ensures that update input without data is valid, because an
-		// update request might only be meant to update the text of a metric
-		// update.
-		{
-			req: &metupd.CreateI{
-				Obj: &metupd.CreateI_Obj{
-					Metadata: map[string]string{
-						metadata.Timeline: "tml-al9qy",
-					},
-					Property: &metupd.CreateI_Obj_Property{},
-				},
-			},
-			searchFake: func() ([]string, error) {
-				return []string{"0:y,1"}, nil
-			},
-		},
-		// Case 4 ensures that update input with the correct amount of
+		// Case 0 ensures that create input with the correct amount of
 		// datapoints is valid.
 		{
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.Timeline: "tml-al9qy",
+						metadata.TimelineID: "1606329189",
+						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{
@@ -226,13 +217,14 @@ func Test_Consistency_Verify_True(t *testing.T) {
 				return []string{"0:y,1,2"}, nil
 			},
 		},
-		// Case 5 ensures that update input with the correct amount of
+		// Case 1 ensures that create input with the correct amount of
 		// datapoints is valid.
 		{
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.Timeline: "tml-al9qy",
+						metadata.TimelineID: "1606329189",
+						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{
@@ -252,13 +244,14 @@ func Test_Consistency_Verify_True(t *testing.T) {
 				return []string{"0:y,1,2,3,4"}, nil
 			},
 		},
-		// Case 6 ensures that update input with the correct amount of
+		// Case 2 ensures that create input with the correct amount of
 		// datapoints is valid.
 		{
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.Timeline: "tml-al9qy",
+						metadata.TimelineID: "1606329189",
+						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{

@@ -2,6 +2,8 @@ package empty
 
 import (
 	"github.com/venturemark/apigengo/pkg/pbf/metupd"
+
+	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
 type VerifierConfig struct {
@@ -24,6 +26,21 @@ func (v *Verifier) Verify(req *metupd.CreateI) (bool, error) {
 			return false, nil
 		}
 		if req.Obj.Property == nil {
+			return false, nil
+		}
+		if req.Obj.Metadata == nil {
+			return false, nil
+		}
+	}
+
+	{
+		if req.Obj.Metadata[metadata.TimelineID] == "" {
+			return false, nil
+		}
+	}
+
+	{
+		if req.Obj.Metadata[metadata.UserID] == "" {
 			return false, nil
 		}
 	}

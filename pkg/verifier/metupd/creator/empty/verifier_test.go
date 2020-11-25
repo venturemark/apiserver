@@ -6,6 +6,8 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/venturemark/apigengo/pkg/pbf/metupd"
+
+	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
 func Test_Empty_Verify_False(t *testing.T) {
@@ -30,21 +32,77 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 3 ensures that update input with empty data is not valid.
+		// Case 3 ensures that create input without metadata is not valid.
 		{
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{},
+						},
+						Text: "Lorem ipsum ...",
+					},
+				},
+			},
+		},
+		// Case 4 ensures that create input without user ID in the metadata
+		// is not valid.
+		{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.TimelineID: "1606329189",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{},
+						},
+						Text: "Lorem ipsum ...",
+					},
+				},
+			},
+		},
+		// Case 5 ensures that create input without timeline ID is not
+		// valid.
+		{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.UserID: "usr-al9qy",
+					},
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{},
+						},
+						Text: "Lorem ipsum ...",
+					},
+				},
+			},
+		},
+		// Case 6 ensures that update input with empty data is not valid.
+		{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.TimelineID: "1606329189",
+						metadata.UserID:     "usr-al9qy",
+					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{},
 					},
 				},
 			},
 		},
-		// Case 4 ensures that update input with empty data and empty text is
+		// Case 7 ensures that update input with empty data and empty text is
 		// not valid.
 		{
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.TimelineID: "1606329189",
+						metadata.UserID:     "usr-al9qy",
+					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{},
 						Text: "",
@@ -52,10 +110,14 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 5 ensures that update input with empty data is not valid.
+		// Case 8 ensures that update input with empty data is not valid.
 		{
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.TimelineID: "1606329189",
+						metadata.UserID:     "usr-al9qy",
+					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{},
 						Text: "Lorem ipsum ...",
@@ -99,6 +161,10 @@ func Test_Empty_Verify_True(t *testing.T) {
 		{
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.TimelineID: "1606329189",
+						metadata.UserID:     "usr-al9qy",
+					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{},
@@ -112,6 +178,10 @@ func Test_Empty_Verify_True(t *testing.T) {
 		{
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.TimelineID: "1605559909",
+						metadata.UserID:     "usr-w4ndz",
+					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{
 							{},

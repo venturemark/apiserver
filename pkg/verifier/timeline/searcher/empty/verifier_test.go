@@ -61,7 +61,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				Obj: []*timeline.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.User: "usr-al9qy",
+							metadata.UserID: "usr-al9qy",
 						},
 					},
 					{
@@ -78,7 +78,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				Obj: []*timeline.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.User: "usr-al9qy",
+							metadata.UserID: "usr-al9qy",
 						},
 						Property: &timeline.SearchI_Obj_Property{},
 					},
@@ -123,7 +123,7 @@ func Test_Empty_Verify_True(t *testing.T) {
 				Obj: []*timeline.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.User: "usr-al9qy",
+							metadata.UserID: "usr-al9qy",
 						},
 					},
 				},
@@ -135,7 +135,7 @@ func Test_Empty_Verify_True(t *testing.T) {
 				Obj: []*timeline.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.User: "usr-kn433",
+							metadata.UserID: "usr-kn433",
 						},
 					},
 				},
