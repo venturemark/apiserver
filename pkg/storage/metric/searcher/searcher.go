@@ -5,8 +5,8 @@ import (
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/verifier/metric/search"
-	"github.com/venturemark/apiserver/pkg/verifier/metric/search/empty"
+	"github.com/venturemark/apiserver/pkg/verifier/metric/searcher"
+	"github.com/venturemark/apiserver/pkg/verifier/metric/searcher/empty"
 )
 
 type Config struct {
@@ -18,7 +18,7 @@ type Searcher struct {
 	logger logger.Interface
 	redigo redigo.Interface
 
-	verify []search.Interface
+	verify []searcher.Interface
 }
 
 func New(config Config) (*Searcher, error) {
@@ -45,7 +45,7 @@ func New(config Config) (*Searcher, error) {
 		logger: config.Logger,
 		redigo: config.Redigo,
 
-		verify: []search.Interface{
+		verify: []searcher.Interface{
 			emptyVerifier,
 		},
 	}
