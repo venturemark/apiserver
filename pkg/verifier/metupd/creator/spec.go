@@ -1,4 +1,4 @@
-package create
+package creator
 
 import "github.com/venturemark/apigengo/pkg/pbf/metupd"
 
