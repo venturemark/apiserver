@@ -8,8 +8,6 @@ import (
 )
 
 func (h *Handler) Search(ctx context.Context, obj *timeline.SearchI) (*timeline.SearchO, error) {
-	// Search for any timeline associated with the given user. One user ID must
-	// be provided.
 	{
 		ok, err := h.storage.Timeline.Searcher.Verify(obj)
 		if err != nil {

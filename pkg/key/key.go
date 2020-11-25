@@ -1,7 +1,7 @@
 package key
 
 const (
-	TimelineMetric = "tml:%s:met"
-	TimelineUpdate = "tml:%s:upd"
-	UserTimeline   = "usr:%s:tml"
+	Metric   = "usr:%s:tml:%s:met"
+	Timeline = "usr:%s:tml"
+	Update   = "usr:%s:tml:%s:upd"
 )

@@ -27,7 +27,8 @@ func Test_Searcher_Search_Redis(t *testing.T) {
 				Obj: []*metric.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.Timeline: "tml-al9qy",
+							metadata.TimelineID: "1606329189",
+							metadata.UserID:     "usr-w4ndz",
 						},
 					},
 				},
@@ -40,8 +41,9 @@ func Test_Searcher_Search_Redis(t *testing.T) {
 				Obj: []*metric.SearchO_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.Timeline: "tml-al9qy",
-							metadata.Unixtime: "1605559909",
+							metadata.MetricID:   "1605559909",
+							metadata.TimelineID: "1606329189",
+							metadata.UserID:     "usr-w4ndz",
 						},
 						Property: &metric.SearchO_Obj_Property{
 							Data: []*metric.SearchO_Obj_Property_Data{
@@ -62,8 +64,9 @@ func Test_Searcher_Search_Redis(t *testing.T) {
 					},
 					{
 						Metadata: map[string]string{
-							metadata.Timeline: "tml-al9qy",
-							metadata.Unixtime: "1605559911",
+							metadata.MetricID:   "1605559911",
+							metadata.TimelineID: "1606329189",
+							metadata.UserID:     "usr-w4ndz",
 						},
 						Property: &metric.SearchO_Obj_Property{
 							Data: []*metric.SearchO_Obj_Property_Data{
@@ -92,7 +95,8 @@ func Test_Searcher_Search_Redis(t *testing.T) {
 				Obj: []*metric.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.Timeline: "tml-al9qy",
+							metadata.TimelineID: "1606329189",
+							metadata.UserID:     "usr-w4ndz",
 						},
 					},
 				},
@@ -104,8 +108,9 @@ func Test_Searcher_Search_Redis(t *testing.T) {
 				Obj: []*metric.SearchO_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.Timeline: "tml-al9qy",
-							metadata.Unixtime: "1605559909",
+							metadata.MetricID:   "1605559909",
+							metadata.TimelineID: "1606329189",
+							metadata.UserID:     "usr-w4ndz",
 						},
 						Property: &metric.SearchO_Obj_Property{
 							Data: []*metric.SearchO_Obj_Property_Data{

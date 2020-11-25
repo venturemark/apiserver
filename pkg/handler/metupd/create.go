@@ -8,7 +8,6 @@ import (
 )
 
 func (h *Handler) Create(ctx context.Context, obj *metupd.CreateI) (*metupd.CreateO, error) {
-	// Create metric updates associated with the given timeline.
 	{
 		ok, err := h.storage.MetUpd.Creator.Verify(obj)
 		if err != nil {

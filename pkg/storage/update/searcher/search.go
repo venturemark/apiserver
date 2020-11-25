@@ -19,6 +19,13 @@ import (
 func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 	var err error
 
+	var tml string
+	var usr string
+	{
+		tml = req.Obj[0].Metadata[metadata.TimelineID]
+		usr = req.Obj[0].Metadata[metadata.UserID]
+	}
+
 	// With redis we use ZREVRANGE which allows us to search for objects while
 	// having support for chunking.
 	//
@@ -27,7 +34,7 @@ func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 	// updates within a certain timerange.
 	var str []string
 	{
-		k := fmt.Sprintf(key.TimelineUpdate, req.Obj[0].Metadata[metadata.Timeline])
+		k := fmt.Sprintf(key.Update, usr, tml)
 		str, err = s.redigo.Scored().Search(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -49,8 +56,9 @@ func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 
 			o := &update.SearchO_Obj{
 				Metadata: map[string]string{
-					metadata.Timeline: req.Obj[0].Metadata[metadata.Timeline],
-					metadata.Unixtime: strconv.Itoa(int(uni)),
+					metadata.UpdateID:   strconv.Itoa(int(uni)),
+					metadata.TimelineID: tml,
+					metadata.UserID:     usr,
 				},
 				Property: &update.SearchO_Obj_Property{
 					Text: val,
