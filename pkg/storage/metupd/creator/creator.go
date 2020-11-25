@@ -5,12 +5,12 @@ import (
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/verifier/metupd/create"
-	"github.com/venturemark/apiserver/pkg/verifier/metupd/create/consistency"
-	"github.com/venturemark/apiserver/pkg/verifier/metupd/create/empty"
-	"github.com/venturemark/apiserver/pkg/verifier/metupd/create/space"
-	"github.com/venturemark/apiserver/pkg/verifier/metupd/create/text"
-	"github.com/venturemark/apiserver/pkg/verifier/metupd/create/value"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/creator"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/creator/consistency"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/creator/empty"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/creator/space"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/creator/text"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/creator/value"
 )
 
 type Config struct {
@@ -22,7 +22,7 @@ type Creator struct {
 	logger logger.Interface
 	redigo redigo.Interface
 
-	verify []create.Interface
+	verify []creator.Interface
 }
 
 func New(config Config) (*Creator, error) {
@@ -91,7 +91,7 @@ func New(config Config) (*Creator, error) {
 		logger: config.Logger,
 		redigo: config.Redigo,
 
-		verify: []create.Interface{
+		verify: []creator.Interface{
 			consistencyVerifier,
 			emptyVerifier,
 			spaceVerifier,
