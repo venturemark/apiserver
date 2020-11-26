@@ -24,7 +24,7 @@ Searching for metrics the first time against the apiserver does not result in
 any data, since none got created yet. Note you need `grpcurl` installed.
 
 ```
-$ grpcurl -d '{"obj":[{"metadata":{"venturemark.co/timeline":"tml-kn433"}}]}' -plaintext 127.0.0.1:7777 metric.API.Search
+$ grpcurl -d '{"obj":[{"metadata":{"timeline.venturemark.co/id":"1606396471","user.venturemark.co/id":"usr-al9qy"}}]}' -plaintext 127.0.0.1:7777 metric.API.Search
 {
 
 }
@@ -36,11 +36,12 @@ Creating the first metric update against the apiserver can be done like this.
 Right now only the timestamp of creation is returned.
 
 ```
-$ grpcurl -d '{"obj":{"metadata":{"venturemark.co/timeline":"tml-kn433"},"property":{"data":[{"space":"y","value":[23]}],"text":"foo bar baz"}}}' -plaintext 127.0.0.1:7777 metupd.API.Create
+$ grpcurl -d '{"obj":{"metadata":{"timeline.venturemark.co/id":"1606396471","user.venturemark.co/id":"usr-al9qy"},"property":{"data":[{"space":"y","value":[23]}],"text":"foo bar baz"}}}' -plaintext 127.0.0.1:7777 metupd.API.Create
 {
   "obj": {
     "metadata": {
-      "venturemark.co/unixtime": "1605741130"
+      "metric.venturemark.co/id": "1606400781",
+      "update.venturemark.co/id": "1606400781"
     }
   }
 }
@@ -53,20 +54,21 @@ automatically injected dimension t tracking the unix timestamp of each datapoint
 emitted.
 
 ```
-$ grpcurl -d '{"obj":[{"metadata":{"venturemark.co/timeline":"tml-kn433"}}]}' -plaintext 127.0.0.1:7777 metric.API.Search
+$ grpcurl -d '{"obj":[{"metadata":{"timeline.venturemark.co/id":"1606396471","user.venturemark.co/id":"usr-al9qy"}}]}' -plaintext 127.0.0.1:7777 metric.API.Search
 {
   "obj": [
     {
       "metadata": {
-        "venturemark.co/timeline": "tml-kn433",
-        "venturemark.co/unixtime": "1605741130"
+        "metric.venturemark.co/id": "1606400781",
+        "timeline.venturemark.co/id": "1606396471",
+        "user.venturemark.co/id": "usr-al9qy"
       },
       "property": {
         "data": [
           {
             "space": "t",
             "value": [
-              1.605741130e+09
+              1.606400781e+09
             ]
           },
           {
@@ -88,7 +90,7 @@ Updating the text of a metric update is shown below. Note the response metadata
 indicating which property got updated.
 
 ```
-$ grpcurl -d '{"obj":{"metadata":{"venturemark.co/timeline":"tml-kn433","venturemark.co/unixtime": "1605741130"},"property":{"text":"changed"}}}' -plaintext 127.0.0.1:7777 metupd.API.Update
+$ grpcurl -d '{"obj":{"metadata":{"timeline.venturemark.co/id":"1606396471","update.venturemark.co/id":"1606400781","user.venturemark.co/id":"usr-al9qy"},"property":{"text":"changed"}}}' -plaintext 127.0.0.1:7777 metupd.API.Update
 {
   "obj": {
     "metadata": {
@@ -104,13 +106,14 @@ Searching for the text of a metric update shows the updated content after the
 update call above.
 
 ```
-$ grpcurl -d '{"obj":[{"metadata":{"venturemark.co/timeline":"tml-kn433"}}]}' -plaintext 127.0.0.1:7777 update.API.Search
+$ grpcurl -d '{"obj":[{"metadata":{"timeline.venturemark.co/id":"1606396471","user.venturemark.co/id":"usr-al9qy"}}]}' -plaintext 127.0.0.1:7777 update.API.Search
 {
   "obj": [
     {
       "metadata": {
-        "venturemark.co/timeline": "tml-kn433",
-        "venturemark.co/unixtime": "1605741130"
+        "timeline.venturemark.co/id": "1606396471",
+        "update.venturemark.co/id": "1606400781",
+        "user.venturemark.co/id": "usr-al9qy"
       },
       "property": {
         "text": "changed"
