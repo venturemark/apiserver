@@ -6,6 +6,8 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/venturemark/apigengo/pkg/pbf/metupd"
+
+	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
 func Test_Empty_Verify_False(t *testing.T) {
@@ -22,29 +24,74 @@ func Test_Empty_Verify_False(t *testing.T) {
 				Obj: &metupd.UpdateI_Obj{},
 			},
 		},
-		// Case 2 ensures that empty update input is not valid.
+		// Case 2 ensures that update input without timeline ID is not valid.
 		{
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
+					Metadata: map[string]string{
+						metadata.MetricID: "1606329189",
+						metadata.UserID:   "usr-al9qy",
+					},
+					Property: &metupd.UpdateI_Obj_Property{
+						Data: []*metupd.UpdateI_Obj_Property_Data{
+							{},
+						},
+					},
+				},
+			},
+		},
+		// Case 3 ensures that update input without user ID is not valid.
+		{
+			req: &metupd.UpdateI{
+				Obj: &metupd.UpdateI_Obj{
+					Metadata: map[string]string{
+						metadata.TimelineID: "1606329189",
+						metadata.UpdateID:   "1606329189",
+					},
+					Property: &metupd.UpdateI_Obj_Property{
+						Text: "Lorem ipsum ...",
+					},
+				},
+			},
+		},
+		// Case 4 ensures that empty update input is not valid.
+		{
+			req: &metupd.UpdateI{
+				Obj: &metupd.UpdateI_Obj{
+					Metadata: map[string]string{
+						metadata.TimelineID: "1606329189",
+						metadata.UserID:     "usr-al9qy",
+					},
 					Property: &metupd.UpdateI_Obj_Property{},
 				},
 			},
 		},
-		// Case 3 ensures that update input with empty data is not valid.
+		// Case 5 ensures that update input with empty data is not valid.
 		{
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
+					Metadata: map[string]string{
+						metadata.MetricID:   "1606329189",
+						metadata.TimelineID: "1606329189",
+						metadata.UserID:     "usr-al9qy",
+					},
 					Property: &metupd.UpdateI_Obj_Property{
 						Data: []*metupd.UpdateI_Obj_Property_Data{},
 					},
 				},
 			},
 		},
-		// Case 4 ensures that update input with empty data and empty text is
+		// Case 6 ensures that update input with empty data and empty text is
 		// not valid.
 		{
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
+					Metadata: map[string]string{
+						metadata.MetricID:   "1606329189",
+						metadata.TimelineID: "1606329189",
+						metadata.UpdateID:   "1606329189",
+						metadata.UserID:     "usr-al9qy",
+					},
 					Property: &metupd.UpdateI_Obj_Property{
 						Data: []*metupd.UpdateI_Obj_Property_Data{},
 						Text: "",
@@ -88,6 +135,11 @@ func Test_Empty_Verify_True(t *testing.T) {
 		{
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
+					Metadata: map[string]string{
+						metadata.MetricID:   "1606329189",
+						metadata.TimelineID: "1606329189",
+						metadata.UserID:     "usr-al9qy",
+					},
 					Property: &metupd.UpdateI_Obj_Property{
 						Data: []*metupd.UpdateI_Obj_Property_Data{
 							{},
@@ -102,7 +154,31 @@ func Test_Empty_Verify_True(t *testing.T) {
 		{
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
+					Metadata: map[string]string{
+						metadata.TimelineID: "1606329189",
+						metadata.UpdateID:   "1606329189",
+						metadata.UserID:     "usr-al9qy",
+					},
 					Property: &metupd.UpdateI_Obj_Property{
+						Text: "Lorem ipsum ...",
+					},
+				},
+			},
+		},
+		// Case 2 ensures that update input with data and text is valid.
+		{
+			req: &metupd.UpdateI{
+				Obj: &metupd.UpdateI_Obj{
+					Metadata: map[string]string{
+						metadata.MetricID:   "1606329189",
+						metadata.TimelineID: "1606329189",
+						metadata.UpdateID:   "1606329189",
+						metadata.UserID:     "usr-al9qy",
+					},
+					Property: &metupd.UpdateI_Obj_Property{
+						Data: []*metupd.UpdateI_Obj_Property_Data{
+							{},
+						},
 						Text: "Lorem ipsum ...",
 					},
 				},

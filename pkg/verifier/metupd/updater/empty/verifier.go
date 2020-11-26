@@ -2,6 +2,8 @@ package empty
 
 import (
 	"github.com/venturemark/apigengo/pkg/pbf/metupd"
+
+	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
 type VerifierConfig struct {
@@ -24,16 +26,43 @@ func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 		if req.Obj == nil {
 			return false, nil
 		}
+		if req.Obj.Metadata == nil {
+			return false, nil
+		}
+		if len(req.Obj.Metadata) != 3 && len(req.Obj.Metadata) != 4 {
+			return false, nil
+		}
 		if req.Obj.Property == nil {
 			return false, nil
 		}
 	}
 
 	{
-		// Updating metric updates requires at least one of the resources to be
-		// specified for modification. It is not valid to request the update of
-		// any resource without providing any of these resources.
-		if req.Obj.Property.Data == nil && req.Obj.Property.Text == "" {
+		if req.Obj.Metadata[metadata.TimelineID] == "" {
+			return false, nil
+		}
+		if req.Obj.Metadata[metadata.UserID] == "" {
+			return false, nil
+		}
+	}
+
+	{
+		met := req.Obj.Metadata[metadata.MetricID] == ""
+		dat := req.Obj.Property.Data == nil
+
+		upd := req.Obj.Metadata[metadata.UpdateID] == ""
+		tex := req.Obj.Property.Text == ""
+
+		// Ensure a metric ID if data is provided to be updated.
+		if met && !dat || !met && dat {
+			return false, nil
+		}
+		// Ensure an update ID if text is provided to be updated.
+		if upd && !tex || !upd && tex {
+			return false, nil
+		}
+		// Ensure that either data or text is provided to be updated.
+		if dat && tex {
 			return false, nil
 		}
 	}
