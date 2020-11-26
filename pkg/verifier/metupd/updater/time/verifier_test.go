@@ -47,7 +47,7 @@ func Test_Time_Verify_False(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.Unixtime: toString(uni),
+						metadata.MetricID: toString(uni),
 					},
 				},
 			},
@@ -58,7 +58,7 @@ func Test_Time_Verify_False(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.Unixtime: toString(uni),
+						metadata.UpdateID: toString(uni),
 					},
 				},
 			},
@@ -69,11 +69,24 @@ func Test_Time_Verify_False(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.Unixtime: toString(uni),
+						metadata.MetricID: toString(uni),
+						metadata.UpdateID: toString(uni),
 					},
 				},
 			},
 			now: uni.Add(24 * time.Hour),
+		},
+		// Case 6 ensures that update input with inconsistent IDs is not valid.
+		{
+			req: &metupd.UpdateI{
+				Obj: &metupd.UpdateI_Obj{
+					Metadata: map[string]string{
+						metadata.MetricID: "1605025038",
+						metadata.UpdateID: "1606396471",
+					},
+				},
+			},
+			now: uni.Add(3 * time.Minute),
 		},
 	}
 
@@ -119,7 +132,7 @@ func Test_Time_Verify_True(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.Unixtime: toString(uni),
+						metadata.MetricID: toString(uni),
 					},
 				},
 			},
@@ -130,7 +143,7 @@ func Test_Time_Verify_True(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.Unixtime: toString(uni),
+						metadata.UpdateID: toString(uni),
 					},
 				},
 			},
@@ -141,7 +154,8 @@ func Test_Time_Verify_True(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.Unixtime: toString(uni),
+						metadata.MetricID: toString(uni),
+						metadata.UpdateID: toString(uni),
 					},
 				},
 			},
@@ -173,7 +187,7 @@ func Test_Time_Verify_True(t *testing.T) {
 			}
 
 			if ok != true {
-				t.Fatalf("\n\n%s\n", cmp.Diff(ok, false))
+				t.Fatalf("\n\n%s\n", cmp.Diff(ok, true))
 			}
 		})
 	}
