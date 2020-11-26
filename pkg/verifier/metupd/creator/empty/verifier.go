@@ -25,10 +25,13 @@ func (v *Verifier) Verify(req *metupd.CreateI) (bool, error) {
 		if req.Obj == nil {
 			return false, nil
 		}
-		if req.Obj.Property == nil {
+		if req.Obj.Metadata == nil {
 			return false, nil
 		}
-		if req.Obj.Metadata == nil {
+		if len(req.Obj.Metadata) != 2 {
+			return false, nil
+		}
+		if req.Obj.Property == nil {
 			return false, nil
 		}
 	}
@@ -37,9 +40,6 @@ func (v *Verifier) Verify(req *metupd.CreateI) (bool, error) {
 		if req.Obj.Metadata[metadata.TimelineID] == "" {
 			return false, nil
 		}
-	}
-
-	{
 		if req.Obj.Metadata[metadata.UserID] == "" {
 			return false, nil
 		}
