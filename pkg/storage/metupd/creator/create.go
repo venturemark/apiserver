@@ -23,15 +23,22 @@ import (
 func (c *Creator) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	var err error
 
+	var tml string
+	var usr string
+	{
+		tml = req.Obj.Metadata[metadata.TimelineID]
+		usr = req.Obj.Metadata[metadata.UserID]
+	}
+
 	// We manage data on a timeline. Our main identifier is a unix timestamp in
 	// seconds is normalized to the UTC timezone. Persisting metrics and updates
 	// respectively uses the same timestamp. This is then how we associate one
 	// with the other. This is then also how our discovery mechanisms are
 	// designed. Everything starts with time, which means that pseudo random IDs
 	// are irrelevant for us.
-	var uni float64
+	var mui float64
 	{
-		uni = float64(time.Now().UTC().Unix())
+		mui = float64(time.Now().UTC().Unix())
 	}
 
 	// We store metrics in a sorted set. The elements of the sorted set are
@@ -42,9 +49,9 @@ func (c *Creator) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	// unique element, even if the user's coordinates on a timeline ever appear
 	// twice.
 	{
-		k := fmt.Sprintf(key.TimelineMetric, req.Obj.Metadata[metadata.Timeline])
-		e := mel.Join(uni, toInterface(req.Obj.Property.Data))
-		s := uni
+		k := fmt.Sprintf(key.Metric, usr, tml)
+		e := mel.Join(mui, toInterface(req.Obj.Property.Data))
+		s := mui
 
 		err = c.redigo.Scored().Create(k, e, s)
 		if err != nil {
@@ -59,9 +66,9 @@ func (c *Creator) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	// sorted set to guarantee a unique element, even if the user's coordinates
 	// on a timeline ever appear twice.
 	{
-		k := fmt.Sprintf(key.TimelineUpdate, req.Obj.Metadata[metadata.Timeline])
-		e := uel.Join(uni, req.Obj.Property.Text)
-		s := uni
+		k := fmt.Sprintf(key.Update, usr, tml)
+		e := uel.Join(mui, req.Obj.Property.Text)
+		s := mui
 
 		err = c.redigo.Scored().Create(k, e, s)
 		if err != nil {
@@ -74,7 +81,8 @@ func (c *Creator) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 		res = &metupd.CreateO{
 			Obj: &metupd.CreateO_Obj{
 				Metadata: map[string]string{
-					metadata.Unixtime: strconv.Itoa(int(uni)),
+					metadata.MetricID: strconv.Itoa(int(mui)),
+					metadata.UpdateID: strconv.Itoa(int(mui)),
 				},
 			},
 		}

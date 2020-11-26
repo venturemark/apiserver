@@ -5,37 +5,37 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/venturemark/apigengo/pkg/pbf/metric"
+	"github.com/venturemark/apigengo/pkg/pbf/update"
 
 	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
 func Test_Empty_Verify_False(t *testing.T) {
 	testCases := []struct {
-		req *metric.SearchI
+		req *update.SearchI
 	}{
 		// Case 0 ensures that search input without metadata is not valid.
 		{
-			req: &metric.SearchI{},
+			req: &update.SearchI{},
 		},
 		// Case 1 ensures that search input without metadata is not valid.
 		{
-			req: &metric.SearchI{
-				Obj: []*metric.SearchI_Obj{},
+			req: &update.SearchI{
+				Obj: []*update.SearchI_Obj{},
 			},
 		},
 		// Case 2 ensures that search input without metadata is not valid.
 		{
-			req: &metric.SearchI{
-				Obj: []*metric.SearchI_Obj{
+			req: &update.SearchI{
+				Obj: []*update.SearchI_Obj{
 					{},
 				},
 			},
 		},
 		// Case 3 ensures that search input without metadata is not valid.
 		{
-			req: &metric.SearchI{
-				Obj: []*metric.SearchI_Obj{
+			req: &update.SearchI{
+				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{},
 					},
@@ -45,8 +45,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 		// Case 4 ensures that search input without timeline ID in the metadata
 		// is not valid.
 		{
-			req: &metric.SearchI{
-				Obj: []*metric.SearchI_Obj{
+			req: &update.SearchI{
+				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
 							"foo": "bar",
@@ -57,8 +57,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 		},
 		// Case 5 ensures that search input with multiple objects is not valid.
 		{
-			req: &metric.SearchI{
-				Obj: []*metric.SearchI_Obj{
+			req: &update.SearchI{
+				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
 							metadata.TimelineID: "1606329189",
@@ -75,40 +75,40 @@ func Test_Empty_Verify_False(t *testing.T) {
 		},
 		// Case 6 ensures that search input with object properties is not valid.
 		{
-			req: &metric.SearchI{
-				Obj: []*metric.SearchI_Obj{
+			req: &update.SearchI{
+				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
 							metadata.TimelineID: "1606329189",
 							metadata.UserID:     "usr-w4ndz",
 						},
-						Property: &metric.SearchI_Obj_Property{},
+						Property: &update.SearchI_Obj_Property{},
 					},
 				},
 			},
 		},
 		// Case 7 ensures that search input without timeline ID is not valid.
 		{
-			req: &metric.SearchI{
-				Obj: []*metric.SearchI_Obj{
+			req: &update.SearchI{
+				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
 							metadata.UserID: "usr-w4ndz",
 						},
-						Property: &metric.SearchI_Obj_Property{},
+						Property: &update.SearchI_Obj_Property{},
 					},
 				},
 			},
 		},
 		// Case 8 ensures that search input without user ID is not valid.
 		{
-			req: &metric.SearchI{
-				Obj: []*metric.SearchI_Obj{
+			req: &update.SearchI{
+				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
 							metadata.TimelineID: "1606329189",
 						},
-						Property: &metric.SearchI_Obj_Property{},
+						Property: &update.SearchI_Obj_Property{},
 					},
 				},
 			},
@@ -143,12 +143,12 @@ func Test_Empty_Verify_False(t *testing.T) {
 
 func Test_Empty_Verify_True(t *testing.T) {
 	testCases := []struct {
-		req *metric.SearchI
+		req *update.SearchI
 	}{
 		// Case 0 ensures that search input with timeline ID is valid.
 		{
-			req: &metric.SearchI{
-				Obj: []*metric.SearchI_Obj{
+			req: &update.SearchI{
+				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
 							metadata.TimelineID: "1606329189",
@@ -160,8 +160,8 @@ func Test_Empty_Verify_True(t *testing.T) {
 		},
 		// Case 1 ensures that search input with timeline ID is valid.
 		{
-			req: &metric.SearchI{
-				Obj: []*metric.SearchI_Obj{
+			req: &update.SearchI{
+				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
 							metadata.TimelineID: "1605559909",

@@ -42,17 +42,36 @@ func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 		}
 	}
 
+	var mui string
 	{
-		// Updating metric updates requires a unix timestamp to be provided with
-		// which the metric and the update can be associated with. If the unix
-		// timestamp is empty, we decline service for this request.
-		if req.Obj.Metadata[metadata.Unixtime] == "" {
+		met := req.Obj.Metadata[metadata.MetricID]
+		upd := req.Obj.Metadata[metadata.UpdateID]
+		eql := met == upd
+
+		if met != "" && upd != "" && !eql {
+			return false, nil
+		}
+
+		if met == "" {
+			mui = upd
+		}
+		if upd == "" {
+			mui = met
+		}
+
+		// If a metric ID and an update ID are given we assign the unified
+		// metric update ID for verification below. At this point we should
+		// already have a consistent ID.
+		if mui == "" {
+			mui = met
+		}
+		if mui == "" {
 			return false, nil
 		}
 	}
 
 	{
-		i, err := strconv.ParseInt(req.Obj.Metadata[metadata.Unixtime], 10, 64)
+		i, err := strconv.ParseInt(mui, 10, 64)
 		if err != nil {
 			return false, tracer.Mask(err)
 		}

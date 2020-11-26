@@ -8,8 +8,6 @@ import (
 )
 
 func (h *Handler) Search(ctx context.Context, obj *update.SearchI) (*update.SearchO, error) {
-	// Search for any update associated with the given timeline. One timeline ID
-	// must be provided.
 	{
 		ok, err := h.storage.Update.Searcher.Verify(obj)
 		if err != nil {

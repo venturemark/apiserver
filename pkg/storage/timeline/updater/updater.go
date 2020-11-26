@@ -1,12 +1,12 @@
-package searcher
+package updater
 
 import (
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/verifier/update/searcher"
-	"github.com/venturemark/apiserver/pkg/verifier/update/searcher/empty"
+	"github.com/venturemark/apiserver/pkg/verifier/timeline/updater"
+	"github.com/venturemark/apiserver/pkg/verifier/timeline/updater/empty"
 )
 
 type Config struct {
@@ -14,14 +14,14 @@ type Config struct {
 	Redigo redigo.Interface
 }
 
-type Searcher struct {
+type Updater struct {
 	logger logger.Interface
 	redigo redigo.Interface
 
-	verify []searcher.Interface
+	verify []updater.Interface
 }
 
-func New(config Config) (*Searcher, error) {
+func New(config Config) (*Updater, error) {
 	if config.Logger == nil {
 		return nil, tracer.Maskf(invalidConfigError, "%T.Logger must not be empty", config)
 	}
@@ -41,14 +41,14 @@ func New(config Config) (*Searcher, error) {
 		}
 	}
 
-	s := &Searcher{
+	u := &Updater{
 		logger: config.Logger,
 		redigo: config.Redigo,
 
-		verify: []searcher.Interface{
+		verify: []updater.Interface{
 			emptyVerifier,
 		},
 	}
 
-	return s, nil
+	return u, nil
 }

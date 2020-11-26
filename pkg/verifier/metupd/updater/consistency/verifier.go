@@ -53,10 +53,13 @@ func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 	}
 
 	{
-		// Updating metric updates requires a timeline ID to be provided with
-		// which the metric and the update can be associated with. If the
-		// timeline ID is empty, we decline service for this request.
-		if req.Obj.Metadata[metadata.Timeline] == "" {
+		if req.Obj.Metadata[metadata.TimelineID] == "" {
+			return false, nil
+		}
+	}
+
+	{
+		if req.Obj.Metadata[metadata.UserID] == "" {
 			return false, nil
 		}
 	}
@@ -65,15 +68,23 @@ func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 		// Updating metrics is optional when updating metric updates. Somebody
 		// may just wish to update their updates.
 		if len(req.Obj.Property.Data) != 0 {
+			var tml string
+			var usr string
+			{
+				tml = req.Obj.Metadata[metadata.TimelineID]
+				usr = req.Obj.Metadata[metadata.UserID]
+			}
+
 			// We always check the latest item of the sorted set to check the
 			// amount of datapoints on the y axis. Due to this very check the
 			// consistency of the sorted set is ensured, which means that
 			// looking up a single element of the sorted set is sufficient.
-			k := fmt.Sprintf(key.TimelineMetric, req.Obj.Metadata[metadata.Timeline])
+			k := fmt.Sprintf(key.Metric, usr, tml)
 			s, err := v.redigo.Scored().Search(k, 0, 1)
 			if err != nil {
 				return false, tracer.Mask(err)
 			}
+
 			if len(s) == 1 {
 				_, val, err := element.Split(s[0])
 				if err != nil {

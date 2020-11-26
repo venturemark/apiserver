@@ -21,7 +21,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 // Verify checks if there is any information given for creating timelines. The
 // only piece of information we need is the user ID provided with the object
 // metadata.
-func (v *Verifier) Verify(req *timeline.CreateI) (bool, error) {
+func (v *Verifier) Verify(req *timeline.UpdateI) (bool, error) {
 	{
 		if req.Obj == nil {
 			return false, nil
@@ -30,6 +30,12 @@ func (v *Verifier) Verify(req *timeline.CreateI) (bool, error) {
 			return false, nil
 		}
 		if req.Obj.Property == nil {
+			return false, nil
+		}
+	}
+
+	{
+		if req.Obj.Metadata[metadata.TimelineID] == "" {
 			return false, nil
 		}
 	}

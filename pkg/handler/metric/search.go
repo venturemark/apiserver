@@ -8,8 +8,6 @@ import (
 )
 
 func (h *Handler) Search(ctx context.Context, obj *metric.SearchI) (*metric.SearchO, error) {
-	// Search for any metric associated with the given timeline. One timeline ID
-	// must be provided.
 	{
 		ok, err := h.storage.Metric.Searcher.Verify(obj)
 		if err != nil {

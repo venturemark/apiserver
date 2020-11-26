@@ -1,7 +1,7 @@
 package empty
 
 import (
-	"github.com/venturemark/apigengo/pkg/pbf/metric"
+	"github.com/venturemark/apigengo/pkg/pbf/update"
 
 	"github.com/venturemark/apiserver/pkg/metadata"
 )
@@ -18,11 +18,11 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if there is any information given for searching metrics. The
+// Verify checks if there is any information given for searching updates. The
 // information we need is the user ID and the timeline ID provided with the
 // object metadata. It is only allowed to provide one search object since no
 // more complex search queries are implemented yet.
-func (v *Verifier) Verify(req *metric.SearchI) (bool, error) {
+func (v *Verifier) Verify(req *update.SearchI) (bool, error) {
 	{
 		if req.Api != nil {
 			return false, nil

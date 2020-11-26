@@ -1,9 +1,8 @@
-package creator
+package updater
 
 import (
 	"fmt"
 	"strconv"
-	"time"
 
 	"github.com/venturemark/apigengo/pkg/pbf/timeline"
 	"github.com/xh3b4sd/tracer"
@@ -13,23 +12,19 @@ import (
 	"github.com/venturemark/apiserver/pkg/value/timeline/element"
 )
 
-// Create provides a storage primitive to persist timelines associated with a
+// Update provides a storage primitive to modify timelines associated with a
 // user.
-func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
+func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 	var err error
 
+	var tml float64
 	var usr string
 	{
+		tml, err = strconv.ParseFloat(req.Obj.Metadata[metadata.TimelineID], 64)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
 		usr = req.Obj.Metadata[metadata.UserID]
-	}
-
-	// We manage data on a timeline. Our main identifier is a unix timestamp in
-	// seconds is normalized to the UTC timezone. Our discovery mechanisms is
-	// designed based on this very unix timestamp. Everything starts with time,
-	// which means that pseudo random IDs are irrelevant for us.
-	var uni float64
-	{
-		uni = float64(time.Now().UTC().Unix())
 	}
 
 	// We store timelines in a sorted set. The elements of the sorted set are
@@ -37,25 +32,28 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 	// to the time right now at creation time. Here e is the timeline name. We
 	// track t as part of the element within the sorted set to guarantee a
 	// unique element.
+	var tok bool
 	{
 		k := fmt.Sprintf(key.Timeline, usr)
-		e := element.Join(uni, req.Obj.Property.Name)
-		s := uni
+		e := element.Join(tml, req.Obj.Property.Name)
+		s := tml
 
-		err = c.redigo.Scored().Create(k, e, s)
+		tok, err = u.redigo.Scored().Update(k, e, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 	}
 
-	var res *timeline.CreateO
+	var res *timeline.UpdateO
 	{
-		res = &timeline.CreateO{
-			Obj: &timeline.CreateO_Obj{
-				Metadata: map[string]string{
-					metadata.TimelineID: strconv.Itoa(int(uni)),
-				},
+		res = &timeline.UpdateO{
+			Obj: &timeline.UpdateO_Obj{
+				Metadata: map[string]string{},
 			},
+		}
+
+		if tok {
+			res.Obj.Metadata[metadata.TimelineStatus] = "updated"
 		}
 	}
 

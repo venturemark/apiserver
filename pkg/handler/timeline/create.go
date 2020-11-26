@@ -8,8 +8,6 @@ import (
 )
 
 func (h *Handler) Create(ctx context.Context, obj *timeline.CreateI) (*timeline.CreateO, error) {
-	// Create a new timeline associated with the given user. One user ID must be
-	// provided.
 	{
 		ok, err := h.storage.Timeline.Creator.Verify(obj)
 		if err != nil {

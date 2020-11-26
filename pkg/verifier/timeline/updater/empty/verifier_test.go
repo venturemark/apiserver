@@ -12,28 +12,28 @@ import (
 
 func Test_Empty_Verify_False(t *testing.T) {
 	testCases := []struct {
-		req *timeline.CreateI
+		req *timeline.UpdateI
 	}{
 		// Case 0 ensures that create input without metadata is not valid.
 		{
-			req: &timeline.CreateI{},
+			req: &timeline.UpdateI{},
 		},
 		// Case 1 ensures that create input without metadata is not valid.
 		{
-			req: &timeline.CreateI{
-				Obj: &timeline.CreateI_Obj{},
+			req: &timeline.UpdateI{
+				Obj: &timeline.UpdateI_Obj{},
 			},
 		},
 		// Case 2 ensures that create input without metadata is not valid.
 		{
-			req: &timeline.CreateI{
-				Obj: &timeline.CreateI_Obj{},
+			req: &timeline.UpdateI{
+				Obj: &timeline.UpdateI_Obj{},
 			},
 		},
 		// Case 3 ensures that create input without metadata is not valid.
 		{
-			req: &timeline.CreateI{
-				Obj: &timeline.CreateI_Obj{
+			req: &timeline.UpdateI{
+				Obj: &timeline.UpdateI_Obj{
 					Metadata: map[string]string{},
 				},
 			},
@@ -41,23 +41,50 @@ func Test_Empty_Verify_False(t *testing.T) {
 		// Case 4 ensures that create input without user ID in the metadata
 		// is not valid.
 		{
-			req: &timeline.CreateI{
-				Obj: &timeline.CreateI_Obj{
+			req: &timeline.UpdateI{
+				Obj: &timeline.UpdateI_Obj{
 					Metadata: map[string]string{
 						"foo": "bar",
 					},
 				},
 			},
 		},
-		// Case 5 ensures that create input without object properties is not
-		// valid.
+		// Case 5 ensures that create input without user ID is not valid.
 		{
-			req: &timeline.CreateI{
-				Obj: &timeline.CreateI_Obj{
+			req: &timeline.UpdateI{
+				Obj: &timeline.UpdateI_Obj{
+					Metadata: map[string]string{
+						metadata.TimelineID: "1606329189",
+					},
+					Property: &timeline.UpdateI_Obj_Property{
+						Name: "foo",
+					},
+				},
+			},
+		},
+		// Case 6 ensures that create input without timeline ID is not valid.
+		{
+			req: &timeline.UpdateI{
+				Obj: &timeline.UpdateI_Obj{
 					Metadata: map[string]string{
 						metadata.UserID: "usr-al9qy",
 					},
-					Property: &timeline.CreateI_Obj_Property{},
+					Property: &timeline.UpdateI_Obj_Property{
+						Name: "foo",
+					},
+				},
+			},
+		},
+		// Case 7 ensures that create input without object properties is not
+		// valid.
+		{
+			req: &timeline.UpdateI{
+				Obj: &timeline.UpdateI_Obj{
+					Metadata: map[string]string{
+						metadata.TimelineID: "1606329189",
+						metadata.UserID:     "usr-al9qy",
+					},
+					Property: &timeline.UpdateI_Obj_Property{},
 				},
 			},
 		},
@@ -91,16 +118,17 @@ func Test_Empty_Verify_False(t *testing.T) {
 
 func Test_Empty_Verify_True(t *testing.T) {
 	testCases := []struct {
-		req *timeline.CreateI
+		req *timeline.UpdateI
 	}{
 		// Case 0 ensures that create input with user ID is valid.
 		{
-			req: &timeline.CreateI{
-				Obj: &timeline.CreateI_Obj{
+			req: &timeline.UpdateI{
+				Obj: &timeline.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.UserID: "usr-al9qy",
+						metadata.TimelineID: "1606329189",
+						metadata.UserID:     "usr-al9qy",
 					},
-					Property: &timeline.CreateI_Obj_Property{
+					Property: &timeline.UpdateI_Obj_Property{
 						Name: "mmr",
 					},
 				},
@@ -108,12 +136,13 @@ func Test_Empty_Verify_True(t *testing.T) {
 		},
 		// Case 1 ensures that create input with user ID is valid.
 		{
-			req: &timeline.CreateI{
-				Obj: &timeline.CreateI_Obj{
+			req: &timeline.UpdateI{
+				Obj: &timeline.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.UserID: "usr-kn433",
+						metadata.TimelineID: "1605559909",
+						metadata.UserID:     "usr-al9qy",
 					},
-					Property: &timeline.CreateI_Obj_Property{
+					Property: &timeline.UpdateI_Obj_Property{
 						Name: "MMR",
 					},
 				},

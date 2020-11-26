@@ -20,14 +20,11 @@ import (
 // creation. For more information about technical details see the inline
 // documentation.
 func (u *Updater) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
-	var err error
-
-	var uni float64
+	var tml string
+	var usr string
 	{
-		uni, err = strconv.ParseFloat(req.Obj.Metadata[metadata.Unixtime], 64)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
+		tml = req.Obj.Metadata[metadata.TimelineID]
+		usr = req.Obj.Metadata[metadata.UserID]
 	}
 
 	// When updating metric updates all assumptions are equal to creating metric
@@ -39,9 +36,14 @@ func (u *Updater) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
 	// was information provided for the update in the first place.
 	var met bool
 	if len(req.Obj.Property.Data) != 0 {
-		k := fmt.Sprintf(key.TimelineMetric, req.Obj.Metadata[metadata.Timeline])
-		e := mel.Join(uni, toInterface(req.Obj.Property.Data))
-		s := uni
+		i, err := strconv.ParseFloat(req.Obj.Metadata[metadata.MetricID], 64)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+
+		k := fmt.Sprintf(key.Metric, usr, tml)
+		e := mel.Join(i, toInterface(req.Obj.Property.Data))
+		s := i
 
 		met, err = u.redigo.Scored().Update(k, e, s)
 		if err != nil {
@@ -58,9 +60,14 @@ func (u *Updater) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
 	// was information provided for the update in the first place.
 	var upd bool
 	if req.Obj.Property.Text != "" {
-		k := fmt.Sprintf(key.TimelineUpdate, req.Obj.Metadata[metadata.Timeline])
-		e := uel.Join(uni, req.Obj.Property.Text)
-		s := uni
+		i, err := strconv.ParseFloat(req.Obj.Metadata[metadata.UpdateID], 64)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+
+		k := fmt.Sprintf(key.Update, usr, tml)
+		e := uel.Join(i, req.Obj.Property.Text)
+		s := i
 
 		upd, err = u.redigo.Scored().Update(k, e, s)
 		if err != nil {
