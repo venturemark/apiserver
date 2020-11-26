@@ -41,6 +41,9 @@ func (v *Verifier) Verify(req *metupd.CreateI) (bool, error) {
 		if req.Obj == nil {
 			return false, nil
 		}
+		if req.Obj.Metadata == nil {
+			return false, nil
+		}
 		if req.Obj.Property == nil {
 			return false, nil
 		}
@@ -52,26 +55,21 @@ func (v *Verifier) Verify(req *metupd.CreateI) (bool, error) {
 		}
 	}
 
+	var tml string
+	var usr string
 	{
-		if req.Obj.Metadata[metadata.TimelineID] == "" {
+		tml = req.Obj.Metadata[metadata.TimelineID]
+		usr = req.Obj.Metadata[metadata.UserID]
+
+		if tml == "" {
+			return false, nil
+		}
+		if usr == "" {
 			return false, nil
 		}
 	}
 
 	{
-		if req.Obj.Metadata[metadata.UserID] == "" {
-			return false, nil
-		}
-	}
-
-	{
-		var tml string
-		var usr string
-		{
-			tml = req.Obj.Metadata[metadata.TimelineID]
-			usr = req.Obj.Metadata[metadata.UserID]
-		}
-
 		// We always check the latest item of the sorted set to check the
 		// amount of datapoints on the y axis. Due to this very check the
 		// consistency of the sorted set is ensured, which means that

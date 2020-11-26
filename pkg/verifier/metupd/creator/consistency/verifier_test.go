@@ -33,7 +33,26 @@ func Test_Consistency_Verify_False(t *testing.T) {
 				return []string{"0:y,1"}, nil
 			},
 		},
-		// Case 2 ensures that empty create input is not valid.
+		// Case 2 ensures that create input without metadata is not valid.
+		{
+			req: &metupd.CreateI{
+				Obj: &metupd.CreateI_Obj{
+					Property: &metupd.CreateI_Obj_Property{
+						Data: []*metupd.CreateI_Obj_Property_Data{
+							{
+								Value: []float64{
+									32,
+								},
+							},
+						},
+					},
+				},
+			},
+			searchFake: func() ([]string, error) {
+				return []string{"0:y,1"}, nil
+			},
+		},
+		// Case 3 ensures that empty create input is not valid.
 		{
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
@@ -50,7 +69,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 				return []string{"0:y,1"}, nil
 			},
 		},
-		// Case 3 ensures that create input with too many datapoints is
+		// Case 4 ensures that create input with too many datapoints is
 		// not valid.
 		{
 			req: &metupd.CreateI{
@@ -75,7 +94,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 				return []string{"0:y,1"}, nil
 			},
 		},
-		// Case 4 ensures that create input with too many datapoints is
+		// Case 5 ensures that create input with too many datapoints is
 		// not valid.
 		{
 			req: &metupd.CreateI{
@@ -102,7 +121,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 				return []string{"0:y,1,2"}, nil
 			},
 		},
-		// Case 5 ensures that create input with too few datapoints is
+		// Case 6 ensures that create input with too few datapoints is
 		// not valid.
 		{
 			req: &metupd.CreateI{
@@ -126,7 +145,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 				return []string{"0:y,1,2,3,4"}, nil
 			},
 		},
-		// Case 6 ensures that create input with too few datapoints is
+		// Case 7 ensures that create input with too few datapoints is
 		// not valid.
 		{
 			req: &metupd.CreateI{
