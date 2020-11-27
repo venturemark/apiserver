@@ -10,6 +10,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/verifier/metupd/creator/empty"
 	"github.com/venturemark/apiserver/pkg/verifier/metupd/creator/space"
 	"github.com/venturemark/apiserver/pkg/verifier/metupd/creator/text"
+	"github.com/venturemark/apiserver/pkg/verifier/metupd/creator/timeline"
 	"github.com/venturemark/apiserver/pkg/verifier/metupd/creator/value"
 )
 
@@ -47,6 +48,16 @@ func New(config Config) (*Creator, error) {
 		}
 	}
 
+	var emptyVerifier *empty.Verifier
+	{
+		c := empty.VerifierConfig{}
+
+		emptyVerifier, err = empty.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	var spaceVerifier *space.Verifier
 	{
 		c := space.VerifierConfig{}
@@ -67,11 +78,13 @@ func New(config Config) (*Creator, error) {
 		}
 	}
 
-	var emptyVerifier *empty.Verifier
+	var timelineVerifier *timeline.Verifier
 	{
-		c := empty.VerifierConfig{}
+		c := timeline.VerifierConfig{
+			Redigo: config.Redigo,
+		}
 
-		emptyVerifier, err = empty.NewVerifier(c)
+		timelineVerifier, err = timeline.NewVerifier(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -96,6 +109,7 @@ func New(config Config) (*Creator, error) {
 			emptyVerifier,
 			spaceVerifier,
 			textVerifier,
+			timelineVerifier,
 			valueVerifier,
 		},
 	}
