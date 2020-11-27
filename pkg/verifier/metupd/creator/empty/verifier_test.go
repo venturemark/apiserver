@@ -215,7 +215,7 @@ func Test_Empty_Verify_True(t *testing.T) {
 			}
 
 			if ok != true {
-				t.Fatalf("\n\n%s\n", cmp.Diff(ok, false))
+				t.Fatalf("\n\n%s\n", cmp.Diff(ok, true))
 			}
 		})
 	}

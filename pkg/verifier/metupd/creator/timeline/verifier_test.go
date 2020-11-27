@@ -65,7 +65,7 @@ func Test_Timeline_Verify_False(t *testing.T) {
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.TimelineID: "invalid",
+						metadata.TimelineID: "0",
 						metadata.UserID:     "usr-al9qy",
 					},
 				},
@@ -173,7 +173,7 @@ func Test_Timeline_Verify_True(t *testing.T) {
 			}
 
 			if ok != true {
-				t.Fatalf("\n\n%s\n", cmp.Diff(ok, false))
+				t.Fatalf("\n\n%s\n", cmp.Diff(ok, true))
 			}
 		})
 	}
