@@ -199,8 +199,8 @@ github.com/venturemark/apigengo v0.0.0-20201124123333-0f2a68156e02 h1:rhwfrhnAfC
 github.com/venturemark/apigengo v0.0.0-20201124123333-0f2a68156e02/go.mod h1:1H03FtN0jnnENa+gdfCRwOTrJVG6c8ztI4EWHRGpD4A=
 github.com/xh3b4sd/logger v0.1.2 h1:zEE3obzyrGofvTNbT+T2U654e9XwqmGbzyktdRB1BR8=
 github.com/xh3b4sd/logger v0.1.2/go.mod h1:/mTz2elyBeH3rPq5vEqAJRWYt/6huhY/b3Hrzych2GE=
-github.com/xh3b4sd/redigo v0.4.0 h1:uyAgw3U2am8ImtL7qQ3vK3/aRe8mjYgi8DgZG9JmZE0=
-github.com/xh3b4sd/redigo v0.4.0/go.mod h1:rOhLvUQSK/byj9v8ew3T98rC60CRyJ90bbuyhu1BQkA=
+github.com/xh3b4sd/redigo v0.5.0 h1:7ibAOVHqAUiEULmlH4zP8FGM8OVL7OJqeTfGzEeq+GQ=
+github.com/xh3b4sd/redigo v0.5.0/go.mod h1:rOhLvUQSK/byj9v8ew3T98rC60CRyJ90bbuyhu1BQkA=
 github.com/xh3b4sd/tracer v0.3.1 h1:wv4Cy/u/xLXLUJeKQWeiR+aU4mywj2f8PkQVda1EXKQ=
 github.com/xh3b4sd/tracer v0.3.1/go.mod h1:ZOLvBVLrmNx3GLCL7j0vEGMuI3r5ltLFcmDjG/3nV7g=
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
