@@ -15,7 +15,7 @@ import (
 func Test_Consistency_Verify_False(t *testing.T) {
 	testCases := []struct {
 		req       *metupd.UpdateI
-		FakeIndex func() ([]string, error)
+		fakeIndex func() ([]string, error)
 	}{
 		// Case 0 ensures that update input with too many datapoints is
 		// not valid.
@@ -39,7 +39,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1"}, nil
 			},
 		},
@@ -67,7 +67,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1,2"}, nil
 			},
 		},
@@ -92,7 +92,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1,2,3,4"}, nil
 			},
 		},
@@ -118,7 +118,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1,2,3,4"}, nil
 			},
 		},
@@ -136,7 +136,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 							return &fake.Sorted{
 								FakeSearch: func() redigo.SortedSearch {
 									return &fake.SortedSearch{
-										FakeIndex: tc.FakeIndex,
+										FakeIndex: tc.fakeIndex,
 									}
 								},
 							}
@@ -165,13 +165,13 @@ func Test_Consistency_Verify_False(t *testing.T) {
 func Test_Consistency_Verify_True(t *testing.T) {
 	testCases := []struct {
 		req       *metupd.UpdateI
-		FakeIndex func() ([]string, error)
+		fakeIndex func() ([]string, error)
 	}{
 		// Case 0 ensures that empty update input is valid. This is because the
 		// user might just wish to update text only.
 		{
 			req: &metupd.UpdateI{},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1"}, nil
 			},
 		},
@@ -181,7 +181,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1"}, nil
 			},
 		},
@@ -197,7 +197,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 					},
 				},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1"}, nil
 			},
 		},
@@ -214,7 +214,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 					Property: &metupd.UpdateI_Obj_Property{},
 				},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1"}, nil
 			},
 		},
@@ -240,7 +240,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 					},
 				},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1,2"}, nil
 			},
 		},
@@ -268,7 +268,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 					},
 				},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1,2,3,4"}, nil
 			},
 		},
@@ -304,7 +304,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 					},
 				},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:x,1,2,3,4", "0:y,1,2,3,4"}, nil
 			},
 		},
@@ -322,7 +322,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 							return &fake.Sorted{
 								FakeSearch: func() redigo.SortedSearch {
 									return &fake.SortedSearch{
-										FakeIndex: tc.FakeIndex,
+										FakeIndex: tc.fakeIndex,
 									}
 								},
 							}

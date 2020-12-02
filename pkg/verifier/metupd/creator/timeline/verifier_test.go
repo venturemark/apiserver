@@ -15,12 +15,12 @@ import (
 func Test_Timeline_Verify_False(t *testing.T) {
 	testCases := []struct {
 		req       *metupd.CreateI
-		FakeScore func() (bool, error)
+		fakeScore func() (bool, error)
 	}{
 		// Case 0 ensures that empty create input is not valid.
 		{
 			req: &metupd.CreateI{},
-			FakeScore: func() (bool, error) {
+			fakeScore: func() (bool, error) {
 				return true, nil
 			},
 		},
@@ -29,7 +29,7 @@ func Test_Timeline_Verify_False(t *testing.T) {
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{},
 			},
-			FakeScore: func() (bool, error) {
+			fakeScore: func() (bool, error) {
 				return true, nil
 			},
 		},
@@ -42,7 +42,7 @@ func Test_Timeline_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			FakeScore: func() (bool, error) {
+			fakeScore: func() (bool, error) {
 				return true, nil
 			},
 		},
@@ -55,7 +55,7 @@ func Test_Timeline_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			FakeScore: func() (bool, error) {
+			fakeScore: func() (bool, error) {
 				return true, nil
 			},
 		},
@@ -70,7 +70,7 @@ func Test_Timeline_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			FakeScore: func() (bool, error) {
+			fakeScore: func() (bool, error) {
 				return false, nil
 			},
 		},
@@ -88,7 +88,7 @@ func Test_Timeline_Verify_False(t *testing.T) {
 							return &fake.Sorted{
 								FakeExists: func() redigo.SortedExists {
 									return &fake.SortedExists{
-										FakeScore: tc.FakeScore,
+										FakeScore: tc.fakeScore,
 									}
 								},
 							}
@@ -117,7 +117,7 @@ func Test_Timeline_Verify_False(t *testing.T) {
 func Test_Timeline_Verify_True(t *testing.T) {
 	testCases := []struct {
 		req       *metupd.CreateI
-		FakeScore func() (bool, error)
+		fakeScore func() (bool, error)
 	}{
 		// Case 0 ensures that create input is valid.
 		{
@@ -129,7 +129,7 @@ func Test_Timeline_Verify_True(t *testing.T) {
 					},
 				},
 			},
-			FakeScore: func() (bool, error) {
+			fakeScore: func() (bool, error) {
 				return true, nil
 			},
 		},
@@ -143,7 +143,7 @@ func Test_Timeline_Verify_True(t *testing.T) {
 					},
 				},
 			},
-			FakeScore: func() (bool, error) {
+			fakeScore: func() (bool, error) {
 				return true, nil
 			},
 		},
@@ -161,7 +161,7 @@ func Test_Timeline_Verify_True(t *testing.T) {
 							return &fake.Sorted{
 								FakeExists: func() redigo.SortedExists {
 									return &fake.SortedExists{
-										FakeScore: tc.FakeScore,
+										FakeScore: tc.fakeScore,
 									}
 								},
 							}

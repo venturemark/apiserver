@@ -15,12 +15,12 @@ import (
 func Test_Consistency_Verify_False(t *testing.T) {
 	testCases := []struct {
 		req       *metupd.CreateI
-		FakeIndex func() ([]string, error)
+		fakeIndex func() ([]string, error)
 	}{
 		// Case 0 ensures that empty create input is not valid.
 		{
 			req: &metupd.CreateI{},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1"}, nil
 			},
 		},
@@ -29,7 +29,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1"}, nil
 			},
 		},
@@ -48,7 +48,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1"}, nil
 			},
 		},
@@ -65,7 +65,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1"}, nil
 			},
 		},
@@ -90,7 +90,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1"}, nil
 			},
 		},
@@ -117,7 +117,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1,2"}, nil
 			},
 		},
@@ -141,7 +141,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1,2,3,4"}, nil
 			},
 		},
@@ -166,7 +166,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1,2,3,4"}, nil
 			},
 		},
@@ -184,7 +184,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 							return &fake.Sorted{
 								FakeSearch: func() redigo.SortedSearch {
 									return &fake.SortedSearch{
-										FakeIndex: tc.FakeIndex,
+										FakeIndex: tc.fakeIndex,
 									}
 								},
 							}
@@ -213,7 +213,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 func Test_Consistency_Verify_True(t *testing.T) {
 	testCases := []struct {
 		req       *metupd.CreateI
-		FakeIndex func() ([]string, error)
+		fakeIndex func() ([]string, error)
 	}{
 		// Case 0 ensures that create input with the correct amount of
 		// datapoints is valid.
@@ -236,7 +236,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 					},
 				},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1,2"}, nil
 			},
 		},
@@ -263,7 +263,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 					},
 				},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:y,1,2,3,4"}, nil
 			},
 		},
@@ -298,7 +298,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 					},
 				},
 			},
-			FakeIndex: func() ([]string, error) {
+			fakeIndex: func() ([]string, error) {
 				return []string{"0:x,1,2,3,4", "0:y,1,2,3,4"}, nil
 			},
 		},
@@ -316,7 +316,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 							return &fake.Sorted{
 								FakeSearch: func() redigo.SortedSearch {
 									return &fake.SortedSearch{
-										FakeIndex: tc.FakeIndex,
+										FakeIndex: tc.fakeIndex,
 									}
 								},
 							}
