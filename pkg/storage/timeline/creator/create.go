@@ -42,7 +42,7 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 		e := element.Join(uni, req.Obj.Property.Name)
 		s := uni
 
-		err = c.redigo.Scored().Create(k, e, s)
+		err = c.redigo.Sorted().Create().Element(k, e, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

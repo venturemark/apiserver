@@ -67,7 +67,7 @@ func (v *Verifier) Verify(req *metupd.CreateI) (bool, error) {
 		k := fmt.Sprintf(key.Timeline, usr)
 		s := i
 
-		exi, err := v.redigo.Scored().Exists(k, s)
+		exi, err := v.redigo.Sorted().Exists().Score(k, s)
 		if err != nil {
 			return false, tracer.Mask(err)
 		}

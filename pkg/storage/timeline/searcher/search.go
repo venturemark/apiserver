@@ -27,7 +27,7 @@ func (s *Searcher) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 	var str []string
 	{
 		k := fmt.Sprintf(key.Timeline, usr)
-		str, err = s.redigo.Scored().Search(k, 0, -1)
+		str, err = s.redigo.Sorted().Search().Index(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
