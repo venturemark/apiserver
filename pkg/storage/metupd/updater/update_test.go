@@ -9,16 +9,16 @@ import (
 	"github.com/venturemark/apigengo/pkg/pbf/metupd"
 	loggerfake "github.com/xh3b4sd/logger/fake"
 	"github.com/xh3b4sd/redigo"
-	redigofake "github.com/xh3b4sd/redigo/fake"
+	"github.com/xh3b4sd/redigo/fake"
 
 	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
 func Test_Updater_Update_Redis(t *testing.T) {
 	testCases := []struct {
-		req        *metupd.UpdateI
-		updateFake func() (bool, error)
-		res        *metupd.UpdateO
+		req       *metupd.UpdateI
+		fakeValue func() (bool, error)
+		res       *metupd.UpdateO
 	}{
 		// Case 0 ensures that update input with data and text causes updates on
 		// data and text each.
@@ -44,7 +44,7 @@ func Test_Updater_Update_Redis(t *testing.T) {
 					},
 				},
 			},
-			updateFake: testReturn(true, true),
+			fakeValue: testReturn(true, true),
 			res: &metupd.UpdateO{
 				Obj: &metupd.UpdateO_Obj{
 					Metadata: map[string]string{
@@ -77,7 +77,7 @@ func Test_Updater_Update_Redis(t *testing.T) {
 					},
 				},
 			},
-			updateFake: testReturn(true, true),
+			fakeValue: testReturn(true, true),
 			res: &metupd.UpdateO{
 				Obj: &metupd.UpdateO_Obj{
 					Metadata: map[string]string{
@@ -102,7 +102,7 @@ func Test_Updater_Update_Redis(t *testing.T) {
 					},
 				},
 			},
-			updateFake: testReturn(true, true),
+			fakeValue: testReturn(true, true),
 			res: &metupd.UpdateO{
 				Obj: &metupd.UpdateO_Obj{
 					Metadata: map[string]string{
@@ -127,7 +127,7 @@ func Test_Updater_Update_Redis(t *testing.T) {
 					Property: &metupd.UpdateI_Obj_Property{},
 				},
 			},
-			updateFake: testReturn(true, true),
+			fakeValue: testReturn(true, true),
 			res: &metupd.UpdateO{
 				Obj: &metupd.UpdateO_Obj{
 					Metadata: map[string]string{},
@@ -144,10 +144,14 @@ func Test_Updater_Update_Redis(t *testing.T) {
 			{
 				c := Config{
 					Logger: loggerfake.New(),
-					Redigo: &redigofake.Client{
-						ScoredFake: func() redigo.Scored {
-							return &redigofake.Scored{
-								UpdateFake: tc.updateFake,
+					Redigo: &fake.Client{
+						SortedFake: func() redigo.Sorted {
+							return &fake.Sorted{
+								FakeUpdate: func() redigo.SortedUpdate {
+									return &fake.SortedUpdate{
+										FakeValue: tc.fakeValue,
+									}
+								},
 							}
 						},
 					},

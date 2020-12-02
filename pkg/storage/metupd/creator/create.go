@@ -53,7 +53,7 @@ func (c *Creator) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 		e := mel.Join(mui, toInterface(req.Obj.Property.Data))
 		s := mui
 
-		err = c.redigo.Scored().Create(k, e, s)
+		err = c.redigo.Sorted().Create().Element(k, e, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -70,7 +70,7 @@ func (c *Creator) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 		e := uel.Join(mui, req.Obj.Property.Text)
 		s := mui
 
-		err = c.redigo.Scored().Create(k, e, s)
+		err = c.redigo.Sorted().Create().Element(k, e, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

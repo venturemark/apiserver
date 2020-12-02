@@ -35,7 +35,7 @@ func (s *Searcher) Search(req *metric.SearchI) (*metric.SearchO, error) {
 	var str []string
 	{
 		k := fmt.Sprintf(key.Metric, usr, tml)
-		str, err = s.redigo.Scored().Search(k, 0, -1)
+		str, err = s.redigo.Sorted().Search().Index(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

@@ -38,7 +38,7 @@ func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 		e := element.Join(tml, req.Obj.Property.Name)
 		s := tml
 
-		tok, err = u.redigo.Scored().Update(k, e, s)
+		tok, err = u.redigo.Sorted().Update().Value(k, e, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

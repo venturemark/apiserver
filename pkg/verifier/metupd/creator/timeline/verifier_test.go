@@ -14,13 +14,13 @@ import (
 
 func Test_Timeline_Verify_False(t *testing.T) {
 	testCases := []struct {
-		req        *metupd.CreateI
-		existsFake func() (bool, error)
+		req       *metupd.CreateI
+		FakeScore func() (bool, error)
 	}{
 		// Case 0 ensures that empty create input is not valid.
 		{
 			req: &metupd.CreateI{},
-			existsFake: func() (bool, error) {
+			FakeScore: func() (bool, error) {
 				return true, nil
 			},
 		},
@@ -29,7 +29,7 @@ func Test_Timeline_Verify_False(t *testing.T) {
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{},
 			},
-			existsFake: func() (bool, error) {
+			FakeScore: func() (bool, error) {
 				return true, nil
 			},
 		},
@@ -42,7 +42,7 @@ func Test_Timeline_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			existsFake: func() (bool, error) {
+			FakeScore: func() (bool, error) {
 				return true, nil
 			},
 		},
@@ -55,7 +55,7 @@ func Test_Timeline_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			existsFake: func() (bool, error) {
+			FakeScore: func() (bool, error) {
 				return true, nil
 			},
 		},
@@ -70,7 +70,7 @@ func Test_Timeline_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			existsFake: func() (bool, error) {
+			FakeScore: func() (bool, error) {
 				return false, nil
 			},
 		},
@@ -84,9 +84,13 @@ func Test_Timeline_Verify_False(t *testing.T) {
 			{
 				c := VerifierConfig{
 					Redigo: &fake.Client{
-						ScoredFake: func() redigo.Scored {
-							return &fake.Scored{
-								ExistsFake: tc.existsFake,
+						SortedFake: func() redigo.Sorted {
+							return &fake.Sorted{
+								FakeExists: func() redigo.SortedExists {
+									return &fake.SortedExists{
+										FakeScore: tc.FakeScore,
+									}
+								},
 							}
 						},
 					},
@@ -112,8 +116,8 @@ func Test_Timeline_Verify_False(t *testing.T) {
 
 func Test_Timeline_Verify_True(t *testing.T) {
 	testCases := []struct {
-		req        *metupd.CreateI
-		existsFake func() (bool, error)
+		req       *metupd.CreateI
+		FakeScore func() (bool, error)
 	}{
 		// Case 0 ensures that create input is valid.
 		{
@@ -125,7 +129,7 @@ func Test_Timeline_Verify_True(t *testing.T) {
 					},
 				},
 			},
-			existsFake: func() (bool, error) {
+			FakeScore: func() (bool, error) {
 				return true, nil
 			},
 		},
@@ -139,7 +143,7 @@ func Test_Timeline_Verify_True(t *testing.T) {
 					},
 				},
 			},
-			existsFake: func() (bool, error) {
+			FakeScore: func() (bool, error) {
 				return true, nil
 			},
 		},
@@ -153,9 +157,13 @@ func Test_Timeline_Verify_True(t *testing.T) {
 			{
 				c := VerifierConfig{
 					Redigo: &fake.Client{
-						ScoredFake: func() redigo.Scored {
-							return &fake.Scored{
-								ExistsFake: tc.existsFake,
+						SortedFake: func() redigo.Sorted {
+							return &fake.Sorted{
+								FakeExists: func() redigo.SortedExists {
+									return &fake.SortedExists{
+										FakeScore: tc.FakeScore,
+									}
+								},
 							}
 						},
 					},

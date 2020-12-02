@@ -45,7 +45,7 @@ func (u *Updater) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
 		e := mel.Join(i, toInterface(req.Obj.Property.Data))
 		s := i
 
-		met, err = u.redigo.Scored().Update(k, e, s)
+		met, err = u.redigo.Sorted().Update().Value(k, e, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -69,7 +69,7 @@ func (u *Updater) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
 		e := uel.Join(i, req.Obj.Property.Text)
 		s := i
 
-		upd, err = u.redigo.Scored().Update(k, e, s)
+		upd, err = u.redigo.Sorted().Update().Value(k, e, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

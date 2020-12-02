@@ -80,7 +80,7 @@ func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 			// consistency of the sorted set is ensured, which means that
 			// looking up a single element of the sorted set is sufficient.
 			k := fmt.Sprintf(key.Metric, usr, tml)
-			s, err := v.redigo.Scored().Search(k, 0, 1)
+			s, err := v.redigo.Sorted().Search().Index(k, 0, 1)
 			if err != nil {
 				return false, tracer.Mask(err)
 			}

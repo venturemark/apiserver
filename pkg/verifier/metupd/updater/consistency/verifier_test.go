@@ -14,8 +14,8 @@ import (
 
 func Test_Consistency_Verify_False(t *testing.T) {
 	testCases := []struct {
-		req        *metupd.UpdateI
-		searchFake func() ([]string, error)
+		req       *metupd.UpdateI
+		FakeIndex func() ([]string, error)
 	}{
 		// Case 0 ensures that update input with too many datapoints is
 		// not valid.
@@ -39,7 +39,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			searchFake: func() ([]string, error) {
+			FakeIndex: func() ([]string, error) {
 				return []string{"0:y,1"}, nil
 			},
 		},
@@ -67,7 +67,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			searchFake: func() ([]string, error) {
+			FakeIndex: func() ([]string, error) {
 				return []string{"0:y,1,2"}, nil
 			},
 		},
@@ -92,7 +92,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			searchFake: func() ([]string, error) {
+			FakeIndex: func() ([]string, error) {
 				return []string{"0:y,1,2,3,4"}, nil
 			},
 		},
@@ -118,7 +118,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 					},
 				},
 			},
-			searchFake: func() ([]string, error) {
+			FakeIndex: func() ([]string, error) {
 				return []string{"0:y,1,2,3,4"}, nil
 			},
 		},
@@ -132,9 +132,13 @@ func Test_Consistency_Verify_False(t *testing.T) {
 			{
 				c := VerifierConfig{
 					Redigo: &fake.Client{
-						ScoredFake: func() redigo.Scored {
-							return &fake.Scored{
-								SearchFake: tc.searchFake,
+						SortedFake: func() redigo.Sorted {
+							return &fake.Sorted{
+								FakeSearch: func() redigo.SortedSearch {
+									return &fake.SortedSearch{
+										FakeIndex: tc.FakeIndex,
+									}
+								},
 							}
 						},
 					},
@@ -160,14 +164,14 @@ func Test_Consistency_Verify_False(t *testing.T) {
 
 func Test_Consistency_Verify_True(t *testing.T) {
 	testCases := []struct {
-		req        *metupd.UpdateI
-		searchFake func() ([]string, error)
+		req       *metupd.UpdateI
+		FakeIndex func() ([]string, error)
 	}{
 		// Case 0 ensures that empty update input is valid. This is because the
 		// user might just wish to update text only.
 		{
 			req: &metupd.UpdateI{},
-			searchFake: func() ([]string, error) {
+			FakeIndex: func() ([]string, error) {
 				return []string{"0:y,1"}, nil
 			},
 		},
@@ -177,7 +181,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{},
 			},
-			searchFake: func() ([]string, error) {
+			FakeIndex: func() ([]string, error) {
 				return []string{"0:y,1"}, nil
 			},
 		},
@@ -193,7 +197,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 					},
 				},
 			},
-			searchFake: func() ([]string, error) {
+			FakeIndex: func() ([]string, error) {
 				return []string{"0:y,1"}, nil
 			},
 		},
@@ -210,7 +214,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 					Property: &metupd.UpdateI_Obj_Property{},
 				},
 			},
-			searchFake: func() ([]string, error) {
+			FakeIndex: func() ([]string, error) {
 				return []string{"0:y,1"}, nil
 			},
 		},
@@ -236,7 +240,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 					},
 				},
 			},
-			searchFake: func() ([]string, error) {
+			FakeIndex: func() ([]string, error) {
 				return []string{"0:y,1,2"}, nil
 			},
 		},
@@ -264,7 +268,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 					},
 				},
 			},
-			searchFake: func() ([]string, error) {
+			FakeIndex: func() ([]string, error) {
 				return []string{"0:y,1,2,3,4"}, nil
 			},
 		},
@@ -300,7 +304,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 					},
 				},
 			},
-			searchFake: func() ([]string, error) {
+			FakeIndex: func() ([]string, error) {
 				return []string{"0:x,1,2,3,4", "0:y,1,2,3,4"}, nil
 			},
 		},
@@ -314,9 +318,13 @@ func Test_Consistency_Verify_True(t *testing.T) {
 			{
 				c := VerifierConfig{
 					Redigo: &fake.Client{
-						ScoredFake: func() redigo.Scored {
-							return &fake.Scored{
-								SearchFake: tc.searchFake,
+						SortedFake: func() redigo.Sorted {
+							return &fake.Sorted{
+								FakeSearch: func() redigo.SortedSearch {
+									return &fake.SortedSearch{
+										FakeIndex: tc.FakeIndex,
+									}
+								},
 							}
 						},
 					},
