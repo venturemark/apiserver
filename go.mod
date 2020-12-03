@@ -9,5 +9,5 @@ require (
 	github.com/xh3b4sd/logger v0.1.2
 	github.com/xh3b4sd/redigo v0.7.0
 	github.com/xh3b4sd/tracer v0.3.1
-	google.golang.org/grpc v1.33.2
+	google.golang.org/grpc v1.34.0
 )
