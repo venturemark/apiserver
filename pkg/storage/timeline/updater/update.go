@@ -7,6 +7,7 @@ import (
 	"github.com/venturemark/apigengo/pkg/pbf/timeline"
 	"github.com/xh3b4sd/tracer"
 
+	"github.com/venturemark/apiserver/pkg/index"
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
 	"github.com/venturemark/apiserver/pkg/value/timeline/element"
@@ -37,8 +38,9 @@ func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 		k := fmt.Sprintf(key.Timeline, usr)
 		e := element.Join(tml, req.Obj.Property.Name)
 		s := tml
+		i := index.New(index.Name, req.Obj.Property.Name)
 
-		tok, err = u.redigo.Sorted().Update().Value(k, e, s)
+		tok, err = u.redigo.Sorted().Update().Value(k, e, s, i)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

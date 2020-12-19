@@ -8,6 +8,7 @@ import (
 	"github.com/venturemark/apigengo/pkg/pbf/timeline"
 	"github.com/xh3b4sd/tracer"
 
+	"github.com/venturemark/apiserver/pkg/index"
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
 	"github.com/venturemark/apiserver/pkg/value/timeline/element"
@@ -41,8 +42,9 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 		k := fmt.Sprintf(key.Timeline, usr)
 		e := element.Join(uni, req.Obj.Property.Name)
 		s := uni
+		i := index.New(index.Name, req.Obj.Property.Name)
 
-		err = c.redigo.Sorted().Create().Element(k, e, s)
+		err = c.redigo.Sorted().Create().Element(k, e, s, i)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
