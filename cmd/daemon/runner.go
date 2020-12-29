@@ -47,6 +47,7 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 	{
 		c := client.Config{
 			Address: net.JoinHostPort(r.flag.Redis.Host, r.flag.Redis.Port),
+			Kind:    r.flag.Redis.Kind,
 		}
 
 		redisClient, err = client.New(c)
