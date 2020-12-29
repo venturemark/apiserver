@@ -19,7 +19,7 @@ spec:
           image: "{{ .Values.image.registry }}/{{ .Values.image.organization }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           args:
             - daemon
-            - --redis-host=rfs-redisfailover.infra.svc.cluster.local
+            - --redis-host=rfs-redis.infra.svc.cluster.local
             - --redis-kind=sentinel
             - --redis-port=26379
           ports:
