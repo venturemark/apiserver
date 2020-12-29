@@ -1,6 +1,6 @@
 apiserver:
   port: 7777
-  replica: 4
+  replica: 2
 cluster:
   name: ""
   zone: ""

@@ -19,11 +19,18 @@ spec:
           image: "{{ .Values.image.registry }}/{{ .Values.image.organization }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           args:
             - daemon
-            - --redis-host=rfs-redis.infra.svc.cluster.local
+            - --redis-host=rfs-redis-failover.infra.svc.cluster.local
             - --redis-kind=sentinel
             - --redis-port=26379
           ports:
             - name: "grpc"
               containerPort: {{ .Values.apiserver.port }}
+          resources:
+            limits:
+              cpu: "100m"
+              memory: "50Mi"
+            requests:
+              cpu: "100m"
+              memory: "50Mi"
       imagePullSecrets:
         - name: "pull-secret"
