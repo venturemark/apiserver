@@ -1,7 +1,11 @@
 package element
 
-import "fmt"
+import (
+	"encoding/base64"
+	"fmt"
+)
 
 func Join(uni float64, tex string) string {
-	return fmt.Sprintf("%d,%s", int64(uni), tex)
+	bas := base64.StdEncoding.EncodeToString([]byte(tex))
+	return fmt.Sprintf("%d,%s", int64(uni), string(bas))
 }

@@ -1,6 +1,7 @@
 package element
 
 import (
+	"encoding/base64"
 	"strconv"
 	"strings"
 
@@ -22,7 +23,11 @@ func Split(str string) (float64, string, error) {
 
 	var t string
 	{
-		t = l[1]
+		tex, err := base64.StdEncoding.DecodeString(l[1])
+		if err != nil {
+			return 0, "", tracer.Mask(err)
+		}
+		t = string(tex)
 	}
 
 	return n, t, nil
