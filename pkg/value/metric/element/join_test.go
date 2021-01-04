@@ -12,9 +12,6 @@ import (
 // a timeline. Note that these tests do also verify the validity of floating
 // point numbers as well as the ordering by dimensional space while the order of
 // provided datapoints remains intact.
-//
-//     go test ./pkg/value/metric/timeline/data -run Test_Data_Join -update
-//
 func Test_Data_Join(t *testing.T) {
 	testCases := []struct {
 		str string
