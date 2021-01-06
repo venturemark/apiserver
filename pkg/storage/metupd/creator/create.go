@@ -31,14 +31,16 @@ func (c *Creator) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	}
 
 	// We manage data on a timeline. Our main identifier is a unix timestamp in
-	// seconds is normalized to the UTC timezone. Persisting metrics and updates
-	// respectively uses the same timestamp. This is then how we associate one
-	// with the other. This is then also how our discovery mechanisms are
-	// designed. Everything starts with time, which means that pseudo random IDs
-	// are irrelevant for us.
+	// nano seconds, normalized to the UTC timezone. Persisting metrics and
+	// updates respectively uses the same timestamp. This is then how we
+	// associate one with the other. This is then also how our discovery
+	// mechanisms are designed. Everything starts with time, which means that
+	// pseudo random IDs are irrelevant for us. Note that we tracked IDs once in
+	// seconds, which caused problems when progammatically faking demo
+	// timelines, because only one timeline per second could be created.
 	var mui float64
 	{
-		mui = float64(time.Now().UTC().Unix())
+		mui = float64(time.Now().UTC().UnixNano())
 	}
 
 	// We store metrics in a sorted set. The elements of the sorted set are

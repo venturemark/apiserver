@@ -25,12 +25,15 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 	}
 
 	// We manage data on a timeline. Our main identifier is a unix timestamp in
-	// seconds is normalized to the UTC timezone. Our discovery mechanisms is
+	// nano seconds, normalized to the UTC timezone. Our discovery mechanisms is
 	// designed based on this very unix timestamp. Everything starts with time,
-	// which means that pseudo random IDs are irrelevant for us.
+	// which means that pseudo random IDs are irrelevant for us. Note that we
+	// tracked IDs once in seconds, which caused problems when progammatically
+	// faking demo timelines, because only one timeline per second could be
+	// created.
 	var uni float64
 	{
-		uni = float64(time.Now().UTC().Unix())
+		uni = float64(time.Now().UTC().UnixNano())
 	}
 
 	// We store timelines in a sorted set. The elements of the sorted set are
