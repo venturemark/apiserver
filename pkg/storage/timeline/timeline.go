@@ -7,6 +7,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/storage/timeline/creator"
 	"github.com/venturemark/apiserver/pkg/storage/timeline/searcher"
+	"github.com/venturemark/apiserver/pkg/storage/timeline/updater"
 )
 
 type Config struct {
@@ -17,6 +18,7 @@ type Config struct {
 type Timeline struct {
 	Creator  *creator.Creator
 	Searcher *searcher.Searcher
+	Updater  *updater.Updater
 }
 
 func New(config Config) (*Timeline, error) {
@@ -48,9 +50,23 @@ func New(config Config) (*Timeline, error) {
 		}
 	}
 
+	var upd *updater.Updater
+	{
+		c := updater.Config{
+			Logger: config.Logger,
+			Redigo: config.Redigo,
+		}
+
+		upd, err = updater.New(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	t := &Timeline{
 		Creator:  cre,
 		Searcher: sea,
+		Updater:  upd,
 	}
 
 	return t, nil
