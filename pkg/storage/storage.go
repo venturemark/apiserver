@@ -5,6 +5,7 @@ import (
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
 
+	"github.com/venturemark/apiserver/pkg/storage/audience"
 	"github.com/venturemark/apiserver/pkg/storage/metric"
 	"github.com/venturemark/apiserver/pkg/storage/metupd"
 	"github.com/venturemark/apiserver/pkg/storage/texupd"
@@ -18,6 +19,7 @@ type Config struct {
 }
 
 type Storage struct {
+	Audience *audience.Audience
 	Metric   *metric.Metric
 	MetUpd   *metupd.MetUpd
 	TexUpd   *texupd.TexUpd
@@ -27,6 +29,19 @@ type Storage struct {
 
 func New(config Config) (*Storage, error) {
 	var err error
+
+	var audienceStorage *audience.Audience
+	{
+		c := audience.Config{
+			Logger: config.Logger,
+			Redigo: config.Redigo,
+		}
+
+		audienceStorage, err = audience.New(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
 
 	var metricStorage *metric.Metric
 	{
@@ -94,6 +109,7 @@ func New(config Config) (*Storage, error) {
 	}
 
 	s := &Storage{
+		Audience: audienceStorage,
 		Metric:   metricStorage,
 		MetUpd:   metupdStorage,
 		TexUpd:   texupdStorage,

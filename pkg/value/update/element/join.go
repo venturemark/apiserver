@@ -6,6 +6,8 @@ import (
 )
 
 func Join(uni float64, tex string) string {
-	bas := base64.StdEncoding.EncodeToString([]byte(tex))
-	return fmt.Sprintf("%d,%s", int64(uni), string(bas))
+	return fmt.Sprintf("%d,%s",
+		int64(uni),
+		string(base64.StdEncoding.EncodeToString([]byte(tex))),
+	)
 }
