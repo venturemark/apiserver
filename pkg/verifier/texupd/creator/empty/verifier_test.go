@@ -43,7 +43,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 4 ensures that create input without user ID in the metadata
+		// Case 4 ensures that create input without audience ID in the metadata
 		// is not valid.
 		{
 			req: &texupd.CreateI{

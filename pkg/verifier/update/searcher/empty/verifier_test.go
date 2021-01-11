@@ -100,7 +100,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 8 ensures that search input without user ID is not valid.
+		// Case 8 ensures that search input without audience ID is not valid.
 		{
 			req: &update.SearchI{
 				Obj: []*update.SearchI_Obj{
