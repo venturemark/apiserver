@@ -25,7 +25,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 					Metadata: map[string]string{
 						metadata.MetricID:   "1606329189",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
+						metadata.AudienceID: "aud-al9qy",
 					},
 					Property: &metupd.UpdateI_Obj_Property{
 						Data: []*metupd.UpdateI_Obj_Property_Data{
@@ -49,9 +49,9 @@ func Test_Consistency_Verify_False(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.MetricID:   "1606329189",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.UpdateI_Obj_Property{
 						Data: []*metupd.UpdateI_Obj_Property_Data{
@@ -77,9 +77,9 @@ func Test_Consistency_Verify_False(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.MetricID:   "1606329189",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.UpdateI_Obj_Property{
 						Data: []*metupd.UpdateI_Obj_Property_Data{
@@ -102,9 +102,9 @@ func Test_Consistency_Verify_False(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.MetricID:   "1606329189",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.UpdateI_Obj_Property{
 						Data: []*metupd.UpdateI_Obj_Property_Data{
@@ -191,9 +191,9 @@ func Test_Consistency_Verify_True(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.MetricID:   "1606329189",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 				},
 			},
@@ -207,9 +207,9 @@ func Test_Consistency_Verify_True(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.MetricID:   "1606329189",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.UpdateI_Obj_Property{},
 				},
@@ -224,9 +224,9 @@ func Test_Consistency_Verify_True(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.MetricID:   "1606329189",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.UpdateI_Obj_Property{
 						Data: []*metupd.UpdateI_Obj_Property_Data{
@@ -250,9 +250,9 @@ func Test_Consistency_Verify_True(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.MetricID:   "1606329189",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.UpdateI_Obj_Property{
 						Data: []*metupd.UpdateI_Obj_Property_Data{
@@ -278,9 +278,9 @@ func Test_Consistency_Verify_True(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.MetricID:   "1606329189",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.UpdateI_Obj_Property{
 						Data: []*metupd.UpdateI_Obj_Property_Data{

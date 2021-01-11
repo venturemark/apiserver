@@ -27,19 +27,16 @@ func (v *Verifier) Verify(req *texupd.CreateI) (bool, error) {
 		if req.Obj.Metadata == nil {
 			return false, nil
 		}
-		if len(req.Obj.Metadata) != 2 {
-			return false, nil
-		}
 		if req.Obj.Property == nil {
 			return false, nil
 		}
 	}
 
 	{
-		if req.Obj.Metadata[metadata.TimelineID] == "" {
+		if req.Obj.Metadata[metadata.AudienceID] == "" {
 			return false, nil
 		}
-		if req.Obj.Metadata[metadata.UserID] == "" {
+		if req.Obj.Metadata[metadata.TimelineID] == "" {
 			return false, nil
 		}
 	}

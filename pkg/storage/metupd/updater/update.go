@@ -20,11 +20,14 @@ import (
 // creation. For more information about technical details see the inline
 // documentation.
 func (u *Updater) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
-	var tml string
-	var usr string
+	var aid string
 	{
-		tml = req.Obj.Metadata[metadata.TimelineID]
-		usr = req.Obj.Metadata[metadata.UserID]
+		aid = req.Obj.Metadata[metadata.AudienceID]
+	}
+
+	var tid string
+	{
+		tid = req.Obj.Metadata[metadata.TimelineID]
 	}
 
 	// When updating metric updates all assumptions are equal to creating metric
@@ -41,7 +44,7 @@ func (u *Updater) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
 			return nil, tracer.Mask(err)
 		}
 
-		k := fmt.Sprintf(key.Metric, usr, tml)
+		k := fmt.Sprintf(key.Metric, aid, tid)
 		e := mel.Join(i, toInterface(req.Obj.Property.Data))
 		s := i
 
@@ -65,7 +68,7 @@ func (u *Updater) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
 			return nil, tracer.Mask(err)
 		}
 
-		k := fmt.Sprintf(key.Update, usr, tml)
+		k := fmt.Sprintf(key.Update, aid, tid)
 		e := uel.Join(i, req.Obj.Property.Text)
 		s := i
 

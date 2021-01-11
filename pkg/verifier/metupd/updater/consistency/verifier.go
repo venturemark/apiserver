@@ -53,13 +53,10 @@ func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 	}
 
 	{
-		if req.Obj.Metadata[metadata.TimelineID] == "" {
+		if req.Obj.Metadata[metadata.AudienceID] == "" {
 			return false, nil
 		}
-	}
-
-	{
-		if req.Obj.Metadata[metadata.UserID] == "" {
+		if req.Obj.Metadata[metadata.TimelineID] == "" {
 			return false, nil
 		}
 	}
@@ -68,18 +65,18 @@ func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 		// Updating metrics is optional when updating metric updates. Somebody
 		// may just wish to update their updates.
 		if len(req.Obj.Property.Data) != 0 {
-			var tml string
-			var usr string
+			var aid string
+			var tid string
 			{
-				tml = req.Obj.Metadata[metadata.TimelineID]
-				usr = req.Obj.Metadata[metadata.UserID]
+				aid = req.Obj.Metadata[metadata.AudienceID]
+				tid = req.Obj.Metadata[metadata.TimelineID]
 			}
 
 			// We always check the latest item of the sorted set to check the
 			// amount of datapoints on the y axis. Due to this very check the
 			// consistency of the sorted set is ensured, which means that
 			// looking up a single element of the sorted set is sufficient.
-			k := fmt.Sprintf(key.Metric, usr, tml)
+			k := fmt.Sprintf(key.Metric, aid, tid)
 			s, err := v.redigo.Sorted().Search().Index(k, 0, 1)
 			if err != nil {
 				return false, tracer.Mask(err)

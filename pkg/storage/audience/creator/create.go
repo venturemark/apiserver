@@ -19,9 +19,9 @@ import (
 func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 	var err error
 
-	var usr string
+	var uid string
 	{
-		usr = req.Obj.Metadata[metadata.UserID]
+		uid = req.Obj.Metadata[metadata.UserID]
 	}
 
 	// We manage data on a timeline. Our main identifier is a unix timestamp in
@@ -31,9 +31,9 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 	// tracked IDs once in seconds, which caused problems when progammatically
 	// faking demo timelines, because only one timeline per second could be
 	// created.
-	var uni float64
+	var aid float64
 	{
-		uni = float64(time.Now().UTC().UnixNano())
+		aid = float64(time.Now().UTC().UnixNano())
 	}
 
 	// We store audiences in a sorted set. The elements of the sorted set are
@@ -42,9 +42,9 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 	// track t as part of the element within the sorted set to guarantee a
 	// unique element.
 	{
-		k := fmt.Sprintf(key.Audience, usr)
-		e := element.Join(uni, req.Obj.Property.Name, req.Obj.Property.User)
-		s := uni
+		k := fmt.Sprintf(key.Audience, uid)
+		e := element.Join(aid, req.Obj.Property.Name, req.Obj.Property.User)
+		s := aid
 		i := index.New(index.Name, req.Obj.Property.Name)
 
 		err = c.redigo.Sorted().Create().Element(k, e, s, i)
@@ -58,7 +58,7 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 		res = &audience.CreateO{
 			Obj: &audience.CreateO_Obj{
 				Metadata: map[string]string{
-					metadata.TimelineID: strconv.Itoa(int(uni)),
+					metadata.AudienceID: strconv.Itoa(int(aid)),
 				},
 			},
 		}

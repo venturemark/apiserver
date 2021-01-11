@@ -26,10 +26,10 @@ func Test_Updater_Update_Redis(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.MetricID:   "1606329189",
 						metadata.TimelineID: "1606329189",
 						metadata.UpdateID:   "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.UpdateI_Obj_Property{
 						Data: []*metupd.UpdateI_Obj_Property_Data{
@@ -61,9 +61,9 @@ func Test_Updater_Update_Redis(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.MetricID:   "1606329189",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.UpdateI_Obj_Property{
 						Data: []*metupd.UpdateI_Obj_Property_Data{
@@ -93,9 +93,9 @@ func Test_Updater_Update_Redis(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.TimelineID: "1606329189",
 						metadata.UpdateID:   "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.UpdateI_Obj_Property{
 						Text: "Lorem ipsum ...",
@@ -121,8 +121,8 @@ func Test_Updater_Update_Redis(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.UpdateI_Obj_Property{},
 				},

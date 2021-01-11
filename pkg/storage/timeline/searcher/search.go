@@ -17,16 +17,16 @@ import (
 func (s *Searcher) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 	var err error
 
-	var usr string
+	var aid string
 	{
-		usr = req.Obj[0].Metadata[metadata.UserID]
+		aid = req.Obj[0].Metadata[metadata.AudienceID]
 	}
 
 	// With redis we use ZREVRANGE which allows us to search for objects while
 	// having support for chunking.
 	var str []string
 	{
-		k := fmt.Sprintf(key.Timeline, usr)
+		k := fmt.Sprintf(key.Timeline, aid)
 		str, err = s.redigo.Sorted().Search().Index(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -41,18 +41,18 @@ func (s *Searcher) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 		res = &timeline.SearchO{}
 
 		for _, s := range str {
-			uni, val, err := element.Split(s)
+			tid, nam, err := element.Split(s)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
 
 			o := &timeline.SearchO_Obj{
 				Metadata: map[string]string{
-					metadata.TimelineID: strconv.Itoa(int(uni)),
-					metadata.UserID:     usr,
+					metadata.TimelineID: strconv.Itoa(int(tid)),
+					metadata.AudienceID: aid,
 				},
 				Property: &timeline.SearchO_Obj_Property{
-					Name: val,
+					Name: nam,
 				},
 			}
 

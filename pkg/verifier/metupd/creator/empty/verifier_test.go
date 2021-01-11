@@ -46,7 +46,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 4 ensures that create input without user ID in the metadata
+		// Case 4 ensures that create input without audience ID in the metadata
 		// is not valid.
 		{
 			req: &metupd.CreateI{
@@ -69,7 +69,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.UserID: "usr-al9qy",
+						metadata.AudienceID: "aud-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{
@@ -85,8 +85,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{},
@@ -100,8 +100,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{},
@@ -115,8 +115,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{},
@@ -162,8 +162,8 @@ func Test_Empty_Verify_True(t *testing.T) {
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{
@@ -179,8 +179,8 @@ func Test_Empty_Verify_True(t *testing.T) {
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-w4ndz",
 						metadata.TimelineID: "1605559909",
-						metadata.UserID:     "usr-w4ndz",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{
