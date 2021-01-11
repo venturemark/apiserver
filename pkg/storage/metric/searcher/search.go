@@ -19,11 +19,14 @@ import (
 func (s *Searcher) Search(req *metric.SearchI) (*metric.SearchO, error) {
 	var err error
 
-	var tml string
-	var usr string
+	var aid string
 	{
-		tml = req.Obj[0].Metadata[metadata.TimelineID]
-		usr = req.Obj[0].Metadata[metadata.UserID]
+		aid = req.Obj[0].Metadata[metadata.AudienceID]
+	}
+
+	var tid string
+	{
+		tid = req.Obj[0].Metadata[metadata.TimelineID]
 	}
 
 	// With redis we use ZREVRANGE which allows us to search for objects while
@@ -34,7 +37,7 @@ func (s *Searcher) Search(req *metric.SearchI) (*metric.SearchO, error) {
 	// metrics within a certain timerange.
 	var str []string
 	{
-		k := fmt.Sprintf(key.Metric, usr, tml)
+		k := fmt.Sprintf(key.Metric, aid, tid)
 		str, err = s.redigo.Sorted().Search().Index(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -51,7 +54,7 @@ func (s *Searcher) Search(req *metric.SearchI) (*metric.SearchO, error) {
 		res = &metric.SearchO{}
 
 		for _, s := range str {
-			uni, val, err := element.Split(s)
+			mid, val, err := element.Split(s)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
@@ -68,9 +71,9 @@ func (s *Searcher) Search(req *metric.SearchI) (*metric.SearchO, error) {
 
 			o := &metric.SearchO_Obj{
 				Metadata: map[string]string{
-					metadata.MetricID:   strconv.Itoa(int(uni)),
-					metadata.TimelineID: tml,
-					metadata.UserID:     usr,
+					metadata.AudienceID: aid,
+					metadata.MetricID:   strconv.Itoa(int(mid)),
+					metadata.TimelineID: tid,
 				},
 				Property: &metric.SearchO_Obj_Property{
 					Data: dat,

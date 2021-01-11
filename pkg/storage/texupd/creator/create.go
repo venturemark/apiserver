@@ -20,11 +20,14 @@ import (
 func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 	var err error
 
-	var tml string
-	var usr string
+	var aid string
 	{
-		tml = req.Obj.Metadata[metadata.TimelineID]
-		usr = req.Obj.Metadata[metadata.UserID]
+		aid = req.Obj.Metadata[metadata.AudienceID]
+	}
+
+	var tid string
+	{
+		tid = req.Obj.Metadata[metadata.TimelineID]
 	}
 
 	// We manage data on a timeline. Our main identifier is a unix timestamp in
@@ -46,7 +49,7 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 	// sorted set to guarantee a unique element, even if the user's coordinates
 	// on a timeline ever appear twice.
 	{
-		k := fmt.Sprintf(key.Update, usr, tml)
+		k := fmt.Sprintf(key.Update, aid, tid)
 		e := uel.Join(tui, req.Obj.Property.Text)
 		s := tui
 

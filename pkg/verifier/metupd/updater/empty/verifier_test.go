@@ -40,7 +40,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 3 ensures that update input without user ID is not valid.
+		// Case 3 ensures that update input without audience ID is not valid.
 		{
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{

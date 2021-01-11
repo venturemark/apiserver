@@ -25,9 +25,9 @@ func Test_Updater_Update_Redis(t *testing.T) {
 			req: &texupd.UpdateI{
 				Obj: &texupd.UpdateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.TimelineID: "1606329189",
 						metadata.UpdateID:   "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &texupd.UpdateI_Obj_Property{
 						Text: "Lorem ipsum ...",

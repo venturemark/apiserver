@@ -38,7 +38,7 @@ func Test_Timeline_Verify_False(t *testing.T) {
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.UserID: "usr-al9qy",
+						metadata.AudienceID: "aud-al9qy",
 					},
 				},
 			},
@@ -46,7 +46,7 @@ func Test_Timeline_Verify_False(t *testing.T) {
 				return true, nil
 			},
 		},
-		// Case 3 ensures that create input without user ID is not valid.
+		// Case 3 ensures that create input without audience ID is not valid.
 		{
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
@@ -65,8 +65,8 @@ func Test_Timeline_Verify_False(t *testing.T) {
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.TimelineID: "0",
-						metadata.UserID:     "usr-al9qy",
 					},
 				},
 			},
@@ -124,8 +124,8 @@ func Test_Timeline_Verify_True(t *testing.T) {
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 				},
 			},
@@ -138,8 +138,8 @@ func Test_Timeline_Verify_True(t *testing.T) {
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-w4ndz",
 						metadata.TimelineID: "1605559909",
-						metadata.UserID:     "usr-w4ndz",
 					},
 				},
 			},

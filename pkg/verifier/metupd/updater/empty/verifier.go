@@ -29,9 +29,6 @@ func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 		if req.Obj.Metadata == nil {
 			return false, nil
 		}
-		if len(req.Obj.Metadata) != 3 && len(req.Obj.Metadata) != 4 {
-			return false, nil
-		}
 		if req.Obj.Property == nil {
 			return false, nil
 		}
