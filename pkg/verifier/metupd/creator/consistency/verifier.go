@@ -55,16 +55,16 @@ func (v *Verifier) Verify(req *metupd.CreateI) (bool, error) {
 		}
 	}
 
-	var tml string
-	var usr string
+	var aid string
+	var tid string
 	{
-		tml = req.Obj.Metadata[metadata.TimelineID]
-		usr = req.Obj.Metadata[metadata.UserID]
+		aid = req.Obj.Metadata[metadata.AudienceID]
+		tid = req.Obj.Metadata[metadata.TimelineID]
 
-		if tml == "" {
+		if tid == "" {
 			return false, nil
 		}
-		if usr == "" {
+		if aid == "" {
 			return false, nil
 		}
 	}
@@ -74,7 +74,7 @@ func (v *Verifier) Verify(req *metupd.CreateI) (bool, error) {
 		// amount of datapoints on the y axis. Due to this very check the
 		// consistency of the sorted set is ensured, which means that
 		// looking up a single element of the sorted set is sufficient.
-		k := fmt.Sprintf(key.Metric, usr, tml)
+		k := fmt.Sprintf(key.Metric, aid, tid)
 		s, err := v.redigo.Sorted().Search().Index(k, 0, 1)
 		if err != nil {
 			return false, tracer.Mask(err)

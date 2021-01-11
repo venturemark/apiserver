@@ -38,10 +38,10 @@ func (v *Verifier) Verify(req *metupd.UpdateI) (bool, error) {
 	}
 
 	{
-		if req.Obj.Metadata[metadata.TimelineID] == "" {
+		if req.Obj.Metadata[metadata.AudienceID] == "" {
 			return false, nil
 		}
-		if req.Obj.Metadata[metadata.UserID] == "" {
+		if req.Obj.Metadata[metadata.TimelineID] == "" {
 			return false, nil
 		}
 	}

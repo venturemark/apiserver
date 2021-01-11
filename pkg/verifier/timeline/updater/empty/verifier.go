@@ -19,7 +19,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 }
 
 // Verify checks if there is any information given for creating timelines. The
-// only piece of information we need is the user ID provided with the object
+// only piece of information we need is the audience ID provided with the object
 // metadata.
 func (v *Verifier) Verify(req *timeline.UpdateI) (bool, error) {
 	{
@@ -41,7 +41,7 @@ func (v *Verifier) Verify(req *timeline.UpdateI) (bool, error) {
 	}
 
 	{
-		if req.Obj.Metadata[metadata.UserID] == "" {
+		if req.Obj.Metadata[metadata.AudienceID] == "" {
 			return false, nil
 		}
 	}

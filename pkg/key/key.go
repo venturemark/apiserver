@@ -4,9 +4,9 @@ const (
 	Audience = "usr:%s:aud"
 )
 
-// TODO we need to map all of the resources below to audiences instead of users.
 const (
-	Metric   = "usr:%s:tml:%s:met"
-	Timeline = "usr:%s:tml"
-	Update   = "usr:%s:tml:%s:upd"
+	Metric   = "aud:%s:tml:%s:met"
+	Timeline = "aud:%s:tml"
+	// TODO we need to map all of the resources below to audiences instead of users.
+	Update = "aud:%s:tml:%s:upd"
 )

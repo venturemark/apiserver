@@ -44,27 +44,27 @@ func (v *Verifier) Verify(req *metupd.CreateI) (bool, error) {
 		}
 	}
 
-	var tml string
-	var usr string
+	var aid string
+	var tid string
 	{
-		tml = req.Obj.Metadata[metadata.TimelineID]
-		usr = req.Obj.Metadata[metadata.UserID]
+		aid = req.Obj.Metadata[metadata.AudienceID]
+		tid = req.Obj.Metadata[metadata.TimelineID]
 
-		if tml == "" {
+		if aid == "" {
 			return false, nil
 		}
-		if usr == "" {
+		if tid == "" {
 			return false, nil
 		}
 	}
 
 	{
-		i, err := strconv.ParseFloat(tml, 64)
+		i, err := strconv.ParseFloat(tid, 64)
 		if err != nil {
 			return false, tracer.Mask(err)
 		}
 
-		k := fmt.Sprintf(key.Timeline, usr)
+		k := fmt.Sprintf(key.Timeline, aid)
 		s := i
 
 		exi, err := v.redigo.Sorted().Exists().Score(k, s)
