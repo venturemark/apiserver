@@ -33,16 +33,16 @@ func (v *Verifier) Verify(req *update.SearchI) (bool, error) {
 		if len(req.Obj) != 1 {
 			return false, nil
 		}
-		if len(req.Obj[0].Metadata) != 2 {
+		if req.Obj[0].Metadata == nil {
 			return false, nil
 		}
 	}
 
 	{
-		if req.Obj[0].Metadata[metadata.TimelineID] == "" {
+		if req.Obj[0].Metadata[metadata.AudienceID] == "" {
 			return false, nil
 		}
-		if req.Obj[0].Metadata[metadata.UserID] == "" {
+		if req.Obj[0].Metadata[metadata.TimelineID] == "" {
 			return false, nil
 		}
 	}

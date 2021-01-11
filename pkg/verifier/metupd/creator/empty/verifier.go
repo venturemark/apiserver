@@ -28,9 +28,6 @@ func (v *Verifier) Verify(req *metupd.CreateI) (bool, error) {
 		if req.Obj.Metadata == nil {
 			return false, nil
 		}
-		if len(req.Obj.Metadata) != 2 {
-			return false, nil
-		}
 		if req.Obj.Property == nil {
 			return false, nil
 		}

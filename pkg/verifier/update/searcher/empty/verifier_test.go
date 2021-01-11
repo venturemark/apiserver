@@ -61,8 +61,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
+							metadata.AudienceID: "aud-w4ndz",
 							metadata.TimelineID: "1606329189",
-							metadata.UserID:     "usr-w4ndz",
 						},
 					},
 					{
@@ -79,8 +79,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
+							metadata.AudienceID: "aud-w4ndz",
 							metadata.TimelineID: "1606329189",
-							metadata.UserID:     "usr-w4ndz",
 						},
 						Property: &update.SearchI_Obj_Property{},
 					},
@@ -93,7 +93,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.UserID: "usr-w4ndz",
+							metadata.AudienceID: "aud-w4ndz",
 						},
 						Property: &update.SearchI_Obj_Property{},
 					},
@@ -151,8 +151,8 @@ func Test_Empty_Verify_True(t *testing.T) {
 				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
+							metadata.AudienceID: "aud-w4ndz",
 							metadata.TimelineID: "1606329189",
-							metadata.UserID:     "usr-w4ndz",
 						},
 					},
 				},
@@ -164,8 +164,8 @@ func Test_Empty_Verify_True(t *testing.T) {
 				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
+							metadata.AudienceID: "aud-al9qy",
 							metadata.TimelineID: "1605559909",
-							metadata.UserID:     "usr-al9qy",
 						},
 					},
 				},
