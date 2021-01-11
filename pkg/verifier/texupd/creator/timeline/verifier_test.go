@@ -46,7 +46,7 @@ func Test_Timeline_Verify_False(t *testing.T) {
 				return true, nil
 			},
 		},
-		// Case 3 ensures that create input without user ID is not valid.
+		// Case 3 ensures that create input without audience ID is not valid.
 		{
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{

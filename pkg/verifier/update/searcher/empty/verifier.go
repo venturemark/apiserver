@@ -19,7 +19,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 }
 
 // Verify checks if there is any information given for searching updates. The
-// information we need is the user ID and the timeline ID provided with the
+// information we need is the audience ID and the timeline ID provided with the
 // object metadata. It is only allowed to provide one search object since no
 // more complex search queries are implemented yet.
 func (v *Verifier) Verify(req *update.SearchI) (bool, error) {
