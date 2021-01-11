@@ -29,8 +29,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.MetricID: "1606329189",
-						metadata.UserID:   "usr-al9qy",
+						metadata.AudienceID: "aud-al9qy",
+						metadata.MetricID:   "1606329189",
 					},
 					Property: &metupd.UpdateI_Obj_Property{
 						Data: []*metupd.UpdateI_Obj_Property_Data{
@@ -40,7 +40,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 3 ensures that update input without user ID is not valid.
+		// Case 3 ensures that update input without audience ID is not valid.
 		{
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
@@ -59,8 +59,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.UpdateI_Obj_Property{},
 				},
@@ -71,9 +71,9 @@ func Test_Empty_Verify_False(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.MetricID:   "1606329189",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.UpdateI_Obj_Property{
 						Data: []*metupd.UpdateI_Obj_Property_Data{},
@@ -87,10 +87,10 @@ func Test_Empty_Verify_False(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.MetricID:   "1606329189",
 						metadata.TimelineID: "1606329189",
 						metadata.UpdateID:   "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.UpdateI_Obj_Property{
 						Data: []*metupd.UpdateI_Obj_Property_Data{},
@@ -136,9 +136,9 @@ func Test_Empty_Verify_True(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.MetricID:   "1606329189",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.UpdateI_Obj_Property{
 						Data: []*metupd.UpdateI_Obj_Property_Data{
@@ -155,9 +155,9 @@ func Test_Empty_Verify_True(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.TimelineID: "1606329189",
 						metadata.UpdateID:   "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.UpdateI_Obj_Property{
 						Text: "Lorem ipsum ...",
@@ -170,10 +170,10 @@ func Test_Empty_Verify_True(t *testing.T) {
 			req: &metupd.UpdateI{
 				Obj: &metupd.UpdateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.MetricID:   "1606329189",
 						metadata.TimelineID: "1606329189",
 						metadata.UpdateID:   "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.UpdateI_Obj_Property{
 						Data: []*metupd.UpdateI_Obj_Property_Data{

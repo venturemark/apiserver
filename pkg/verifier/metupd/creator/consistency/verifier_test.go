@@ -57,8 +57,8 @@ func Test_Consistency_Verify_False(t *testing.T) {
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{},
@@ -75,8 +75,8 @@ func Test_Consistency_Verify_False(t *testing.T) {
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{
@@ -100,8 +100,8 @@ func Test_Consistency_Verify_False(t *testing.T) {
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{
@@ -127,8 +127,8 @@ func Test_Consistency_Verify_False(t *testing.T) {
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{
@@ -151,8 +151,8 @@ func Test_Consistency_Verify_False(t *testing.T) {
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{
@@ -221,8 +221,8 @@ func Test_Consistency_Verify_True(t *testing.T) {
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{
@@ -246,8 +246,8 @@ func Test_Consistency_Verify_True(t *testing.T) {
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{
@@ -273,8 +273,8 @@ func Test_Consistency_Verify_True(t *testing.T) {
 			req: &metupd.CreateI{
 				Obj: &metupd.CreateI_Obj{
 					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
 						metadata.TimelineID: "1606329189",
-						metadata.UserID:     "usr-al9qy",
 					},
 					Property: &metupd.CreateI_Obj_Property{
 						Data: []*metupd.CreateI_Obj_Property_Data{

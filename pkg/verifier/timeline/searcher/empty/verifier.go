@@ -19,13 +19,10 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 }
 
 // Verify checks if there is any information given for searching timelines. The
-// only piece of information we need is the user ID provided with the object
+// only piece of information we need is the audience ID provided with the object
 // metadata. It is only allowed to provide one search object.
 func (v *Verifier) Verify(req *timeline.SearchI) (bool, error) {
 	{
-		// We need a single object with a single metadata label for the user's
-		// timeline in order to fullfil the search request. We will extend
-		// functionality here later.
 		if len(req.Obj) != 1 {
 			return false, nil
 		}
@@ -35,7 +32,7 @@ func (v *Verifier) Verify(req *timeline.SearchI) (bool, error) {
 	}
 
 	{
-		if req.Obj[0].Metadata[metadata.UserID] == "" {
+		if req.Obj[0].Metadata[metadata.AudienceID] == "" {
 			return false, nil
 		}
 	}

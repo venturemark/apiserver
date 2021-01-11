@@ -16,11 +16,14 @@ import (
 // timeline. A timeline refers to many updates. For more information about
 // technical details see the inline documentation.
 func (u *Updater) Update(req *texupd.UpdateI) (*texupd.UpdateO, error) {
-	var tml string
-	var usr string
+	var aid string
 	{
-		tml = req.Obj.Metadata[metadata.TimelineID]
-		usr = req.Obj.Metadata[metadata.UserID]
+		aid = req.Obj.Metadata[metadata.AudienceID]
+	}
+
+	var tid string
+	{
+		tid = req.Obj.Metadata[metadata.TimelineID]
 	}
 
 	// When updating text updates all assumptions are equal to creating text
@@ -36,7 +39,7 @@ func (u *Updater) Update(req *texupd.UpdateI) (*texupd.UpdateO, error) {
 			return nil, tracer.Mask(err)
 		}
 
-		k := fmt.Sprintf(key.Update, usr, tml)
+		k := fmt.Sprintf(key.Update, aid, tid)
 		e := uel.Join(i, req.Obj.Property.Text)
 		s := i
 

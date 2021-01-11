@@ -23,11 +23,14 @@ import (
 func (c *Creator) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	var err error
 
-	var tml string
-	var usr string
+	var aid string
 	{
-		tml = req.Obj.Metadata[metadata.TimelineID]
-		usr = req.Obj.Metadata[metadata.UserID]
+		aid = req.Obj.Metadata[metadata.AudienceID]
+	}
+
+	var tid string
+	{
+		tid = req.Obj.Metadata[metadata.TimelineID]
 	}
 
 	// We manage data on a timeline. Our main identifier is a unix timestamp in
@@ -38,9 +41,9 @@ func (c *Creator) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	// pseudo random IDs are irrelevant for us. Note that we tracked IDs once in
 	// seconds, which caused problems when progammatically faking demo
 	// timelines, because only one timeline per second could be created.
-	var mui float64
+	var mid float64
 	{
-		mui = float64(time.Now().UTC().UnixNano())
+		mid = float64(time.Now().UTC().UnixNano())
 	}
 
 	// We store metrics in a sorted set. The elements of the sorted set are
@@ -51,9 +54,9 @@ func (c *Creator) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	// unique element, even if the user's coordinates on a timeline ever appear
 	// twice.
 	{
-		k := fmt.Sprintf(key.Metric, usr, tml)
-		e := mel.Join(mui, toInterface(req.Obj.Property.Data))
-		s := mui
+		k := fmt.Sprintf(key.Metric, aid, tid)
+		e := mel.Join(mid, toInterface(req.Obj.Property.Data))
+		s := mid
 
 		err = c.redigo.Sorted().Create().Element(k, e, s)
 		if err != nil {
@@ -68,9 +71,9 @@ func (c *Creator) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	// sorted set to guarantee a unique element, even if the user's coordinates
 	// on a timeline ever appear twice.
 	{
-		k := fmt.Sprintf(key.Update, usr, tml)
-		e := uel.Join(mui, req.Obj.Property.Text)
-		s := mui
+		k := fmt.Sprintf(key.Update, aid, tid)
+		e := uel.Join(mid, req.Obj.Property.Text)
+		s := mid
 
 		err = c.redigo.Sorted().Create().Element(k, e, s)
 		if err != nil {
@@ -83,8 +86,8 @@ func (c *Creator) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 		res = &metupd.CreateO{
 			Obj: &metupd.CreateO_Obj{
 				Metadata: map[string]string{
-					metadata.MetricID: strconv.Itoa(int(mui)),
-					metadata.UpdateID: strconv.Itoa(int(mui)),
+					metadata.MetricID: strconv.Itoa(int(mid)),
+					metadata.UpdateID: strconv.Itoa(int(mid)),
 				},
 			},
 		}

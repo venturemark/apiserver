@@ -2,7 +2,9 @@
 // and information sharing. We need to consider the following resources within
 // the system.
 //
+//     audience
 //     metric
+//     organization
 //     timeline
 //     update
 //     user
@@ -11,14 +13,22 @@
 // expose different pieces of information throughout the lifecycle of the
 // resources when interacting with them.
 //
-//     id        unix timestamp normalized to UTC timezone (does not apply to users)
-//     status    state change information like "updated"
+//     id        unix timestamp normalized to UTC timezone
+//     status    state change information e.g. "updated"
 //
 package metadata
 
 const (
+	AudienceID = "audience.venturemark.co/id"
+)
+
+const (
 	MetricID     = "metric.venturemark.co/id"
 	MetricStatus = "metric.venturemark.co/status"
+)
+
+const (
+	OrganizationID = "organization.venturemark.co/id"
 )
 
 const (
