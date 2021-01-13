@@ -6,6 +6,7 @@ import (
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/storage/audience"
+	"github.com/venturemark/apiserver/pkg/storage/message"
 	"github.com/venturemark/apiserver/pkg/storage/metric"
 	"github.com/venturemark/apiserver/pkg/storage/metupd"
 	"github.com/venturemark/apiserver/pkg/storage/texupd"
@@ -20,6 +21,7 @@ type Config struct {
 
 type Storage struct {
 	Audience *audience.Audience
+	Message  *message.Message
 	Metric   *metric.Metric
 	MetUpd   *metupd.MetUpd
 	TexUpd   *texupd.TexUpd
@@ -38,6 +40,19 @@ func New(config Config) (*Storage, error) {
 		}
 
 		audienceStorage, err = audience.New(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	var messageStorage *message.Message
+	{
+		c := message.Config{
+			Logger: config.Logger,
+			Redigo: config.Redigo,
+		}
+
+		messageStorage, err = message.New(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -110,6 +125,7 @@ func New(config Config) (*Storage, error) {
 
 	s := &Storage{
 		Audience: audienceStorage,
+		Message:  messageStorage,
 		Metric:   metricStorage,
 		MetUpd:   metupdStorage,
 		TexUpd:   texupdStorage,

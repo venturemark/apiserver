@@ -12,7 +12,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/value/audience/element"
 )
 
-// Search provides a filter primitive to lookup timelines associated with a
+// Search provides a filter primitive to lookup audiencies associated with a
 // user.
 func (s *Searcher) Search(req *audience.SearchI) (*audience.SearchO, error) {
 	var err error
@@ -33,9 +33,6 @@ func (s *Searcher) Search(req *audience.SearchI) (*audience.SearchO, error) {
 		}
 	}
 
-	// We store timelines in a sorted set. The elements of the sorted set are
-	// concatenated strings of the unix timestamp of timeline creation and the
-	// timeline name.
 	var res *audience.SearchO
 	{
 		res = &audience.SearchO{}

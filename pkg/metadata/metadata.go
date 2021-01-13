@@ -28,6 +28,10 @@ const (
 )
 
 const (
+	MessageID = "message.venturemark.co/id"
+)
+
+const (
 	OrganizationID = "organization.venturemark.co/id"
 )
 
