@@ -37,10 +37,11 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 	}
 
 	// We store audiences in a sorted set. The elements of the sorted set are
-	// concatenated strings of t and e. Here t is the unix timestamp referring
-	// to the time right now at creation time. Here e is the audience name. We
-	// track t as part of the element within the sorted set to guarantee a
-	// unique element.
+	// concatenated strings of t, n and u. Here t is the unix timestamp
+	// referring to the time right now at creation time. Here n is the audience
+	// name. Here u is a list of users associated to that audience. We track t
+	// as part of the element within the sorted set to guarantee a unique
+	// element.
 	{
 		k := fmt.Sprintf(key.Audience, uid)
 		e := element.Join(aid, req.Obj.Property.Name, req.Obj.Property.User)
