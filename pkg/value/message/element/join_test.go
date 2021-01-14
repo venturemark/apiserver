@@ -38,6 +38,14 @@ func Test_Element_Join(t *testing.T) {
 			rid: "rid-al9qy",
 			bas: "1605858909,Zm9vLCBiYXIgfCBiYXogPz8/IDJpMzc2IGtqIC0tLS4uLDIzcjJkM2tqXl5gIGJvb20gYm9vbQ==,cmlkLWFsOXF5",
 		},
+		// Case 3 ensures a simple string can be joined to the data format
+		// encoding.
+		{
+			uni: 1605559909,
+			tex: "foo bar",
+			rid: "",
+			bas: "1605559909,Zm9vIGJhcg==",
+		},
 	}
 
 	for i, tc := range testCases {

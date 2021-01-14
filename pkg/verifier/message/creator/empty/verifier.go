@@ -18,8 +18,8 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if there is any information given for creating audiences. What
-// we need is the name of the audience and a list of user IDs associated to it.
+// Verify checks if there is any information given for creating messages. What
+// we need is the text of the message and sufficient metadata for association.
 func (v *Verifier) Verify(req *message.CreateI) (bool, error) {
 	{
 		if req.Obj == nil {
@@ -34,16 +34,19 @@ func (v *Verifier) Verify(req *message.CreateI) (bool, error) {
 	}
 
 	{
-		if req.Obj.Metadata[metadata.OrganizationID] == "" {
+		if req.Obj.Metadata[metadata.AudienceID] == "" {
 			return false, nil
 		}
-		if req.Obj.Metadata[metadata.UserID] == "" {
+		if req.Obj.Metadata[metadata.TimelineID] == "" {
+			return false, nil
+		}
+		if req.Obj.Metadata[metadata.UpdateID] == "" {
 			return false, nil
 		}
 	}
 
 	{
-		if req.Obj.Property.Name == "" {
+		if req.Obj.Property.Text == "" {
 			return false, nil
 		}
 	}

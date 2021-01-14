@@ -12,7 +12,7 @@ func Split(str string) (float64, string, string, error) {
 	l := strings.Split(str, ",")
 
 	var t float64
-	{
+	if len(l) >= 1 {
 		i, err := strconv.ParseFloat(l[0], 64)
 		if err != nil {
 			return 0, "", "", tracer.Mask(err)
@@ -22,7 +22,7 @@ func Split(str string) (float64, string, string, error) {
 	}
 
 	var m string
-	{
+	if len(l) >= 2 {
 		mes, err := base64.StdEncoding.DecodeString(l[1])
 		if err != nil {
 			return 0, "", "", tracer.Mask(err)
@@ -31,7 +31,7 @@ func Split(str string) (float64, string, string, error) {
 	}
 
 	var r string
-	{
+	if len(l) >= 3 {
 		rid, err := base64.StdEncoding.DecodeString(l[2])
 		if err != nil {
 			return 0, "", "", tracer.Mask(err)
