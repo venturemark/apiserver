@@ -11,6 +11,7 @@ import (
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/handler"
+	"github.com/venturemark/apiserver/pkg/handler/audience"
 	"github.com/venturemark/apiserver/pkg/handler/metric"
 	"github.com/venturemark/apiserver/pkg/handler/metupd"
 	"github.com/venturemark/apiserver/pkg/handler/texupd"
@@ -65,6 +66,19 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 		}
 
 		redisStorage, err = storage.New(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
+
+	var audienceHandler *audience.Handler
+	{
+		c := audience.HandlerConfig{
+			Logger:  r.logger,
+			Storage: redisStorage,
+		}
+
+		audienceHandler, err = audience.NewHandler(c)
 		if err != nil {
 			return tracer.Mask(err)
 		}
@@ -140,6 +154,7 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 		c := grpc.ServerConfig{
 			Logger: r.logger,
 			Handlers: []handler.Interface{
+				audienceHandler,
 				metricHandler,
 				metupdHandler,
 				texupdHandler,
