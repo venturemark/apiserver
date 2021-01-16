@@ -196,8 +196,8 @@ github.com/stretchr/testify v1.5.1 h1:nOGnQDM7FYENwehXlg/kFVnos3rEvtKTjRvOWSzb6H
 github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5cxcmMvtA=
 github.com/subosito/gotenv v1.2.0/go.mod h1:N0PQaV/YGNqwC0u51sEeR/aUtSLEXKX9iv69rRypqCw=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
-github.com/venturemark/apigengo v0.0.0-20210115214846-44f82a16198f h1:BF+tPCjgdb93fEWLazrVuozrfSJdFcJSBVuEzGD0ry4=
-github.com/venturemark/apigengo v0.0.0-20210115214846-44f82a16198f/go.mod h1:Vh1j2Yvbdui2WYbByYto5AJbhYdkpP6VRz2d6P4PhqM=
+github.com/venturemark/apigengo v0.0.0-20210116142137-f45ab25c185a h1:W4tQQXbpv1ra4Pmuu0ni8j1xH11o1lSw/yDYvHCB/cs=
+github.com/venturemark/apigengo v0.0.0-20210116142137-f45ab25c185a/go.mod h1:Vh1j2Yvbdui2WYbByYto5AJbhYdkpP6VRz2d6P4PhqM=
 github.com/xh3b4sd/logger v0.1.2 h1:zEE3obzyrGofvTNbT+T2U654e9XwqmGbzyktdRB1BR8=
 github.com/xh3b4sd/logger v0.1.2/go.mod h1:/mTz2elyBeH3rPq5vEqAJRWYt/6huhY/b3Hrzych2GE=
 github.com/xh3b4sd/redigo v0.10.0 h1:0eCY9QL6L32Qr1M77dxrLQNRXbIpAL52mkg2znTM3ho=
