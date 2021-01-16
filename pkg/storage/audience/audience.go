@@ -6,6 +6,7 @@ import (
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/storage/audience/creator"
+	"github.com/venturemark/apiserver/pkg/storage/audience/deleter"
 	"github.com/venturemark/apiserver/pkg/storage/audience/searcher"
 )
 
@@ -16,6 +17,7 @@ type Config struct {
 
 type Audience struct {
 	Creator  *creator.Creator
+	Deleter  *deleter.Deleter
 	Searcher *searcher.Searcher
 }
 
@@ -30,6 +32,19 @@ func New(config Config) (*Audience, error) {
 		}
 
 		cre, err = creator.New(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	var del *deleter.Deleter
+	{
+		c := deleter.Config{
+			Logger: config.Logger,
+			Redigo: config.Redigo,
+		}
+
+		del, err = deleter.New(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -50,6 +65,7 @@ func New(config Config) (*Audience, error) {
 
 	a := &Audience{
 		Creator:  cre,
+		Deleter:  del,
 		Searcher: sea,
 	}
 
