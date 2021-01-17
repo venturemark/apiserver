@@ -6,6 +6,7 @@ import (
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/storage/timeline/creator"
+	"github.com/venturemark/apiserver/pkg/storage/timeline/deleter"
 	"github.com/venturemark/apiserver/pkg/storage/timeline/searcher"
 	"github.com/venturemark/apiserver/pkg/storage/timeline/updater"
 )
@@ -17,6 +18,7 @@ type Config struct {
 
 type Timeline struct {
 	Creator  *creator.Creator
+	Deleter  *deleter.Deleter
 	Searcher *searcher.Searcher
 	Updater  *updater.Updater
 }
@@ -32,6 +34,19 @@ func New(config Config) (*Timeline, error) {
 		}
 
 		cre, err = creator.New(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	var del *deleter.Deleter
+	{
+		c := deleter.Config{
+			Logger: config.Logger,
+			Redigo: config.Redigo,
+		}
+
+		del, err = deleter.New(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -65,6 +80,7 @@ func New(config Config) (*Timeline, error) {
 
 	t := &Timeline{
 		Creator:  cre,
+		Deleter:  del,
 		Searcher: sea,
 		Updater:  upd,
 	}
