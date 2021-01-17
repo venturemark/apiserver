@@ -6,6 +6,7 @@ import (
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/storage/texupd/creator"
+	"github.com/venturemark/apiserver/pkg/storage/texupd/deleter"
 	"github.com/venturemark/apiserver/pkg/storage/texupd/updater"
 )
 
@@ -16,6 +17,7 @@ type Config struct {
 
 type TexUpd struct {
 	Creator *creator.Creator
+	Deleter *deleter.Deleter
 	Updater *updater.Updater
 }
 
@@ -30,6 +32,19 @@ func New(config Config) (*TexUpd, error) {
 		}
 
 		cre, err = creator.New(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	var del *deleter.Deleter
+	{
+		c := deleter.Config{
+			Logger: config.Logger,
+			Redigo: config.Redigo,
+		}
+
+		del, err = deleter.New(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -50,6 +65,7 @@ func New(config Config) (*TexUpd, error) {
 
 	t := &TexUpd{
 		Creator: cre,
+		Deleter: del,
 		Updater: upd,
 	}
 
