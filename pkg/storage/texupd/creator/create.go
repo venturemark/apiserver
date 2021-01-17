@@ -37,9 +37,9 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 	// that we tracked IDs once in seconds, which caused problems when
 	// progammatically faking demo timelines, because only one timeline per
 	// second could be created.
-	var tui float64
+	var uid float64
 	{
-		tui = float64(time.Now().UTC().UnixNano())
+		uid = float64(time.Now().UTC().UnixNano())
 	}
 
 	// We store updates in a sorted set. The elements of the sorted set are
@@ -50,8 +50,8 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 	// on a timeline ever appear twice.
 	{
 		k := fmt.Sprintf(key.Update, aid, tid)
-		e := uel.Join(tui, req.Obj.Property.Text)
-		s := tui
+		e := uel.Join(uid, req.Obj.Property.Text)
+		s := uid
 
 		err = c.redigo.Sorted().Create().Element(k, e, s)
 		if err != nil {
@@ -64,7 +64,7 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 		res = &texupd.CreateO{
 			Obj: &texupd.CreateO_Obj{
 				Metadata: map[string]string{
-					metadata.UpdateID: strconv.Itoa(int(tui)),
+					metadata.UpdateID: strconv.Itoa(int(uid)),
 				},
 			},
 		}
