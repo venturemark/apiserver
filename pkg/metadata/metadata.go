@@ -3,6 +3,7 @@
 // the system.
 //
 //     audience
+//     message
 //     metric
 //     organization
 //     timeline
@@ -24,12 +25,13 @@ const (
 )
 
 const (
-	MetricID     = "metric.venturemark.co/id"
-	MetricStatus = "metric.venturemark.co/status"
+	MessageID     = "message.venturemark.co/id"
+	MessageStatus = "message.venturemark.co/status"
 )
 
 const (
-	MessageID = "message.venturemark.co/id"
+	MetricID     = "metric.venturemark.co/id"
+	MetricStatus = "metric.venturemark.co/status"
 )
 
 const (
