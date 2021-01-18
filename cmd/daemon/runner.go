@@ -12,6 +12,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/handler"
 	"github.com/venturemark/apiserver/pkg/handler/audience"
+	"github.com/venturemark/apiserver/pkg/handler/message"
 	"github.com/venturemark/apiserver/pkg/handler/metric"
 	"github.com/venturemark/apiserver/pkg/handler/metupd"
 	"github.com/venturemark/apiserver/pkg/handler/texupd"
@@ -79,6 +80,19 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 		}
 
 		audienceHandler, err = audience.NewHandler(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
+
+	var messageHandler *message.Handler
+	{
+		c := message.HandlerConfig{
+			Logger:  r.logger,
+			Storage: redisStorage,
+		}
+
+		messageHandler, err = message.NewHandler(c)
 		if err != nil {
 			return tracer.Mask(err)
 		}
@@ -155,6 +169,7 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 			Logger: r.logger,
 			Handlers: []handler.Interface{
 				audienceHandler,
+				messageHandler,
 				metricHandler,
 				metupdHandler,
 				texupdHandler,
