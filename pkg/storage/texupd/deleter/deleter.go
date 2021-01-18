@@ -41,7 +41,7 @@ func New(config Config) (*Deleter, error) {
 		}
 	}
 
-	c := &Deleter{
+	d := &Deleter{
 		logger: config.Logger,
 		redigo: config.Redigo,
 
@@ -50,5 +50,5 @@ func New(config Config) (*Deleter, error) {
 		},
 	}
 
-	return c, nil
+	return d, nil
 }

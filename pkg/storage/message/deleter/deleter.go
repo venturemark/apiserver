@@ -5,8 +5,8 @@ import (
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/verifier/timeline/deleter"
-	"github.com/venturemark/apiserver/pkg/verifier/timeline/deleter/empty"
+	"github.com/venturemark/apiserver/pkg/verifier/message/deleter"
+	"github.com/venturemark/apiserver/pkg/verifier/message/deleter/empty"
 )
 
 type Config struct {
