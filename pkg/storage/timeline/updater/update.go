@@ -31,6 +31,44 @@ func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 		}
 	}
 
+	// Properties can be updated separately. We only need to figure out which
+	// information are given so that we only update the specified fields. For
+	// any field not being specified within the update request we fetch the
+	// current state and default to it accordingly.
+	var des string
+	var nam string
+	var sta string
+	{
+		k := fmt.Sprintf(key.Timeline, aid)
+
+		str, err := u.redigo.Sorted().Search().Score(k, tid, tid)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+		_, d, n, s, err := element.Split(str[0])
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+
+		if req.Obj.Property.Desc != nil {
+			des = *req.Obj.Property.Desc
+		} else {
+			des = d
+		}
+
+		if req.Obj.Property.Name != nil {
+			nam = *req.Obj.Property.Name
+		} else {
+			nam = n
+		}
+
+		if req.Obj.Property.Stat != nil {
+			sta = *req.Obj.Property.Stat
+		} else {
+			sta = s
+		}
+	}
+
 	// We store timelines in a sorted set. The elements of the sorted set are
 	// concatenated strings of t and e. Here t is the unix timestamp referring
 	// to the time right now at creation time. Here e is the timeline name. We
@@ -39,9 +77,14 @@ func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 	var upd bool
 	{
 		k := fmt.Sprintf(key.Timeline, aid)
-		e := element.Join(tid, req.Obj.Property.Name)
+		e := element.Join(tid, des, nam, sta)
 		s := tid
-		i := index.New(index.Name, req.Obj.Property.Name)
+
+		var i string
+		if nam != "" {
+			// If the name got updated we need to update its index as well.
+			i = index.New(index.Name, nam)
+		}
 
 		upd, err = u.redigo.Sorted().Update().Value(k, e, s, i)
 		if err != nil {

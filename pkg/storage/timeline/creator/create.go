@@ -43,7 +43,7 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 	// unique element.
 	{
 		k := fmt.Sprintf(key.Timeline, aid)
-		e := element.Join(tid, req.Obj.Property.Name)
+		e := element.Join(tid, req.Obj.Property.Desc, req.Obj.Property.Name, "active")
 		s := tid
 		i := index.New(index.Name, req.Obj.Property.Name)
 

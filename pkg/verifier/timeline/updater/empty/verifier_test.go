@@ -57,7 +57,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 						metadata.TimelineID: "1606329189",
 					},
 					Property: &timeline.UpdateI_Obj_Property{
-						Name: "foo",
+						Name: toStringP("foo"),
 					},
 				},
 			},
@@ -70,7 +70,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 						metadata.AudienceID: "aud-al9qy",
 					},
 					Property: &timeline.UpdateI_Obj_Property{
-						Name: "foo",
+						Name: toStringP("foo"),
 					},
 				},
 			},
@@ -129,7 +129,7 @@ func Test_Empty_Verify_True(t *testing.T) {
 						metadata.TimelineID: "1606329189",
 					},
 					Property: &timeline.UpdateI_Obj_Property{
-						Name: "mmr",
+						Name: toStringP("mmr"),
 					},
 				},
 			},
@@ -143,7 +143,23 @@ func Test_Empty_Verify_True(t *testing.T) {
 						metadata.TimelineID: "1605559909",
 					},
 					Property: &timeline.UpdateI_Obj_Property{
-						Name: "MMR",
+						Desc: toStringP("Lorem ipsum ..."),
+					},
+				},
+			},
+		},
+		// Case 2 ensures that create input with audience ID is valid.
+		{
+			req: &timeline.UpdateI{
+				Obj: &timeline.UpdateI_Obj{
+					Metadata: map[string]string{
+						metadata.AudienceID: "aud-al9qy",
+						metadata.TimelineID: "1605559909",
+					},
+					Property: &timeline.UpdateI_Obj_Property{
+						Desc: toStringP("Lorem ipsum ..."),
+						Name: toStringP("mmr"),
+						Stat: toStringP("archived"),
 					},
 				},
 			},
@@ -174,4 +190,8 @@ func Test_Empty_Verify_True(t *testing.T) {
 			}
 		})
 	}
+}
+
+func toStringP(s string) *string {
+	return &s
 }
