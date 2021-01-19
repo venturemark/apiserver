@@ -41,7 +41,7 @@ func (s *Searcher) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 		res = &timeline.SearchO{}
 
 		for _, s := range str {
-			tid, nam, err := element.Split(s)
+			tid, des, nam, sta, err := element.Split(s)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
@@ -52,7 +52,9 @@ func (s *Searcher) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 					metadata.AudienceID: aid,
 				},
 				Property: &timeline.SearchO_Obj_Property{
+					Desc: des,
 					Name: nam,
+					Stat: sta,
 				},
 			}
 

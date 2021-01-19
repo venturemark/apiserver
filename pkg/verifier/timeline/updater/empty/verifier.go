@@ -18,9 +18,10 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if there is any information given for creating timelines. The
-// only piece of information we need is the audience ID provided with the object
-// metadata.
+// Verify checks if there is any information given for creating timelines. We
+// need the audience ID and timeline ID provided with the object metadata. We
+// need at least one of the existing properties to be specified in order to
+// update the specified timeline.
 func (v *Verifier) Verify(req *timeline.UpdateI) (bool, error) {
 	{
 		if req.Obj == nil {
@@ -47,7 +48,11 @@ func (v *Verifier) Verify(req *timeline.UpdateI) (bool, error) {
 	}
 
 	{
-		if req.Obj.Property.Name == "" {
+		desEmp := req.Obj.Property.Desc == nil
+		namEmp := req.Obj.Property.Name == nil
+		staEmp := req.Obj.Property.Stat == nil
+
+		if desEmp && namEmp && staEmp {
 			return false, nil
 		}
 	}
