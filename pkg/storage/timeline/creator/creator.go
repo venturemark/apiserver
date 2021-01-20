@@ -7,6 +7,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/creator"
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/creator/empty"
+	"github.com/venturemark/apiserver/pkg/verifier/timeline/creator/length"
 )
 
 type Config struct {
@@ -41,12 +42,23 @@ func New(config Config) (*Creator, error) {
 		}
 	}
 
+	var lengthVerifier *length.Verifier
+	{
+		c := length.VerifierConfig{}
+
+		lengthVerifier, err = length.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	c := &Creator{
 		logger: config.Logger,
 		redigo: config.Redigo,
 
 		verify: []creator.Interface{
 			emptyVerifier,
+			lengthVerifier,
 		},
 	}
 
