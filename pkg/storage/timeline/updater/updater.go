@@ -7,6 +7,8 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/updater"
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/updater/empty"
+	"github.com/venturemark/apiserver/pkg/verifier/timeline/updater/length"
+	"github.com/venturemark/apiserver/pkg/verifier/timeline/updater/state"
 )
 
 type Config struct {
@@ -41,12 +43,34 @@ func New(config Config) (*Updater, error) {
 		}
 	}
 
+	var lengthVerifier *length.Verifier
+	{
+		c := length.VerifierConfig{}
+
+		lengthVerifier, err = length.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	var stateVerifier *state.Verifier
+	{
+		c := state.VerifierConfig{}
+
+		stateVerifier, err = state.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	u := &Updater{
 		logger: config.Logger,
 		redigo: config.Redigo,
 
 		verify: []updater.Interface{
 			emptyVerifier,
+			lengthVerifier,
+			stateVerifier,
 		},
 	}
 

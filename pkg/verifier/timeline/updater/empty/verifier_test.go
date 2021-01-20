@@ -14,23 +14,23 @@ func Test_Empty_Verify_False(t *testing.T) {
 	testCases := []struct {
 		req *timeline.UpdateI
 	}{
-		// Case 0 ensures that create input without metadata is not valid.
+		// Case 0 ensures that update input without metadata is not valid.
 		{
 			req: &timeline.UpdateI{},
 		},
-		// Case 1 ensures that create input without metadata is not valid.
+		// Case 1 ensures that update input without metadata is not valid.
 		{
 			req: &timeline.UpdateI{
 				Obj: &timeline.UpdateI_Obj{},
 			},
 		},
-		// Case 2 ensures that create input without metadata is not valid.
+		// Case 2 ensures that update input without metadata is not valid.
 		{
 			req: &timeline.UpdateI{
 				Obj: &timeline.UpdateI_Obj{},
 			},
 		},
-		// Case 3 ensures that create input without metadata is not valid.
+		// Case 3 ensures that update input without metadata is not valid.
 		{
 			req: &timeline.UpdateI{
 				Obj: &timeline.UpdateI_Obj{
@@ -38,7 +38,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 4 ensures that create input without audience ID in the metadata
+		// Case 4 ensures that update input without audience ID in the metadata
 		// is not valid.
 		{
 			req: &timeline.UpdateI{
@@ -49,7 +49,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 5 ensures that create input without audience ID is not valid.
+		// Case 5 ensures that update input without audience ID is not valid.
 		{
 			req: &timeline.UpdateI{
 				Obj: &timeline.UpdateI_Obj{
@@ -62,7 +62,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 6 ensures that create input without timeline ID is not valid.
+		// Case 6 ensures that update input without timeline ID is not valid.
 		{
 			req: &timeline.UpdateI{
 				Obj: &timeline.UpdateI_Obj{
@@ -75,7 +75,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 7 ensures that create input without object properties is not
+		// Case 7 ensures that update input without object properties is not
 		// valid.
 		{
 			req: &timeline.UpdateI{
@@ -120,7 +120,7 @@ func Test_Empty_Verify_True(t *testing.T) {
 	testCases := []struct {
 		req *timeline.UpdateI
 	}{
-		// Case 0 ensures that create input with audience ID is valid.
+		// Case 0 ensures that update input with audience ID is valid.
 		{
 			req: &timeline.UpdateI{
 				Obj: &timeline.UpdateI_Obj{
@@ -134,7 +134,7 @@ func Test_Empty_Verify_True(t *testing.T) {
 				},
 			},
 		},
-		// Case 1 ensures that create input with audience ID is valid.
+		// Case 1 ensures that update input with audience ID is valid.
 		{
 			req: &timeline.UpdateI{
 				Obj: &timeline.UpdateI_Obj{
@@ -148,7 +148,7 @@ func Test_Empty_Verify_True(t *testing.T) {
 				},
 			},
 		},
-		// Case 2 ensures that create input with audience ID is valid.
+		// Case 2 ensures that update input with audience ID is valid.
 		{
 			req: &timeline.UpdateI{
 				Obj: &timeline.UpdateI_Obj{
