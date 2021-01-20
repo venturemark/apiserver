@@ -7,6 +7,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/deleter"
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/deleter/empty"
+	"github.com/venturemark/apiserver/pkg/verifier/timeline/deleter/state"
 )
 
 type Config struct {
@@ -41,12 +42,25 @@ func New(config Config) (*Deleter, error) {
 		}
 	}
 
+	var stateVerifier *state.Verifier
+	{
+		c := state.VerifierConfig{
+			Redigo: config.Redigo,
+		}
+
+		stateVerifier, err = state.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	d := &Deleter{
 		logger: config.Logger,
 		redigo: config.Redigo,
 
 		verify: []deleter.Interface{
 			emptyVerifier,
+			stateVerifier,
 		},
 	}
 
