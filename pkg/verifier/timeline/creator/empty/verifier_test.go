@@ -114,6 +114,7 @@ func Test_Empty_Verify_True(t *testing.T) {
 						metadata.AudienceID: "aud-kn433",
 					},
 					Property: &timeline.CreateI_Obj_Property{
+						Desc: "Lorem ipsum ...",
 						Name: "MRR",
 					},
 				},
