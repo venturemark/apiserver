@@ -12,21 +12,19 @@ import (
 	"github.com/venturemark/apiserver/pkg/value/audience/element"
 )
 
-// Search provides a filter primitive to lookup audiencies associated with a
-// user.
 func (s *Searcher) Search(req *audience.SearchI) (*audience.SearchO, error) {
 	var err error
 
-	var uid string
+	var oid string
 	{
-		uid = req.Obj[0].Metadata[metadata.UserID]
+		oid = req.Obj[0].Metadata[metadata.OrganizationID]
 	}
 
 	// With redis we use ZREVRANGE which allows us to search for objects while
 	// having support for chunking.
 	var str []string
 	{
-		k := fmt.Sprintf(key.Audience, uid)
+		k := fmt.Sprintf(key.Audience, oid)
 		str, err = s.redigo.Sorted().Search().Index(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -45,8 +43,8 @@ func (s *Searcher) Search(req *audience.SearchI) (*audience.SearchO, error) {
 
 			o := &audience.SearchO_Obj{
 				Metadata: map[string]string{
-					metadata.AudienceID: strconv.Itoa(int(aid)),
-					metadata.UserID:     uid,
+					metadata.AudienceID:     strconv.Itoa(int(aid)),
+					metadata.OrganizationID: oid,
 				},
 				Property: &audience.SearchO_Obj_Property{
 					Name: nam,

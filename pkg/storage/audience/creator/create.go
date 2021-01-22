@@ -14,14 +14,12 @@ import (
 	"github.com/venturemark/apiserver/pkg/value/audience/element"
 )
 
-// Create provides a storage primitive to persist audiences associated with a
-// user.
 func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 	var err error
 
-	var uid string
+	var oid string
 	{
-		uid = req.Obj.Metadata[metadata.UserID]
+		oid = req.Obj.Metadata[metadata.OrganizationID]
 	}
 
 	// We manage data on a timeline. Our main identifier is a unix timestamp in
@@ -43,7 +41,7 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 	// as part of the element within the sorted set to guarantee a unique
 	// element.
 	{
-		k := fmt.Sprintf(key.Audience, uid)
+		k := fmt.Sprintf(key.Audience, oid)
 		e := element.Join(aid, req.Obj.Property.Name, req.Obj.Property.User)
 		s := aid
 		i := index.New(index.Name, req.Obj.Property.Name)
