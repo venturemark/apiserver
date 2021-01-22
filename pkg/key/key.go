@@ -8,9 +8,9 @@ const (
 )
 
 const (
-	// Timeline is the storage key for mapping audience IDs to timeline IDs. An
-	// audience can have multiple timelines.
-	Timeline = "aud:%s:tml"
+	// Timeline is the storage key for mapping organization IDs to timeline IDs.
+	// An organization can own multiple timelines.
+	Timeline = "org:%s:tml"
 )
 
 const (

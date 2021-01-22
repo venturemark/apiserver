@@ -19,9 +19,9 @@ import (
 func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 	var err error
 
-	var aid string
+	var oid string
 	{
-		aid = req.Obj.Metadata[metadata.AudienceID]
+		oid = req.Obj.Metadata[metadata.OrganizationID]
 	}
 
 	// We manage data on a timeline. Our main identifier is a unix timestamp in
@@ -42,7 +42,7 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 	// track t as part of the element within the sorted set to guarantee a
 	// unique element.
 	{
-		k := fmt.Sprintf(key.Timeline, aid)
+		k := fmt.Sprintf(key.Timeline, oid)
 		e := element.Join(tid, req.Obj.Property.Desc, req.Obj.Property.Name, "active")
 		s := tid
 		i := index.New(index.Name, req.Obj.Property.Name)

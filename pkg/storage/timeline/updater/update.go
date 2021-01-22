@@ -18,9 +18,9 @@ import (
 func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 	var err error
 
-	var aid string
+	var oid string
 	{
-		aid = req.Obj.Metadata[metadata.AudienceID]
+		oid = req.Obj.Metadata[metadata.OrganizationID]
 	}
 
 	var tid float64
@@ -39,7 +39,7 @@ func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 	var nam string
 	var sta string
 	{
-		k := fmt.Sprintf(key.Timeline, aid)
+		k := fmt.Sprintf(key.Timeline, oid)
 
 		str, err := u.redigo.Sorted().Search().Score(k, tid, tid)
 		if err != nil {
@@ -76,7 +76,7 @@ func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 	// unique element.
 	var upd bool
 	{
-		k := fmt.Sprintf(key.Timeline, aid)
+		k := fmt.Sprintf(key.Timeline, oid)
 		e := element.Join(tid, des, nam, sta)
 		s := tid
 

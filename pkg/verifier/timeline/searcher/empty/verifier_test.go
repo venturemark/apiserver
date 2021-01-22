@@ -42,7 +42,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 4 ensures that search input without audience ID in the metadata
+		// Case 4 ensures that search input without organization ID in the metadata
 		// is not valid.
 		{
 			req: &timeline.SearchI{
@@ -61,7 +61,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				Obj: []*timeline.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.AudienceID: "aud-al9qy",
+							metadata.OrganizationID: "org-al9qy",
 						},
 					},
 					{
@@ -78,7 +78,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				Obj: []*timeline.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.AudienceID: "aud-al9qy",
+							metadata.OrganizationID: "org-al9qy",
 						},
 						Property: &timeline.SearchI_Obj_Property{},
 					},
@@ -117,25 +117,25 @@ func Test_Empty_Verify_True(t *testing.T) {
 	testCases := []struct {
 		req *timeline.SearchI
 	}{
-		// Case 0 ensures that search input with audience ID is valid.
+		// Case 0 ensures that search input with organization ID is valid.
 		{
 			req: &timeline.SearchI{
 				Obj: []*timeline.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.AudienceID: "aud-al9qy",
+							metadata.OrganizationID: "org-al9qy",
 						},
 					},
 				},
 			},
 		},
-		// Case 1 ensures that search input with audience ID is valid.
+		// Case 1 ensures that search input with organization ID is valid.
 		{
 			req: &timeline.SearchI{
 				Obj: []*timeline.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.AudienceID: "aud-kn433",
+							metadata.OrganizationID: "org-kn433",
 						},
 					},
 				},

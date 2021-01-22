@@ -45,11 +45,11 @@ func (v *Verifier) Verify(req *timeline.DeleteI) (bool, error) {
 		}
 	}
 
-	var aid string
+	var oid string
 	{
-		aid = req.Obj.Metadata[metadata.AudienceID]
+		oid = req.Obj.Metadata[metadata.OrganizationID]
 
-		if aid == "" {
+		if oid == "" {
 			return false, nil
 		}
 	}
@@ -70,7 +70,7 @@ func (v *Verifier) Verify(req *timeline.DeleteI) (bool, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Timeline, aid)
+		k := fmt.Sprintf(key.Timeline, oid)
 
 		str, err := v.redigo.Sorted().Search().Score(k, tid, tid)
 		if err != nil {

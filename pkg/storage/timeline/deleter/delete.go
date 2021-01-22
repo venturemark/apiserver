@@ -16,9 +16,9 @@ import (
 func (c *Deleter) Delete(req *timeline.DeleteI) (*timeline.DeleteO, error) {
 	var err error
 
-	var aid string
+	var oid string
 	{
-		aid = req.Obj.Metadata[metadata.AudienceID]
+		oid = req.Obj.Metadata[metadata.OrganizationID]
 	}
 
 	var tid float64
@@ -30,7 +30,7 @@ func (c *Deleter) Delete(req *timeline.DeleteI) (*timeline.DeleteO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Timeline, aid)
+		k := fmt.Sprintf(key.Timeline, oid)
 		s := tid
 
 		err = c.redigo.Sorted().Delete().Score(k, s)
