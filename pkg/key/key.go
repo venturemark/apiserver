@@ -1,9 +1,10 @@
 package key
 
 const (
-	// Audience is the storage key for mapping user IDs to audience IDs. A user
-	// can be part of multiple audiences.
-	Audience = "usr:%s:aud"
+	// Audience is the storage key for mapping organization IDs to audience IDs.
+	// An organization owns an audience, while a user can be part of multiple
+	// organizations as well as multiple audiences.
+	Audience = "org:%s:aud"
 )
 
 const (

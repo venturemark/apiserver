@@ -11,8 +11,6 @@ import (
 	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
-// Delete provides a storage primitive to remove audiences associated with a
-// user.
 func (c *Deleter) Delete(req *audience.DeleteI) (*audience.DeleteO, error) {
 	var err error
 
@@ -24,13 +22,13 @@ func (c *Deleter) Delete(req *audience.DeleteI) (*audience.DeleteO, error) {
 		}
 	}
 
-	var uid string
+	var oid string
 	{
-		uid = req.Obj.Metadata[metadata.UserID]
+		oid = req.Obj.Metadata[metadata.OrganizationID]
 	}
 
 	{
-		k := fmt.Sprintf(key.Audience, uid)
+		k := fmt.Sprintf(key.Audience, oid)
 		s := aid
 
 		err = c.redigo.Sorted().Delete().Score(k, s)
