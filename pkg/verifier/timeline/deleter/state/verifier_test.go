@@ -39,8 +39,8 @@ func Test_State_Verify_False(t *testing.T) {
 			req: &timeline.DeleteI{
 				Obj: &timeline.DeleteI_Obj{
 					Metadata: map[string]string{
-						metadata.AudienceID: "aud-al9qy",
-						metadata.TimelineID: "1606329189",
+						metadata.OrganizationID: "org-al9qy",
+						metadata.TimelineID:     "1606329189",
 					},
 				},
 			},
@@ -54,8 +54,8 @@ func Test_State_Verify_False(t *testing.T) {
 			req: &timeline.DeleteI{
 				Obj: &timeline.DeleteI_Obj{
 					Metadata: map[string]string{
-						metadata.AudienceID: "aud-al9qy",
-						metadata.TimelineID: "1606329189",
+						metadata.OrganizationID: "org-al9qy",
+						metadata.TimelineID:     "1606329189",
 					},
 				},
 			},
@@ -113,8 +113,8 @@ func Test_State_Verify_True(t *testing.T) {
 			req: &timeline.DeleteI{
 				Obj: &timeline.DeleteI_Obj{
 					Metadata: map[string]string{
-						metadata.AudienceID: "aud-al9qy",
-						metadata.TimelineID: "1606329189",
+						metadata.OrganizationID: "org-al9qy",
+						metadata.TimelineID:     "1606329189",
 					},
 				},
 			},
@@ -127,8 +127,8 @@ func Test_State_Verify_True(t *testing.T) {
 			req: &timeline.DeleteI{
 				Obj: &timeline.DeleteI_Obj{
 					Metadata: map[string]string{
-						metadata.AudienceID: "aud-al9qy",
-						metadata.TimelineID: "1606329189",
+						metadata.OrganizationID: "org-al9qy",
+						metadata.TimelineID:     "1606329189",
 					},
 				},
 			},

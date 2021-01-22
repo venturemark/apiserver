@@ -38,7 +38,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 4 ensures that create input without audience ID in the metadata
+		// Case 4 ensures that create input without organization ID in the metadata
 		// is not valid.
 		{
 			req: &timeline.CreateI{
@@ -55,7 +55,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 			req: &timeline.CreateI{
 				Obj: &timeline.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.AudienceID: "aud-al9qy",
+						metadata.OrganizationID: "org-al9qy",
 					},
 					Property: &timeline.CreateI_Obj_Property{},
 				},
@@ -93,12 +93,12 @@ func Test_Empty_Verify_True(t *testing.T) {
 	testCases := []struct {
 		req *timeline.CreateI
 	}{
-		// Case 0 ensures that create input with audience ID is valid.
+		// Case 0 ensures that create input with organization ID is valid.
 		{
 			req: &timeline.CreateI{
 				Obj: &timeline.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.AudienceID: "aud-al9qy",
+						metadata.OrganizationID: "org-al9qy",
 					},
 					Property: &timeline.CreateI_Obj_Property{
 						Name: "mrr",
@@ -106,12 +106,12 @@ func Test_Empty_Verify_True(t *testing.T) {
 				},
 			},
 		},
-		// Case 1 ensures that create input with audience ID is valid.
+		// Case 1 ensures that create input with organization ID is valid.
 		{
 			req: &timeline.CreateI{
 				Obj: &timeline.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.AudienceID: "aud-kn433",
+						metadata.OrganizationID: "org-kn433",
 					},
 					Property: &timeline.CreateI_Obj_Property{
 						Desc: "Lorem ipsum ...",

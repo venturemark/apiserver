@@ -38,7 +38,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 4 ensures that update input without audience ID in the metadata
+		// Case 4 ensures that update input without organization ID in the metadata
 		// is not valid.
 		{
 			req: &timeline.UpdateI{
@@ -49,7 +49,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 5 ensures that update input without audience ID is not valid.
+		// Case 5 ensures that update input without organization ID is not valid.
 		{
 			req: &timeline.UpdateI{
 				Obj: &timeline.UpdateI_Obj{
@@ -67,7 +67,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 			req: &timeline.UpdateI{
 				Obj: &timeline.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.AudienceID: "aud-al9qy",
+						metadata.OrganizationID: "org-al9qy",
 					},
 					Property: &timeline.UpdateI_Obj_Property{
 						Name: toStringP("foo"),
@@ -81,8 +81,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 			req: &timeline.UpdateI{
 				Obj: &timeline.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.AudienceID: "aud-al9qy",
-						metadata.TimelineID: "1606329189",
+						metadata.OrganizationID: "org-al9qy",
+						metadata.TimelineID:     "1606329189",
 					},
 					Property: &timeline.UpdateI_Obj_Property{},
 				},
@@ -120,13 +120,13 @@ func Test_Empty_Verify_True(t *testing.T) {
 	testCases := []struct {
 		req *timeline.UpdateI
 	}{
-		// Case 0 ensures that update input with audience ID is valid.
+		// Case 0 ensures that update input with organization ID is valid.
 		{
 			req: &timeline.UpdateI{
 				Obj: &timeline.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.AudienceID: "aud-al9qy",
-						metadata.TimelineID: "1606329189",
+						metadata.OrganizationID: "org-al9qy",
+						metadata.TimelineID:     "1606329189",
 					},
 					Property: &timeline.UpdateI_Obj_Property{
 						Name: toStringP("mmr"),
@@ -134,13 +134,13 @@ func Test_Empty_Verify_True(t *testing.T) {
 				},
 			},
 		},
-		// Case 1 ensures that update input with audience ID is valid.
+		// Case 1 ensures that update input with organization ID is valid.
 		{
 			req: &timeline.UpdateI{
 				Obj: &timeline.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.AudienceID: "aud-al9qy",
-						metadata.TimelineID: "1605559909",
+						metadata.OrganizationID: "org-al9qy",
+						metadata.TimelineID:     "1605559909",
 					},
 					Property: &timeline.UpdateI_Obj_Property{
 						Desc: toStringP("Lorem ipsum ..."),
@@ -148,13 +148,13 @@ func Test_Empty_Verify_True(t *testing.T) {
 				},
 			},
 		},
-		// Case 2 ensures that update input with audience ID is valid.
+		// Case 2 ensures that update input with organization ID is valid.
 		{
 			req: &timeline.UpdateI{
 				Obj: &timeline.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.AudienceID: "aud-al9qy",
-						metadata.TimelineID: "1605559909",
+						metadata.OrganizationID: "org-al9qy",
+						metadata.TimelineID:     "1605559909",
 					},
 					Property: &timeline.UpdateI_Obj_Property{
 						Desc: toStringP("Lorem ipsum ..."),
