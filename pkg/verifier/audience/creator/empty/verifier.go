@@ -48,11 +48,11 @@ func (v *Verifier) Verify(req *audience.CreateI) (bool, error) {
 		}
 	}
 
-	{
-		if len(req.Obj.Property.User) == 0 {
-			return false, nil
-		}
-	}
+	// {
+	// 	if len(req.Obj.Property.User) == 0 {
+	// 		return false, nil
+	// 	}
+	// }
 
 	return true, nil
 }
