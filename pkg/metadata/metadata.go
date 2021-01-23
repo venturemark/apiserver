@@ -18,36 +18,3 @@
 //     status    state change information e.g. "updated"
 //
 package metadata
-
-const (
-	AudienceID     = "audience.venturemark.co/id"
-	AudienceStatus = "audience.venturemark.co/status"
-)
-
-const (
-	MessageID     = "message.venturemark.co/id"
-	MessageStatus = "message.venturemark.co/status"
-)
-
-const (
-	MetricID     = "metric.venturemark.co/id"
-	MetricStatus = "metric.venturemark.co/status"
-)
-
-const (
-	OrganizationID = "organization.venturemark.co/id"
-)
-
-const (
-	TimelineID     = "timeline.venturemark.co/id"
-	TimelineStatus = "timeline.venturemark.co/status"
-)
-
-const (
-	UpdateID     = "update.venturemark.co/id"
-	UpdateStatus = "update.venturemark.co/status"
-)
-
-const (
-	UserID = "user.venturemark.co/id"
-)
