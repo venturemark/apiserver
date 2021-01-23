@@ -42,7 +42,7 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 	// element.
 	{
 		k := fmt.Sprintf(key.Audience, oid)
-		e := element.Join(aid, req.Obj.Property.Name, req.Obj.Property.User)
+		e := element.Join(aid, req.Obj.Property.Name, req.Obj.Property.Tmln, req.Obj.Property.User)
 		s := aid
 		i := index.New(index.Name, req.Obj.Property.Name)
 
