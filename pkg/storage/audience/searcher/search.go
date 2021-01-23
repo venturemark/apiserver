@@ -36,7 +36,7 @@ func (s *Searcher) Search(req *audience.SearchI) (*audience.SearchO, error) {
 		res = &audience.SearchO{}
 
 		for _, s := range str {
-			aid, nam, usr, err := element.Split(s)
+			aid, nam, tim, usr, err := element.Split(s)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
@@ -48,6 +48,7 @@ func (s *Searcher) Search(req *audience.SearchI) (*audience.SearchO, error) {
 				},
 				Property: &audience.SearchO_Obj_Property{
 					Name: nam,
+					Tmln: tim,
 					User: usr,
 				},
 			}

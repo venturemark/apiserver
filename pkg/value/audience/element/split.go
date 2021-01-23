@@ -8,36 +8,49 @@ import (
 	"github.com/xh3b4sd/tracer"
 )
 
-func Split(str string) (float64, string, []string, error) {
+func Split(str string) (float64, string, []string, []string, error) {
 	l := strings.Split(str, ",")
 
-	var t float64
-	{
-		i, err := strconv.ParseFloat(l[0], 64)
+	var aid float64
+	if len(l) >= 1 {
+		a, err := strconv.ParseFloat(l[0], 64)
 		if err != nil {
-			return 0, "", nil, tracer.Mask(err)
+			return 0, "", nil, nil, tracer.Mask(err)
 		}
 
-		t = float64(i)
+		aid = float64(a)
 	}
 
-	var n string
-	{
-		nam, err := base64.StdEncoding.DecodeString(l[1])
+	var nam string
+	if len(l) >= 2 {
+		n, err := base64.StdEncoding.DecodeString(l[1])
 		if err != nil {
-			return 0, "", nil, tracer.Mask(err)
+			return 0, "", nil, nil, tracer.Mask(err)
 		}
-		n = string(nam)
+		nam = string(n)
 	}
 
-	var u []string
-	{
-		usr, err := base64.StdEncoding.DecodeString(l[2])
+	var tim []string
+	if len(l) >= 3 {
+		t, err := base64.StdEncoding.DecodeString(l[2])
 		if err != nil {
-			return 0, "", nil, tracer.Mask(err)
+			return 0, "", nil, nil, tracer.Mask(err)
 		}
-		u = strings.Split(string(usr), ",")
+		tim = strings.Split(string(t), ",")
 	}
 
-	return t, n, u, nil
+	var usr []string
+	if len(l) >= 4 {
+		u, err := base64.StdEncoding.DecodeString(l[3])
+		if err != nil {
+			return 0, "", nil, nil, tracer.Mask(err)
+		}
+		if string(u) == "" {
+			usr = []string{}
+		} else {
+			usr = strings.Split(string(u), ",")
+		}
+	}
+
+	return aid, nam, tim, usr, nil
 }
