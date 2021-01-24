@@ -8,6 +8,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/storage/audience/creator"
 	"github.com/venturemark/apiserver/pkg/storage/audience/deleter"
 	"github.com/venturemark/apiserver/pkg/storage/audience/searcher"
+	"github.com/venturemark/apiserver/pkg/storage/audience/updater"
 )
 
 type Config struct {
@@ -19,6 +20,7 @@ type Audience struct {
 	Creator  *creator.Creator
 	Deleter  *deleter.Deleter
 	Searcher *searcher.Searcher
+	Updater  *updater.Updater
 }
 
 func New(config Config) (*Audience, error) {
@@ -63,10 +65,24 @@ func New(config Config) (*Audience, error) {
 		}
 	}
 
+	var upd *updater.Updater
+	{
+		c := updater.Config{
+			Logger: config.Logger,
+			Redigo: config.Redigo,
+		}
+
+		upd, err = updater.New(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	a := &Audience{
 		Creator:  cre,
 		Deleter:  del,
 		Searcher: sea,
+		Updater:  upd,
 	}
 
 	return a, nil
