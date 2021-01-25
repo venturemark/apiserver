@@ -16,9 +16,9 @@ import (
 func (c *Deleter) Delete(req *message.DeleteI) (*message.DeleteO, error) {
 	var err error
 
-	var aid string
+	var oid string
 	{
-		aid = req.Obj.Metadata[metadata.AudienceID]
+		oid = req.Obj.Metadata[metadata.OrganizationID]
 	}
 
 	var mid float64
@@ -40,7 +40,7 @@ func (c *Deleter) Delete(req *message.DeleteI) (*message.DeleteO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Message, aid, tid, uid)
+		k := fmt.Sprintf(key.Message, oid, tid, uid)
 		s := mid
 
 		err = c.redigo.Sorted().Delete().Score(k, s)

@@ -17,9 +17,9 @@ import (
 func (s *Searcher) Search(req *message.SearchI) (*message.SearchO, error) {
 	var err error
 
-	var aid string
+	var oid string
 	{
-		aid = req.Obj[0].Metadata[metadata.AudienceID]
+		oid = req.Obj[0].Metadata[metadata.OrganizationID]
 	}
 
 	var tid string
@@ -36,7 +36,7 @@ func (s *Searcher) Search(req *message.SearchI) (*message.SearchO, error) {
 	// having support for chunking.
 	var str []string
 	{
-		k := fmt.Sprintf(key.Message, aid, tid, uid)
+		k := fmt.Sprintf(key.Message, oid, tid, uid)
 		str, err = s.redigo.Sorted().Search().Index(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -55,10 +55,10 @@ func (s *Searcher) Search(req *message.SearchI) (*message.SearchO, error) {
 
 			o := &message.SearchO_Obj{
 				Metadata: map[string]string{
-					metadata.AudienceID: aid,
-					metadata.MessageID:  strconv.Itoa(int(mid)),
-					metadata.TimelineID: tid,
-					metadata.UpdateID:   uid,
+					metadata.MessageID:      strconv.Itoa(int(mid)),
+					metadata.OrganizationID: oid,
+					metadata.TimelineID:     tid,
+					metadata.UpdateID:       uid,
 				},
 				Property: &message.SearchO_Obj_Property{
 					Text: tex,
