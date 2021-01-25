@@ -42,16 +42,16 @@ func (v *Verifier) Verify(req *texupd.UpdateI) (bool, error) {
 		}
 	}
 
-	var tui string
+	var uid string
 	{
-		tui = req.Obj.Metadata[metadata.UpdateID]
-		if tui == "" {
+		uid = req.Obj.Metadata[metadata.UpdateID]
+		if uid == "" {
 			return false, nil
 		}
 	}
 
 	{
-		i, err := strconv.ParseInt(tui, 10, 64)
+		i, err := strconv.ParseInt(uid, 10, 64)
 		if err != nil {
 			return false, tracer.Mask(err)
 		}

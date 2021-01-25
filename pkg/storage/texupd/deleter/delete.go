@@ -16,9 +16,9 @@ import (
 func (c *Deleter) Delete(req *texupd.DeleteI) (*texupd.DeleteO, error) {
 	var err error
 
-	var aid string
+	var oid string
 	{
-		aid = req.Obj.Metadata[metadata.AudienceID]
+		oid = req.Obj.Metadata[metadata.OrganizationID]
 	}
 
 	var tid string
@@ -35,7 +35,7 @@ func (c *Deleter) Delete(req *texupd.DeleteI) (*texupd.DeleteO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Update, aid, tid)
+		k := fmt.Sprintf(key.Update, oid, tid)
 		s := uid
 
 		err = c.redigo.Sorted().Delete().Score(k, s)
