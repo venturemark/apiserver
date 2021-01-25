@@ -19,9 +19,9 @@ import (
 func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 	var err error
 
-	var aid string
+	var oid string
 	{
-		aid = req.Obj[0].Metadata[metadata.AudienceID]
+		oid = req.Obj[0].Metadata[metadata.OrganizationID]
 	}
 
 	var tid string
@@ -37,7 +37,7 @@ func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 	// updates within a certain timerange.
 	var str []string
 	{
-		k := fmt.Sprintf(key.Update, aid, tid)
+		k := fmt.Sprintf(key.Update, oid, tid)
 		str, err = s.redigo.Sorted().Search().Index(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -59,9 +59,9 @@ func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 
 			o := &update.SearchO_Obj{
 				Metadata: map[string]string{
-					metadata.AudienceID: aid,
-					metadata.UpdateID:   strconv.Itoa(int(uni)),
-					metadata.TimelineID: tid,
+					metadata.OrganizationID: oid,
+					metadata.TimelineID:     tid,
+					metadata.UpdateID:       strconv.Itoa(int(uni)),
 				},
 				Property: &update.SearchO_Obj_Property{
 					Text: val,

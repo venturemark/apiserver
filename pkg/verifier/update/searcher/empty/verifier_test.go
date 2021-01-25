@@ -61,8 +61,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.AudienceID: "aud-w4ndz",
-							metadata.TimelineID: "1606329189",
+							metadata.OrganizationID: "<id>",
+							metadata.TimelineID:     "<id>",
 						},
 					},
 					{
@@ -79,8 +79,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.AudienceID: "aud-w4ndz",
-							metadata.TimelineID: "1606329189",
+							metadata.OrganizationID: "<id>",
+							metadata.TimelineID:     "<id>",
 						},
 						Property: &update.SearchI_Obj_Property{},
 					},
@@ -93,20 +93,21 @@ func Test_Empty_Verify_False(t *testing.T) {
 				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.AudienceID: "aud-w4ndz",
+							metadata.OrganizationID: "<id>",
 						},
 						Property: &update.SearchI_Obj_Property{},
 					},
 				},
 			},
 		},
-		// Case 8 ensures that search input without audience ID is not valid.
+		// Case 8 ensures that search input without organization ID is not
+		// valid.
 		{
 			req: &update.SearchI{
 				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.TimelineID: "1606329189",
+							metadata.TimelineID: "<id>",
 						},
 						Property: &update.SearchI_Obj_Property{},
 					},
@@ -151,8 +152,8 @@ func Test_Empty_Verify_True(t *testing.T) {
 				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.AudienceID: "aud-w4ndz",
-							metadata.TimelineID: "1606329189",
+							metadata.OrganizationID: "<id>",
+							metadata.TimelineID:     "<id>",
 						},
 					},
 				},
@@ -164,8 +165,8 @@ func Test_Empty_Verify_True(t *testing.T) {
 				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.AudienceID: "aud-al9qy",
-							metadata.TimelineID: "1605559909",
+							metadata.OrganizationID: "<id>",
+							metadata.TimelineID:     "<id>",
 						},
 					},
 				},

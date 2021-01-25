@@ -43,13 +43,13 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 4 ensures that create input without audience ID in the metadata
-		// is not valid.
+		// Case 4 ensures that create input without organization ID in the
+		// metadata is not valid.
 		{
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.TimelineID: "1606329189",
+						metadata.TimelineID: "<id>",
 					},
 					Property: &texupd.CreateI_Obj_Property{
 						Text: "Lorem ipsum ...",
@@ -63,7 +63,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.AudienceID: "aud-al9qy",
+						metadata.OrganizationID: "<id>",
 					},
 					Property: &texupd.CreateI_Obj_Property{
 						Text: "Lorem ipsum ...",
@@ -76,8 +76,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.AudienceID: "aud-al9qy",
-						metadata.TimelineID: "1606329189",
+						metadata.OrganizationID: "<id>",
+						metadata.TimelineID:     "<id>",
 					},
 					Property: &texupd.CreateI_Obj_Property{
 						Text: "",
@@ -122,8 +122,8 @@ func Test_Empty_Verify_True(t *testing.T) {
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.AudienceID: "aud-al9qy",
-						metadata.TimelineID: "1606329189",
+						metadata.OrganizationID: "<id>",
+						metadata.TimelineID:     "<id>",
 					},
 					Property: &texupd.CreateI_Obj_Property{
 						Text: "Lorem ipsum ...",
@@ -136,8 +136,8 @@ func Test_Empty_Verify_True(t *testing.T) {
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.AudienceID: "aud-w4ndz",
-						metadata.TimelineID: "1605559909",
+						metadata.OrganizationID: "<id>",
+						metadata.TimelineID:     "<id>",
 					},
 					Property: &texupd.CreateI_Obj_Property{
 						Text: "Foo barr ...",

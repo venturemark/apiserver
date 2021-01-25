@@ -44,16 +44,16 @@ func (v *Verifier) Verify(req *texupd.CreateI) (bool, error) {
 		}
 	}
 
-	var aid string
+	var oid string
 	var tid string
 	{
-		aid = req.Obj.Metadata[metadata.AudienceID]
+		oid = req.Obj.Metadata[metadata.OrganizationID]
 		tid = req.Obj.Metadata[metadata.TimelineID]
 
 		if tid == "" {
 			return false, nil
 		}
-		if aid == "" {
+		if oid == "" {
 			return false, nil
 		}
 	}
@@ -64,7 +64,7 @@ func (v *Verifier) Verify(req *texupd.CreateI) (bool, error) {
 			return false, tracer.Mask(err)
 		}
 
-		k := fmt.Sprintf(key.Timeline, aid)
+		k := fmt.Sprintf(key.Timeline, oid)
 		s := i
 
 		exi, err := v.redigo.Sorted().Exists().Score(k, s)

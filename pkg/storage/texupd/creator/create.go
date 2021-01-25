@@ -20,9 +20,9 @@ import (
 func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 	var err error
 
-	var aid string
+	var oid string
 	{
-		aid = req.Obj.Metadata[metadata.AudienceID]
+		oid = req.Obj.Metadata[metadata.OrganizationID]
 	}
 
 	var tid string
@@ -49,7 +49,7 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 	// sorted set to guarantee a unique element, even if the user's coordinates
 	// on a timeline ever appear twice.
 	{
-		k := fmt.Sprintf(key.Update, aid, tid)
+		k := fmt.Sprintf(key.Update, oid, tid)
 		e := uel.Join(uid, req.Obj.Property.Text)
 		s := uid
 
