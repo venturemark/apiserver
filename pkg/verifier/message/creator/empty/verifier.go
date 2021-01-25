@@ -34,7 +34,7 @@ func (v *Verifier) Verify(req *message.CreateI) (bool, error) {
 	}
 
 	{
-		if req.Obj.Metadata[metadata.AudienceID] == "" {
+		if req.Obj.Metadata[metadata.OrganizationID] == "" {
 			return false, nil
 		}
 		if req.Obj.Metadata[metadata.TimelineID] == "" {

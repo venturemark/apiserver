@@ -33,7 +33,7 @@ func (v *Verifier) Verify(req *message.SearchI) (bool, error) {
 	}
 
 	{
-		if req.Obj[0].Metadata[metadata.AudienceID] == "" {
+		if req.Obj[0].Metadata[metadata.OrganizationID] == "" {
 			return false, nil
 		}
 		if req.Obj[0].Metadata[metadata.TimelineID] == "" {

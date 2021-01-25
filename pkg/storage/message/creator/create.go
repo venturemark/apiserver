@@ -18,9 +18,9 @@ import (
 func (c *Creator) Create(req *message.CreateI) (*message.CreateO, error) {
 	var err error
 
-	var aid string
+	var oid string
 	{
-		aid = req.Obj.Metadata[metadata.AudienceID]
+		oid = req.Obj.Metadata[metadata.OrganizationID]
 	}
 
 	var tid string
@@ -51,7 +51,7 @@ func (c *Creator) Create(req *message.CreateI) (*message.CreateO, error) {
 	// text. Here r is the reply ID, if any. We track t as part of the element
 	// within the sorted set to guarantee a unique element.
 	{
-		k := fmt.Sprintf(key.Message, aid, tid, uid)
+		k := fmt.Sprintf(key.Message, oid, tid, uid)
 		e := element.Join(mid, req.Obj.Property.Text, req.Obj.Property.Reid)
 		s := mid
 
