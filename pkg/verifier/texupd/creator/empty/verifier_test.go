@@ -50,6 +50,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				Obj: &texupd.CreateI_Obj{
 					Metadata: map[string]string{
 						metadata.TimelineID: "<id>",
+						metadata.UserID:     "<id>",
 					},
 					Property: &texupd.CreateI_Obj_Property{
 						Text: "Lorem ipsum ...",
@@ -81,6 +82,20 @@ func Test_Empty_Verify_False(t *testing.T) {
 					},
 					Property: &texupd.CreateI_Obj_Property{
 						Text: "",
+					},
+				},
+			},
+		},
+		// Case 8 ensures that update input without user ID is not valid.
+		{
+			req: &texupd.CreateI{
+				Obj: &texupd.CreateI_Obj{
+					Metadata: map[string]string{
+						metadata.OrganizationID: "<id>",
+						metadata.TimelineID:     "<id>",
+					},
+					Property: &texupd.CreateI_Obj_Property{
+						Text: "foo bar",
 					},
 				},
 			},
@@ -124,6 +139,7 @@ func Test_Empty_Verify_True(t *testing.T) {
 					Metadata: map[string]string{
 						metadata.OrganizationID: "<id>",
 						metadata.TimelineID:     "<id>",
+						metadata.UserID:         "<id>",
 					},
 					Property: &texupd.CreateI_Obj_Property{
 						Text: "Lorem ipsum ...",
@@ -138,6 +154,7 @@ func Test_Empty_Verify_True(t *testing.T) {
 					Metadata: map[string]string{
 						metadata.OrganizationID: "<id>",
 						metadata.TimelineID:     "<id>",
+						metadata.UserID:         "<id>",
 					},
 					Property: &texupd.CreateI_Obj_Property{
 						Text: "Foo barr ...",

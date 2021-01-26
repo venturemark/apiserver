@@ -39,6 +39,9 @@ func (v *Verifier) Verify(req *texupd.UpdateI) (bool, error) {
 		if req.Obj.Metadata[metadata.TimelineID] == "" {
 			return false, nil
 		}
+		if req.Obj.Metadata[metadata.UpdateID] == "" {
+			return false, nil
+		}
 	}
 
 	{

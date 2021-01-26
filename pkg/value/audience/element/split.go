@@ -36,7 +36,11 @@ func Split(str string) (float64, string, []string, []string, error) {
 		if err != nil {
 			return 0, "", nil, nil, tracer.Mask(err)
 		}
-		tim = strings.Split(string(t), ",")
+		if string(t) == "" {
+			tim = []string{}
+		} else {
+			tim = strings.Split(string(t), ",")
+		}
 	}
 
 	var usr []string

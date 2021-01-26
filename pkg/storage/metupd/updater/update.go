@@ -69,7 +69,7 @@ func (u *Updater) Update(req *metupd.UpdateI) (*metupd.UpdateO, error) {
 		}
 
 		k := fmt.Sprintf(key.Update, aid, tid)
-		e := uel.Join(i, req.Obj.Property.Text)
+		e := uel.Join(i, "", req.Obj.Property.Text, "")
 		s := i
 
 		upd, err = u.redigo.Sorted().Update().Value(k, e, s)

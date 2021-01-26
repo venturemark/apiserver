@@ -49,7 +49,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 			req: &texupd.UpdateI{
 				Obj: &texupd.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.TimelineID: "1606329189",
+						metadata.TimelineID: "<id>",
+						metadata.UpdateID:   "<id>",
 					},
 					Property: &texupd.UpdateI_Obj_Property{
 						Text: "Lorem ipsum ...",
@@ -81,6 +82,21 @@ func Test_Empty_Verify_False(t *testing.T) {
 					},
 					Property: &texupd.UpdateI_Obj_Property{
 						Text: "",
+					},
+				},
+			},
+		},
+		// Case 8 ensures that update input without update ID in the
+		// metadata is not valid.
+		{
+			req: &texupd.UpdateI{
+				Obj: &texupd.UpdateI_Obj{
+					Metadata: map[string]string{
+						metadata.OrganizationID: "<id>",
+						metadata.TimelineID:     "<id>",
+					},
+					Property: &texupd.UpdateI_Obj_Property{
+						Text: "Lorem ipsum ...",
 					},
 				},
 			},
@@ -122,25 +138,12 @@ func Test_Empty_Verify_True(t *testing.T) {
 			req: &texupd.UpdateI{
 				Obj: &texupd.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.OrganizationID: "org-al9qy",
-						metadata.TimelineID:     "1606329189",
+						metadata.OrganizationID: "<id>",
+						metadata.TimelineID:     "<id>",
+						metadata.UpdateID:       "<id>",
 					},
 					Property: &texupd.UpdateI_Obj_Property{
 						Text: "Lorem ipsum ...",
-					},
-				},
-			},
-		},
-		// Case 1 ensures that update input with text is valid.
-		{
-			req: &texupd.UpdateI{
-				Obj: &texupd.UpdateI_Obj{
-					Metadata: map[string]string{
-						metadata.OrganizationID: "org-w4ndz",
-						metadata.TimelineID:     "1605559909",
-					},
-					Property: &texupd.UpdateI_Obj_Property{
-						Text: "Foo barr ...",
 					},
 				},
 			},
