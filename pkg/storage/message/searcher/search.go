@@ -48,7 +48,7 @@ func (s *Searcher) Search(req *message.SearchI) (*message.SearchO, error) {
 		res = &message.SearchO{}
 
 		for _, s := range str {
-			mid, tex, rid, err := element.Split(s)
+			mid, oid, tex, rid, usr, err := element.Split(s)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
@@ -59,6 +59,7 @@ func (s *Searcher) Search(req *message.SearchI) (*message.SearchO, error) {
 					metadata.OrganizationID: oid,
 					metadata.TimelineID:     tid,
 					metadata.UpdateID:       uid,
+					metadata.UserID:         usr,
 				},
 				Property: &message.SearchO_Obj_Property{
 					Text: tex,

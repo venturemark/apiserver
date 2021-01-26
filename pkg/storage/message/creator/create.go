@@ -33,6 +33,11 @@ func (c *Creator) Create(req *message.CreateI) (*message.CreateO, error) {
 		uid = req.Obj.Metadata[metadata.UpdateID]
 	}
 
+	var usr string
+	{
+		usr = req.Obj.Metadata[metadata.UserID]
+	}
+
 	// We manage data on a timeline. Our main identifier is a unix timestamp in
 	// nano seconds, normalized to the UTC timezone. Our discovery mechanisms is
 	// designed based on this very unix timestamp. Everything starts with time,
@@ -52,7 +57,7 @@ func (c *Creator) Create(req *message.CreateI) (*message.CreateO, error) {
 	// within the sorted set to guarantee a unique element.
 	{
 		k := fmt.Sprintf(key.Message, oid, tid, uid)
-		e := element.Join(mid, req.Obj.Property.Text, req.Obj.Property.Reid)
+		e := element.Join(mid, oid, req.Obj.Property.Text, req.Obj.Property.Reid, usr)
 		s := mid
 
 		err = c.redigo.Sorted().Create().Element(k, e, s)

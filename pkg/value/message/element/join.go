@@ -5,19 +5,13 @@ import (
 	"fmt"
 )
 
-func Join(uni float64, tex string, rid string) string {
-	if rid == "" {
-		return fmt.Sprintf(
-			"%d,%s",
-			int64(uni),
-			string(base64.StdEncoding.EncodeToString([]byte(tex))),
-		)
-	}
-
+func Join(mid float64, oid string, tex string, rid string, usr string) string {
 	return fmt.Sprintf(
-		"%d,%s,%s",
-		int64(uni),
+		"%d,%s,%s,%s,%s",
+		int64(mid),
+		string(base64.StdEncoding.EncodeToString([]byte(oid))),
 		string(base64.StdEncoding.EncodeToString([]byte(tex))),
 		string(base64.StdEncoding.EncodeToString([]byte(rid))),
+		string(base64.StdEncoding.EncodeToString([]byte(usr))),
 	)
 }
