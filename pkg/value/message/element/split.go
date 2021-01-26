@@ -8,36 +8,54 @@ import (
 	"github.com/xh3b4sd/tracer"
 )
 
-func Split(str string) (float64, string, string, error) {
+func Split(str string) (float64, string, string, string, string, error) {
 	l := strings.Split(str, ",")
 
-	var t float64
+	var mid float64
 	if len(l) >= 1 {
 		i, err := strconv.ParseFloat(l[0], 64)
 		if err != nil {
-			return 0, "", "", tracer.Mask(err)
+			return 0, "", "", "", "", tracer.Mask(err)
 		}
 
-		t = float64(i)
+		mid = float64(i)
 	}
 
-	var m string
+	var oid string
 	if len(l) >= 2 {
-		mes, err := base64.StdEncoding.DecodeString(l[1])
+		b, err := base64.StdEncoding.DecodeString(l[1])
 		if err != nil {
-			return 0, "", "", tracer.Mask(err)
+			return 0, "", "", "", "", tracer.Mask(err)
 		}
-		m = string(mes)
+		oid = string(b)
 	}
 
-	var r string
+	var tex string
 	if len(l) >= 3 {
-		rid, err := base64.StdEncoding.DecodeString(l[2])
+		b, err := base64.StdEncoding.DecodeString(l[2])
 		if err != nil {
-			return 0, "", "", tracer.Mask(err)
+			return 0, "", "", "", "", tracer.Mask(err)
 		}
-		r = string(rid)
+		tex = string(b)
 	}
 
-	return t, m, r, nil
+	var rid string
+	if len(l) >= 4 {
+		b, err := base64.StdEncoding.DecodeString(l[3])
+		if err != nil {
+			return 0, "", "", "", "", tracer.Mask(err)
+		}
+		rid = string(b)
+	}
+
+	var usr string
+	if len(l) >= 5 {
+		b, err := base64.StdEncoding.DecodeString(l[4])
+		if err != nil {
+			return 0, "", "", "", "", tracer.Mask(err)
+		}
+		usr = string(b)
+	}
+
+	return mid, oid, tex, rid, usr, nil
 }

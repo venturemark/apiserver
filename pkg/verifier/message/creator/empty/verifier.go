@@ -43,6 +43,9 @@ func (v *Verifier) Verify(req *message.CreateI) (bool, error) {
 		if req.Obj.Metadata[metadata.UpdateID] == "" {
 			return false, nil
 		}
+		if req.Obj.Metadata[metadata.UserID] == "" {
+			return false, nil
+		}
 	}
 
 	{
