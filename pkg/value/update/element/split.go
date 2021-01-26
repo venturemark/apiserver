@@ -8,27 +8,45 @@ import (
 	"github.com/xh3b4sd/tracer"
 )
 
-func Split(str string) (float64, string, error) {
+func Split(str string) (float64, string, string, string, error) {
 	l := strings.Split(str, ",")
 
-	var n float64
-	{
-		i, err := strconv.ParseFloat(l[0], 64)
+	var uid float64
+	if len(l) >= 1 {
+		a, err := strconv.ParseFloat(l[0], 64)
 		if err != nil {
-			return 0, "", tracer.Mask(err)
+			return 0, "", "", "", tracer.Mask(err)
 		}
 
-		n = float64(i)
+		uid = float64(a)
 	}
 
-	var t string
-	{
-		tex, err := base64.StdEncoding.DecodeString(l[1])
+	var oid string
+	if len(l) >= 2 {
+		n, err := base64.StdEncoding.DecodeString(l[1])
 		if err != nil {
-			return 0, "", tracer.Mask(err)
+			return 0, "", "", "", tracer.Mask(err)
 		}
-		t = string(tex)
+		oid = string(n)
 	}
 
-	return n, t, nil
+	var tex string
+	if len(l) >= 3 {
+		t, err := base64.StdEncoding.DecodeString(l[2])
+		if err != nil {
+			return 0, "", "", "", tracer.Mask(err)
+		}
+		tex = string(t)
+	}
+
+	var usr string
+	if len(l) >= 4 {
+		u, err := base64.StdEncoding.DecodeString(l[3])
+		if err != nil {
+			return 0, "", "", "", tracer.Mask(err)
+		}
+		usr = string(u)
+	}
+
+	return uid, oid, tex, usr, nil
 }

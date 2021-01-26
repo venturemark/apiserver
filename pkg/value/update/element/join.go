@@ -5,9 +5,11 @@ import (
 	"fmt"
 )
 
-func Join(uni float64, tex string) string {
-	return fmt.Sprintf("%d,%s",
-		int64(uni),
+func Join(uid float64, oid string, tex string, usr string) string {
+	return fmt.Sprintf("%d,%s,%s,%s",
+		int64(uid),
+		string(base64.StdEncoding.EncodeToString([]byte(oid))),
 		string(base64.StdEncoding.EncodeToString([]byte(tex))),
+		string(base64.StdEncoding.EncodeToString([]byte(usr))),
 	)
 }

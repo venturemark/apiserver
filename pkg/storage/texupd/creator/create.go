@@ -30,6 +30,11 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 		tid = req.Obj.Metadata[metadata.TimelineID]
 	}
 
+	var usr string
+	{
+		usr = req.Obj.Metadata[metadata.UserID]
+	}
+
 	// We manage data on a timeline. Our main identifier is a unix timestamp in
 	// nano seconds, normalized to the UTC timezone. Our discovery mechanisms is
 	// designed based on the unix timestamp, which acts ad ID. Everything starts
@@ -50,7 +55,7 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 	// on a timeline ever appear twice.
 	{
 		k := fmt.Sprintf(key.Update, oid, tid)
-		e := uel.Join(uid, req.Obj.Property.Text)
+		e := uel.Join(uid, oid, req.Obj.Property.Text, usr)
 		s := uid
 
 		err = c.redigo.Sorted().Create().Element(k, e, s)

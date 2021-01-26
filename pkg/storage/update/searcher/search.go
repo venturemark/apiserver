@@ -52,7 +52,7 @@ func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 		res = &update.SearchO{}
 
 		for _, s := range str {
-			uni, val, err := element.Split(s)
+			uid, oid, tex, usr, err := element.Split(s)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
@@ -61,10 +61,11 @@ func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 				Metadata: map[string]string{
 					metadata.OrganizationID: oid,
 					metadata.TimelineID:     tid,
-					metadata.UpdateID:       strconv.Itoa(int(uni)),
+					metadata.UserID:         usr,
+					metadata.UpdateID:       strconv.Itoa(int(uid)),
 				},
 				Property: &update.SearchO_Obj_Property{
-					Text: val,
+					Text: tex,
 				},
 			}
 

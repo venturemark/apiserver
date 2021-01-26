@@ -72,7 +72,7 @@ func (c *Creator) Create(req *metupd.CreateI) (*metupd.CreateO, error) {
 	// on a timeline ever appear twice.
 	{
 		k := fmt.Sprintf(key.Update, aid, tid)
-		e := uel.Join(mid, req.Obj.Property.Text)
+		e := uel.Join(mid, "", req.Obj.Property.Text, "")
 		s := mid
 
 		err = c.redigo.Sorted().Create().Element(k, e, s)
