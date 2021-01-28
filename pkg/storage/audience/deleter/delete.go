@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/venturemark/apigengo/pkg/pbf/audience"
+	"github.com/xh3b4sd/rescue/pkg/task"
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/key"
@@ -25,6 +26,22 @@ func (c *Deleter) Delete(req *audience.DeleteI) (*audience.DeleteO, error) {
 	var oid string
 	{
 		oid = req.Obj.Metadata[metadata.OrganizationID]
+	}
+
+	{
+		t := &task.Task{
+			Obj: task.TaskObj{
+				Metadata: map[string]string{
+					metadata.TaskAction:   "delete",
+					metadata.TaskResource: "audience",
+				},
+			},
+		}
+
+		err = c.rescue.Create(t)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
 	}
 
 	{

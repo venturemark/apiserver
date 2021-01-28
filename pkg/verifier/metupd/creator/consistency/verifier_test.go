@@ -180,7 +180,7 @@ func Test_Consistency_Verify_False(t *testing.T) {
 			{
 				c := VerifierConfig{
 					Redigo: &fake.Client{
-						SortedFake: func() redigo.Sorted {
+						FakeSorted: func() redigo.Sorted {
 							return &fake.Sorted{
 								FakeSearch: func() redigo.SortedSearch {
 									return &fake.SortedSearch{
@@ -312,7 +312,7 @@ func Test_Consistency_Verify_True(t *testing.T) {
 			{
 				c := VerifierConfig{
 					Redigo: &fake.Client{
-						SortedFake: func() redigo.Sorted {
+						FakeSorted: func() redigo.Sorted {
 							return &fake.Sorted{
 								FakeSearch: func() redigo.SortedSearch {
 									return &fake.SortedSearch{

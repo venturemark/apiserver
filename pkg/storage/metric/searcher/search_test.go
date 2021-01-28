@@ -163,7 +163,7 @@ func Test_Searcher_Search_Redis(t *testing.T) {
 				c := Config{
 					Logger: loggerfake.New(),
 					Redigo: &redigofake.Client{
-						SortedFake: func() redigo.Sorted {
+						FakeSorted: func() redigo.Sorted {
 							return &redigofake.Sorted{
 								FakeSearch: func() redigo.SortedSearch {
 									return &redigofake.SortedSearch{

@@ -3,6 +3,7 @@ package deleter
 import (
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/redigo"
+	"github.com/xh3b4sd/rescue"
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/deleter"
@@ -13,11 +14,13 @@ import (
 type Config struct {
 	Logger logger.Interface
 	Redigo redigo.Interface
+	Rescue rescue.Interface
 }
 
 type Deleter struct {
 	logger logger.Interface
 	redigo redigo.Interface
+	rescue rescue.Interface
 
 	verify []deleter.Interface
 }
@@ -57,6 +60,7 @@ func New(config Config) (*Deleter, error) {
 	d := &Deleter{
 		logger: config.Logger,
 		redigo: config.Redigo,
+		rescue: config.Rescue,
 
 		verify: []deleter.Interface{
 			emptyVerifier,

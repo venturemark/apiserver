@@ -145,7 +145,7 @@ func Test_Updater_Update_Redis(t *testing.T) {
 				c := Config{
 					Logger: loggerfake.New(),
 					Redigo: &fake.Client{
-						SortedFake: func() redigo.Sorted {
+						FakeSorted: func() redigo.Sorted {
 							return &fake.Sorted{
 								FakeUpdate: func() redigo.SortedUpdate {
 									return &fake.SortedUpdate{
