@@ -21,7 +21,7 @@ func (f *flag) Init(cmd *cobra.Command) {
 	cmd.Flags().StringVarP(&f.ApiServer.Host, "apiserver-host", "", "127.0.0.1", "The host for binding the grpc apiserver to.")
 	cmd.Flags().StringVarP(&f.ApiServer.Port, "apiserver-port", "", "7777", "The port for binding the grpc apiserver to.")
 	cmd.Flags().StringVarP(&f.Redis.Host, "redis-host", "", "127.0.0.1", "The host for connecting with redis.")
-	cmd.Flags().StringVarP(&f.Redis.Kind, "redis-kind", "", "simple", "The kind of redis to connect to, e.g. simple or sentinel.")
+	cmd.Flags().StringVarP(&f.Redis.Kind, "redis-kind", "", "single", "The kind of redis to connect to, e.g. simple or sentinel.")
 	cmd.Flags().StringVarP(&f.Redis.Port, "redis-port", "", "6379", "The port for connecting with redis.")
 }
 

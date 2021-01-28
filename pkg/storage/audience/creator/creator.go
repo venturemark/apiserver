@@ -3,6 +3,7 @@ package creator
 import (
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/redigo"
+	"github.com/xh3b4sd/rescue"
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/verifier/audience/creator"
@@ -12,11 +13,13 @@ import (
 type Config struct {
 	Logger logger.Interface
 	Redigo redigo.Interface
+	Rescue rescue.Interface
 }
 
 type Creator struct {
 	logger logger.Interface
 	redigo redigo.Interface
+	rescue rescue.Interface
 
 	verify []creator.Interface
 }
@@ -27,6 +30,9 @@ func New(config Config) (*Creator, error) {
 	}
 	if config.Redigo == nil {
 		return nil, tracer.Maskf(invalidConfigError, "%T.Redigo must not be empty", config)
+	}
+	if config.Rescue == nil {
+		return nil, tracer.Maskf(invalidConfigError, "%T.Rescue must not be empty", config)
 	}
 
 	var err error
@@ -44,6 +50,7 @@ func New(config Config) (*Creator, error) {
 	c := &Creator{
 		logger: config.Logger,
 		redigo: config.Redigo,
+		rescue: config.Rescue,
 
 		verify: []creator.Interface{
 			emptyVerifier,

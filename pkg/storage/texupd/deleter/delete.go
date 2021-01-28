@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/venturemark/apigengo/pkg/pbf/texupd"
+	"github.com/xh3b4sd/rescue/pkg/task"
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/key"
@@ -29,6 +30,22 @@ func (c *Deleter) Delete(req *texupd.DeleteI) (*texupd.DeleteO, error) {
 	var uid float64
 	{
 		uid, err = strconv.ParseFloat(req.Obj.Metadata[metadata.UpdateID], 64)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	{
+		t := &task.Task{
+			Obj: task.TaskObj{
+				Metadata: map[string]string{
+					metadata.TaskAction:   "delete",
+					metadata.TaskResource: "texupd",
+				},
+			},
+		}
+
+		err = c.rescue.Create(t)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

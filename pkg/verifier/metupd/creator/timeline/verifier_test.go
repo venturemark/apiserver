@@ -84,7 +84,7 @@ func Test_Timeline_Verify_False(t *testing.T) {
 			{
 				c := VerifierConfig{
 					Redigo: &fake.Client{
-						SortedFake: func() redigo.Sorted {
+						FakeSorted: func() redigo.Sorted {
 							return &fake.Sorted{
 								FakeExists: func() redigo.SortedExists {
 									return &fake.SortedExists{
@@ -157,7 +157,7 @@ func Test_Timeline_Verify_True(t *testing.T) {
 			{
 				c := VerifierConfig{
 					Redigo: &fake.Client{
-						SortedFake: func() redigo.Sorted {
+						FakeSorted: func() redigo.Sorted {
 							return &fake.Sorted{
 								FakeExists: func() redigo.SortedExists {
 									return &fake.SortedExists{

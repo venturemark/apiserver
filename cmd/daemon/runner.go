@@ -8,6 +8,8 @@ import (
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/redigo/client"
+	"github.com/xh3b4sd/rescue"
+	"github.com/xh3b4sd/rescue/pkg/engine"
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/handler"
@@ -46,14 +48,27 @@ func (r *runner) Run(cmd *cobra.Command, args []string) error {
 func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) error {
 	var err error
 
-	var redisClient redigo.Interface
+	var redigoClient redigo.Interface
 	{
 		c := client.Config{
 			Address: net.JoinHostPort(r.flag.Redis.Host, r.flag.Redis.Port),
 			Kind:    r.flag.Redis.Kind,
 		}
 
-		redisClient, err = client.New(c)
+		redigoClient, err = client.New(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
+
+	var rescueEngine rescue.Interface
+	{
+		c := engine.Config{
+			Logger: r.logger,
+			Redigo: redigoClient,
+		}
+
+		rescueEngine, err = engine.New(c)
 		if err != nil {
 			return tracer.Mask(err)
 		}
@@ -63,7 +78,8 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 	{
 		c := storage.Config{
 			Logger: r.logger,
-			Redigo: redisClient,
+			Redigo: redigoClient,
+			Rescue: rescueEngine,
 		}
 
 		redisStorage, err = storage.New(c)

@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/venturemark/apigengo/pkg/pbf/timeline"
+	"github.com/xh3b4sd/rescue/pkg/task"
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/key"
@@ -24,6 +25,22 @@ func (c *Deleter) Delete(req *timeline.DeleteI) (*timeline.DeleteO, error) {
 	var tid float64
 	{
 		tid, err = strconv.ParseFloat(req.Obj.Metadata[metadata.TimelineID], 64)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	{
+		t := &task.Task{
+			Obj: task.TaskObj{
+				Metadata: map[string]string{
+					metadata.TaskAction:   "delete",
+					metadata.TaskResource: "timeline",
+				},
+			},
+		}
+
+		err = c.rescue.Create(t)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

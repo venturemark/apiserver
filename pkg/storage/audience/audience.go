@@ -3,6 +3,7 @@ package audience
 import (
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/redigo"
+	"github.com/xh3b4sd/rescue"
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/storage/audience/creator"
@@ -14,6 +15,7 @@ import (
 type Config struct {
 	Logger logger.Interface
 	Redigo redigo.Interface
+	Rescue rescue.Interface
 }
 
 type Audience struct {
@@ -31,6 +33,7 @@ func New(config Config) (*Audience, error) {
 		c := creator.Config{
 			Logger: config.Logger,
 			Redigo: config.Redigo,
+			Rescue: config.Rescue,
 		}
 
 		cre, err = creator.New(c)
@@ -44,6 +47,7 @@ func New(config Config) (*Audience, error) {
 		c := deleter.Config{
 			Logger: config.Logger,
 			Redigo: config.Redigo,
+			Rescue: config.Rescue,
 		}
 
 		del, err = deleter.New(c)
@@ -57,6 +61,7 @@ func New(config Config) (*Audience, error) {
 		c := searcher.Config{
 			Logger: config.Logger,
 			Redigo: config.Redigo,
+			Rescue: config.Rescue,
 		}
 
 		sea, err = searcher.New(c)
@@ -70,6 +75,7 @@ func New(config Config) (*Audience, error) {
 		c := updater.Config{
 			Logger: config.Logger,
 			Redigo: config.Redigo,
+			Rescue: config.Rescue,
 		}
 
 		upd, err = updater.New(c)

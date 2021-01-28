@@ -3,6 +3,7 @@ package storage
 import (
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/redigo"
+	"github.com/xh3b4sd/rescue"
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/storage/audience"
@@ -17,6 +18,7 @@ import (
 type Config struct {
 	Logger logger.Interface
 	Redigo redigo.Interface
+	Rescue rescue.Interface
 }
 
 type Storage struct {
@@ -37,6 +39,7 @@ func New(config Config) (*Storage, error) {
 		c := audience.Config{
 			Logger: config.Logger,
 			Redigo: config.Redigo,
+			Rescue: config.Rescue,
 		}
 
 		audienceStorage, err = audience.New(c)
@@ -50,6 +53,7 @@ func New(config Config) (*Storage, error) {
 		c := message.Config{
 			Logger: config.Logger,
 			Redigo: config.Redigo,
+			Rescue: config.Rescue,
 		}
 
 		messageStorage, err = message.New(c)
@@ -89,6 +93,7 @@ func New(config Config) (*Storage, error) {
 		c := texupd.Config{
 			Logger: config.Logger,
 			Redigo: config.Redigo,
+			Rescue: config.Rescue,
 		}
 
 		texupdStorage, err = texupd.New(c)
@@ -102,6 +107,7 @@ func New(config Config) (*Storage, error) {
 		c := timeline.Config{
 			Logger: config.Logger,
 			Redigo: config.Redigo,
+			Rescue: config.Rescue,
 		}
 
 		timelineStorage, err = timeline.New(c)
@@ -115,6 +121,7 @@ func New(config Config) (*Storage, error) {
 		c := update.Config{
 			Logger: config.Logger,
 			Redigo: config.Redigo,
+			Rescue: config.Rescue,
 		}
 
 		updateStorage, err = update.New(c)
