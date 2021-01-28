@@ -32,6 +32,9 @@ func New(config Config) (*Deleter, error) {
 	if config.Redigo == nil {
 		return nil, tracer.Maskf(invalidConfigError, "%T.Redigo must not be empty", config)
 	}
+	if config.Rescue == nil {
+		return nil, tracer.Maskf(invalidConfigError, "%T.Rescue must not be empty", config)
+	}
 
 	var err error
 
