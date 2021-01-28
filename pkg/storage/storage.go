@@ -67,7 +67,6 @@ func New(config Config) (*Storage, error) {
 		c := metric.Config{
 			Logger: config.Logger,
 			Redigo: config.Redigo,
-			Rescue: config.Rescue,
 		}
 
 		metricStorage, err = metric.New(c)
@@ -81,7 +80,6 @@ func New(config Config) (*Storage, error) {
 		c := metupd.Config{
 			Logger: config.Logger,
 			Redigo: config.Redigo,
-			Rescue: config.Rescue,
 		}
 
 		metupdStorage, err = metupd.New(c)
