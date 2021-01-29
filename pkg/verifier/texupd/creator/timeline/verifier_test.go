@@ -7,7 +7,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/venturemark/apigengo/pkg/pbf/texupd"
 	"github.com/xh3b4sd/redigo"
-	"github.com/xh3b4sd/redigo/fake"
+	"github.com/xh3b4sd/redigo/pkg/fake"
 
 	"github.com/venturemark/apiserver/pkg/metadata"
 )

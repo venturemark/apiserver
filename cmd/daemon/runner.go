@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/redigo"
-	"github.com/xh3b4sd/redigo/client"
+	"github.com/xh3b4sd/redigo/pkg/client"
 	"github.com/xh3b4sd/rescue"
 	"github.com/xh3b4sd/rescue/pkg/engine"
 	"github.com/xh3b4sd/tracer"
