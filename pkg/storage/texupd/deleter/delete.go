@@ -1,6 +1,7 @@
 package deleter
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 
@@ -10,11 +11,12 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
+	"github.com/venturemark/apiserver/pkg/schema"
 )
 
 // Delete provides a storage primitive to remove text updates associated with a
 // timeline.
-func (c *Deleter) Delete(req *texupd.DeleteI) (*texupd.DeleteO, error) {
+func (d *Deleter) Delete(req *texupd.DeleteI) (*texupd.DeleteO, error) {
 	var err error
 
 	var oid string
@@ -35,17 +37,32 @@ func (c *Deleter) Delete(req *texupd.DeleteI) (*texupd.DeleteO, error) {
 		}
 	}
 
+	var upd *schema.Update
+	{
+		k := fmt.Sprintf(key.Update, oid, tid)
+		s, err := d.redigo.Sorted().Search().Score(k, uid, uid)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+
+		upd = &schema.Update{}
+		err = json.Unmarshal([]byte(s[0]), upd)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	{
 		t := &task.Task{
 			Obj: task.TaskObj{
-				Metadata: map[string]string{
-					metadata.TaskAction:   "delete",
-					metadata.TaskResource: "texupd",
-				},
+				Metadata: upd.Obj.Metadata,
 			},
 		}
 
-		err = c.rescue.Create(t)
+		t.Obj.Metadata[metadata.TaskAction] = "delete"
+		t.Obj.Metadata[metadata.TaskResource] = "update"
+
+		err = d.rescue.Create(t)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -55,7 +72,7 @@ func (c *Deleter) Delete(req *texupd.DeleteI) (*texupd.DeleteO, error) {
 		k := fmt.Sprintf(key.Update, oid, tid)
 		s := uid
 
-		err = c.redigo.Sorted().Delete().Score(k, s)
+		err = d.redigo.Sorted().Delete().Score(k, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

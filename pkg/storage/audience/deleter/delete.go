@@ -1,6 +1,7 @@
 package deleter
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 
@@ -10,9 +11,10 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
+	"github.com/venturemark/apiserver/pkg/schema"
 )
 
-func (c *Deleter) Delete(req *audience.DeleteI) (*audience.DeleteO, error) {
+func (d *Deleter) Delete(req *audience.DeleteI) (*audience.DeleteO, error) {
 	var err error
 
 	var aid float64
@@ -28,17 +30,32 @@ func (c *Deleter) Delete(req *audience.DeleteI) (*audience.DeleteO, error) {
 		oid = req.Obj.Metadata[metadata.OrganizationID]
 	}
 
+	var aud *schema.Audience
+	{
+		k := fmt.Sprintf(key.Audience, oid)
+		s, err := d.redigo.Sorted().Search().Score(k, aid, aid)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+
+		aud = &schema.Audience{}
+		err = json.Unmarshal([]byte(s[0]), aud)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	{
 		t := &task.Task{
 			Obj: task.TaskObj{
-				Metadata: map[string]string{
-					metadata.TaskAction:   "delete",
-					metadata.TaskResource: "audience",
-				},
+				Metadata: aud.Obj.Metadata,
 			},
 		}
 
-		err = c.rescue.Create(t)
+		t.Obj.Metadata[metadata.TaskAction] = "delete"
+		t.Obj.Metadata[metadata.TaskResource] = "audience"
+
+		err = d.rescue.Create(t)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -48,7 +65,7 @@ func (c *Deleter) Delete(req *audience.DeleteI) (*audience.DeleteO, error) {
 		k := fmt.Sprintf(key.Audience, oid)
 		s := aid
 
-		err = c.redigo.Sorted().Delete().Score(k, s)
+		err = d.redigo.Sorted().Delete().Score(k, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

@@ -5,8 +5,8 @@ import (
 	"github.com/xh3b4sd/tracer"
 )
 
-func (c *Deleter) Verify(req *texupd.DeleteI) (bool, error) {
-	for _, v := range c.verify {
+func (d *Deleter) Verify(req *texupd.DeleteI) (bool, error) {
+	for _, v := range d.verify {
 		ok, err := v.Verify(req)
 		if err != nil {
 			return false, tracer.Mask(err)

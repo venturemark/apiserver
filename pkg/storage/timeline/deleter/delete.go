@@ -1,6 +1,7 @@
 package deleter
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 
@@ -10,11 +11,12 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
+	"github.com/venturemark/apiserver/pkg/schema"
 )
 
 // Delete provides a storage primitive to remove timelines associated with an
 // audience.
-func (c *Deleter) Delete(req *timeline.DeleteI) (*timeline.DeleteO, error) {
+func (d *Deleter) Delete(req *timeline.DeleteI) (*timeline.DeleteO, error) {
 	var err error
 
 	var oid string
@@ -30,17 +32,32 @@ func (c *Deleter) Delete(req *timeline.DeleteI) (*timeline.DeleteO, error) {
 		}
 	}
 
+	var tim *schema.Timeline
+	{
+		k := fmt.Sprintf(key.Timeline, oid)
+		s, err := d.redigo.Sorted().Search().Score(k, tid, tid)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+
+		tim = &schema.Timeline{}
+		err = json.Unmarshal([]byte(s[0]), tim)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	{
 		t := &task.Task{
 			Obj: task.TaskObj{
-				Metadata: map[string]string{
-					metadata.TaskAction:   "delete",
-					metadata.TaskResource: "timeline",
-				},
+				Metadata: tim.Obj.Metadata,
 			},
 		}
 
-		err = c.rescue.Create(t)
+		t.Obj.Metadata[metadata.TaskAction] = "delete"
+		t.Obj.Metadata[metadata.TaskResource] = "timeline"
+
+		err = d.rescue.Create(t)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -50,7 +67,7 @@ func (c *Deleter) Delete(req *timeline.DeleteI) (*timeline.DeleteO, error) {
 		k := fmt.Sprintf(key.Timeline, oid)
 		s := tid
 
-		err = c.redigo.Sorted().Delete().Score(k, s)
+		err = d.redigo.Sorted().Delete().Score(k, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
