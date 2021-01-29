@@ -1,6 +1,7 @@
 package searcher
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 
@@ -10,18 +11,13 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/value/timeline/element"
+	"github.com/venturemark/apiserver/pkg/schema"
 )
 
 // Search provides a filter primitive to lookup timelines associated with a
 // user.
 func (s *Searcher) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 	var err error
-
-	var oid string
-	{
-		oid = req.Obj[0].Metadata[metadata.OrganizationID]
-	}
 
 	var str []string
 	{
@@ -53,20 +49,18 @@ func (s *Searcher) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 		res = &timeline.SearchO{}
 
 		for _, s := range str {
-			tid, des, nam, sta, err := element.Split(s)
+			tim := &schema.Timeline{}
+			err := json.Unmarshal([]byte(s), tim)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
 
 			o := &timeline.SearchO_Obj{
-				Metadata: map[string]string{
-					metadata.TimelineID:     strconv.Itoa(int(tid)),
-					metadata.OrganizationID: oid,
-				},
+				Metadata: tim.Obj.Metadata,
 				Property: &timeline.SearchO_Obj_Property{
-					Desc: des,
-					Name: nam,
-					Stat: sta,
+					Desc: tim.Obj.Property.Desc,
+					Name: tim.Obj.Property.Name,
+					Stat: tim.Obj.Property.Stat,
 				},
 			}
 

@@ -1,8 +1,8 @@
 package searcher
 
 import (
+	"encoding/json"
 	"fmt"
-	"strconv"
 
 	"github.com/venturemark/apigengo/pkg/pbf/audience"
 	"github.com/venturemark/apigengo/pkg/pbf/timeline"
@@ -10,7 +10,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/value/audience/element"
+	"github.com/venturemark/apiserver/pkg/schema"
 )
 
 func (s *Searcher) searchAud(req *timeline.SearchI) (*audience.SearchO, error) {
@@ -37,20 +37,18 @@ func (s *Searcher) searchAud(req *timeline.SearchI) (*audience.SearchO, error) {
 		res = &audience.SearchO{}
 
 		for _, s := range str {
-			aid, nam, tim, usr, err := element.Split(s)
+			aud := &schema.Audience{}
+			err := json.Unmarshal([]byte(s), aud)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
 
 			o := &audience.SearchO_Obj{
-				Metadata: map[string]string{
-					metadata.AudienceID:     strconv.Itoa(int(aid)),
-					metadata.OrganizationID: oid,
-				},
+				Metadata: aud.Obj.Metadata,
 				Property: &audience.SearchO_Obj_Property{
-					Name: nam,
-					Tmln: tim,
-					User: usr,
+					Name: aud.Obj.Property.Name,
+					Tmln: aud.Obj.Property.Tmln,
+					User: aud.Obj.Property.User,
 				},
 			}
 

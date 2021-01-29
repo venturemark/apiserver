@@ -1,15 +1,15 @@
 package searcher
 
 import (
+	"encoding/json"
 	"fmt"
-	"strconv"
 
 	"github.com/venturemark/apigengo/pkg/pbf/update"
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/value/update/element"
+	"github.com/venturemark/apiserver/pkg/schema"
 )
 
 // Search provides a filter primitive to lookup updates associated with a
@@ -29,12 +29,6 @@ func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 		tid = req.Obj[0].Metadata[metadata.TimelineID]
 	}
 
-	// With redis we use ZREVRANGE which allows us to search for objects while
-	// having support for chunking.
-	//
-	// With redis we use ZRANGEBYSCORE which allows us to search for objects
-	// while having support for the "bet" operator later. One example is to show
-	// updates within a certain timerange.
 	var str []string
 	{
 		k := fmt.Sprintf(key.Update, oid, tid)
@@ -44,28 +38,21 @@ func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 		}
 	}
 
-	// We store updates in a sorted set. The elements of the sorted set are
-	// concatenated strings of the unix timestamp of update creation and the
-	// user's natural language in written form.
 	var res *update.SearchO
 	{
 		res = &update.SearchO{}
 
 		for _, s := range str {
-			uid, oid, tex, usr, err := element.Split(s)
+			upd := &schema.Update{}
+			err := json.Unmarshal([]byte(s), upd)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
 
 			o := &update.SearchO_Obj{
-				Metadata: map[string]string{
-					metadata.OrganizationID: oid,
-					metadata.TimelineID:     tid,
-					metadata.UserID:         usr,
-					metadata.UpdateID:       strconv.Itoa(int(uid)),
-				},
+				Metadata: upd.Obj.Metadata,
 				Property: &update.SearchO_Obj_Property{
-					Text: tex,
+					Text: upd.Obj.Property.Text,
 				},
 			}
 

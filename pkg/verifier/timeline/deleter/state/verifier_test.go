@@ -21,7 +21,7 @@ func Test_State_Verify_False(t *testing.T) {
 		{
 			req: &timeline.DeleteI{},
 			fakeScore: func() ([]string, error) {
-				return []string{"0,,,YXJjaGl2ZWQ="}, nil
+				return []string{`{"obj":{"property":{"stat":"archived"}}}`}, nil
 			},
 		},
 		// Case 1 ensures that empty delete input is not valid.
@@ -30,7 +30,7 @@ func Test_State_Verify_False(t *testing.T) {
 				Obj: &timeline.DeleteI_Obj{},
 			},
 			fakeScore: func() ([]string, error) {
-				return []string{"0,,,YXJjaGl2ZWQ="}, nil
+				return []string{`{"obj":{"property":{"stat":"archived"}}}`}, nil
 			},
 		},
 		// Case 2 ensures that delete input with an active timeline is not
@@ -39,13 +39,13 @@ func Test_State_Verify_False(t *testing.T) {
 			req: &timeline.DeleteI{
 				Obj: &timeline.DeleteI_Obj{
 					Metadata: map[string]string{
-						metadata.OrganizationID: "org-al9qy",
+						metadata.OrganizationID: "<id>",
 						metadata.TimelineID:     "1606329189",
 					},
 				},
 			},
 			fakeScore: func() ([]string, error) {
-				return []string{"0,,,YWN0aXZl"}, nil
+				return []string{`{"obj":{"property":{"stat":"active"}}}`}, nil
 			},
 		},
 		// Case 3 ensures that delete input with arbitrary timeline state is not
@@ -54,13 +54,13 @@ func Test_State_Verify_False(t *testing.T) {
 			req: &timeline.DeleteI{
 				Obj: &timeline.DeleteI_Obj{
 					Metadata: map[string]string{
-						metadata.OrganizationID: "org-al9qy",
+						metadata.OrganizationID: "<id>",
 						metadata.TimelineID:     "1606329189",
 					},
 				},
 			},
 			fakeScore: func() ([]string, error) {
-				return []string{"0,,,Zm9v"}, nil
+				return []string{`{"obj":{"property":{"stat":"foo"}}}`}, nil
 			},
 		},
 	}
@@ -113,13 +113,13 @@ func Test_State_Verify_True(t *testing.T) {
 			req: &timeline.DeleteI{
 				Obj: &timeline.DeleteI_Obj{
 					Metadata: map[string]string{
-						metadata.OrganizationID: "org-al9qy",
+						metadata.OrganizationID: "<id>",
 						metadata.TimelineID:     "1606329189",
 					},
 				},
 			},
 			fakeScore: func() ([]string, error) {
-				return []string{"0,,,YXJjaGl2ZWQ="}, nil
+				return []string{`{"obj":{"property":{"stat":"archived"}}}`}, nil
 			},
 		},
 		// Case 1 ensures that delete input with an archived timeline is valid.
@@ -127,13 +127,13 @@ func Test_State_Verify_True(t *testing.T) {
 			req: &timeline.DeleteI{
 				Obj: &timeline.DeleteI_Obj{
 					Metadata: map[string]string{
-						metadata.OrganizationID: "org-al9qy",
+						metadata.OrganizationID: "<id>",
 						metadata.TimelineID:     "1606329189",
 					},
 				},
 			},
 			fakeScore: func() ([]string, error) {
-				return []string{"0,desc,name,YXJjaGl2ZWQ="}, nil
+				return []string{`{"obj":{"property":{"name":"mrr","stat":"archived"}}}`}, nil
 			},
 		},
 	}

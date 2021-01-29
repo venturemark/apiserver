@@ -1,6 +1,7 @@
 package creator
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"time"
@@ -10,7 +11,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/value/message/element"
+	"github.com/venturemark/apiserver/pkg/schema"
 )
 
 // Create provides a storage primitive to persist messages associated with an
@@ -33,11 +34,6 @@ func (c *Creator) Create(req *message.CreateI) (*message.CreateO, error) {
 		uid = req.Obj.Metadata[metadata.UpdateID]
 	}
 
-	var usr string
-	{
-		usr = req.Obj.Metadata[metadata.UserID]
-	}
-
 	// We manage data on a timeline. Our main identifier is a unix timestamp in
 	// nano seconds, normalized to the UTC timezone. Our discovery mechanisms is
 	// designed based on this very unix timestamp. Everything starts with time,
@@ -50,17 +46,32 @@ func (c *Creator) Create(req *message.CreateI) (*message.CreateO, error) {
 		mid = float64(time.Now().UTC().UnixNano())
 	}
 
-	// We store messages in a sorted set. The elements of the sorted set are
-	// concatenated strings of t, m and r. Here t is the unix timestamp
-	// referring to the time right now at creation time. Here m is the message
-	// text. Here r is the reply ID, if any. We track t as part of the element
-	// within the sorted set to guarantee a unique element.
+	var val string
+	{
+		mes := schema.Message{
+			Obj: schema.MessageObj{
+				Metadata: req.Obj.Metadata,
+				Property: schema.MessageObjProperty{
+					Text: req.Obj.Property.Text,
+					Reid: req.Obj.Property.Reid,
+				},
+			},
+		}
+
+		byt, err := json.Marshal(mes)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+
+		val = string(byt)
+	}
+
 	{
 		k := fmt.Sprintf(key.Message, oid, tid, uid)
-		e := element.Join(mid, oid, req.Obj.Property.Text, req.Obj.Property.Reid, usr)
+		v := val
 		s := mid
 
-		err = c.redigo.Sorted().Create().Element(k, e, s)
+		err = c.redigo.Sorted().Create().Element(k, v, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
