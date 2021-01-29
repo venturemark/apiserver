@@ -6,12 +6,11 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/venturemark/apicommon/pkg/key"
+	"github.com/venturemark/apicommon/pkg/metadata"
+	"github.com/venturemark/apicommon/pkg/schema"
 	"github.com/venturemark/apigengo/pkg/pbf/texupd"
 	"github.com/xh3b4sd/tracer"
-
-	"github.com/venturemark/apiserver/pkg/key"
-	"github.com/venturemark/apiserver/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/schema"
 )
 
 // Create provides a storage primitive to persist text updates associated with a
