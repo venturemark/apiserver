@@ -6,7 +6,7 @@ require (
 	github.com/evanphx/json-patch v0.5.2
 	github.com/google/go-cmp v0.5.4
 	github.com/spf13/cobra v1.1.1
-	github.com/venturemark/apigengo v0.0.0-20210124134620-879f65ac9e29
+	github.com/venturemark/apigengo v0.0.0-20210129164645-bb5f1f84dae1
 	github.com/xh3b4sd/logger v0.1.2
 	github.com/xh3b4sd/redigo v0.12.0
 	github.com/xh3b4sd/rescue v0.1.0
