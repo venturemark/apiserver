@@ -6,9 +6,8 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/texupd"
-
-	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
 func Test_Time_Verify_False(t *testing.T) {

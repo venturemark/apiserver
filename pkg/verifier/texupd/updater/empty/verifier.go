@@ -1,9 +1,8 @@
 package empty
 
 import (
+	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/texupd"
-
-	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
 type VerifierConfig struct {

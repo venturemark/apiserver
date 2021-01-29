@@ -6,13 +6,12 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/venturemark/apicommon/pkg/index"
+	"github.com/venturemark/apicommon/pkg/key"
+	"github.com/venturemark/apicommon/pkg/metadata"
+	"github.com/venturemark/apicommon/pkg/schema"
 	"github.com/venturemark/apigengo/pkg/pbf/audience"
 	"github.com/xh3b4sd/tracer"
-
-	"github.com/venturemark/apiserver/pkg/index"
-	"github.com/venturemark/apiserver/pkg/key"
-	"github.com/venturemark/apiserver/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/schema"
 )
 
 func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {

@@ -5,11 +5,10 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/timeline"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/redigo/pkg/fake"
-
-	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
 func Test_State_Verify_False(t *testing.T) {

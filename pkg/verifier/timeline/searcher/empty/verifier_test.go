@@ -5,9 +5,8 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/timeline"
-
-	"github.com/venturemark/apiserver/pkg/metadata"
 )
 
 func Test_Empty_Verify_False(t *testing.T) {
