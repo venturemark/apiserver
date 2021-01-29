@@ -8,8 +8,6 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/storage/audience"
 	"github.com/venturemark/apiserver/pkg/storage/message"
-	"github.com/venturemark/apiserver/pkg/storage/metric"
-	"github.com/venturemark/apiserver/pkg/storage/metupd"
 	"github.com/venturemark/apiserver/pkg/storage/texupd"
 	"github.com/venturemark/apiserver/pkg/storage/timeline"
 	"github.com/venturemark/apiserver/pkg/storage/update"
@@ -24,8 +22,6 @@ type Config struct {
 type Storage struct {
 	Audience *audience.Audience
 	Message  *message.Message
-	Metric   *metric.Metric
-	MetUpd   *metupd.MetUpd
 	TexUpd   *texupd.TexUpd
 	Timeline *timeline.Timeline
 	Update   *update.Update
@@ -57,32 +53,6 @@ func New(config Config) (*Storage, error) {
 		}
 
 		messageStorage, err = message.New(c)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
-	var metricStorage *metric.Metric
-	{
-		c := metric.Config{
-			Logger: config.Logger,
-			Redigo: config.Redigo,
-		}
-
-		metricStorage, err = metric.New(c)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
-	var metupdStorage *metupd.MetUpd
-	{
-		c := metupd.Config{
-			Logger: config.Logger,
-			Redigo: config.Redigo,
-		}
-
-		metupdStorage, err = metupd.New(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -133,8 +103,6 @@ func New(config Config) (*Storage, error) {
 	s := &Storage{
 		Audience: audienceStorage,
 		Message:  messageStorage,
-		Metric:   metricStorage,
-		MetUpd:   metupdStorage,
 		TexUpd:   texupdStorage,
 		Timeline: timelineStorage,
 		Update:   updateStorage,

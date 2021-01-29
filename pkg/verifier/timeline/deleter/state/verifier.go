@@ -78,14 +78,11 @@ func (v *Verifier) Verify(req *timeline.DeleteI) (bool, error) {
 			return false, tracer.Mask(err)
 		}
 
-		fmt.Printf("%#v\n", s)
-
 		tim := &schema.Timeline{}
 		err = json.Unmarshal([]byte(s[0]), tim)
 		if err != nil {
 			return false, tracer.Mask(err)
 		}
-		fmt.Printf("%#v\n", tim)
 
 		if tim.Obj.Property.Stat != "archived" {
 			return false, nil
