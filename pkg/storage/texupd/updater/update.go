@@ -1,6 +1,7 @@
 package updater
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 
@@ -9,7 +10,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/value/update/element"
+	"github.com/venturemark/apiserver/pkg/schema"
 )
 
 // Update provides a storage primitive to modify text updates associated with a
@@ -36,34 +37,40 @@ func (u *Updater) Update(req *texupd.UpdateI) (*texupd.UpdateO, error) {
 		}
 	}
 
-	var org string
-	var usr string
+	var upd *schema.Update
 	{
 		k := fmt.Sprintf(key.Update, oid, tid)
-		str, err := u.redigo.Sorted().Search().Score(k, uid, uid)
+		s, err := u.redigo.Sorted().Search().Score(k, uid, uid)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 
-		_, org, _, usr, err = element.Split(str[0])
+		upd = &schema.Update{}
+		err = json.Unmarshal([]byte(s[0]), upd)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
+
+		upd.Obj.Property.Text = req.Obj.Property.Text
 	}
 
-	// When updating text updates all assumptions are equal to creating text
-	// updates. The update mechanism of elements within sorted sets is rather
-	// complex. An error will be returned if the sorted set or its alleged
-	// element does not exist. The bool upd will be false if the update
-	// requested to be updated did in fact not change. Then no update will be
-	// performed under the hood.
-	var upd bool
+	var val string
+	{
+		byt, err := json.Marshal(upd)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+
+		val = string(byt)
+	}
+
+	var mod bool
 	{
 		k := fmt.Sprintf(key.Update, oid, tid)
-		e := element.Join(uid, org, req.Obj.Property.Text, usr)
+		v := val
 		s := uid
 
-		upd, err = u.redigo.Sorted().Update().Value(k, e, s)
+		mod, err = u.redigo.Sorted().Update().Value(k, v, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -77,7 +84,7 @@ func (u *Updater) Update(req *texupd.UpdateI) (*texupd.UpdateO, error) {
 			},
 		}
 
-		if upd {
+		if mod {
 			res.Obj.Metadata[metadata.UpdateStatus] = "updated"
 		}
 	}

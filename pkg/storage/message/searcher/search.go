@@ -1,15 +1,15 @@
 package searcher
 
 import (
+	"encoding/json"
 	"fmt"
-	"strconv"
 
 	"github.com/venturemark/apigengo/pkg/pbf/message"
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/value/message/element"
+	"github.com/venturemark/apiserver/pkg/schema"
 )
 
 // Search provides a filter primitive to lookup messages associated with an
@@ -48,22 +48,17 @@ func (s *Searcher) Search(req *message.SearchI) (*message.SearchO, error) {
 		res = &message.SearchO{}
 
 		for _, s := range str {
-			mid, oid, tex, rid, usr, err := element.Split(s)
+			mes := &schema.Message{}
+			err := json.Unmarshal([]byte(s), mes)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
 
 			o := &message.SearchO_Obj{
-				Metadata: map[string]string{
-					metadata.MessageID:      strconv.Itoa(int(mid)),
-					metadata.OrganizationID: oid,
-					metadata.TimelineID:     tid,
-					metadata.UpdateID:       uid,
-					metadata.UserID:         usr,
-				},
+				Metadata: mes.Obj.Metadata,
 				Property: &message.SearchO_Obj_Property{
-					Text: tex,
-					Reid: rid,
+					Text: mes.Obj.Property.Text,
+					Reid: mes.Obj.Property.Reid,
 				},
 			}
 

@@ -1,6 +1,7 @@
 package creator
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"time"
@@ -10,7 +11,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
-	uel "github.com/venturemark/apiserver/pkg/value/update/element"
+	"github.com/venturemark/apiserver/pkg/schema"
 )
 
 // Create provides a storage primitive to persist text updates associated with a
@@ -30,11 +31,6 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 		tid = req.Obj.Metadata[metadata.TimelineID]
 	}
 
-	var usr string
-	{
-		usr = req.Obj.Metadata[metadata.UserID]
-	}
-
 	// We manage data on a timeline. Our main identifier is a unix timestamp in
 	// nano seconds, normalized to the UTC timezone. Our discovery mechanisms is
 	// designed based on the unix timestamp, which acts ad ID. Everything starts
@@ -47,18 +43,31 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 		uid = float64(time.Now().UTC().UnixNano())
 	}
 
-	// We store updates in a sorted set. The elements of the sorted set are
-	// concatenated strings of t and e. Here t is the unix timestamp referring
-	// to the time right now at creation time. Here e is the user's natural
-	// language in written form. We track t as part of the element within the
-	// sorted set to guarantee a unique element, even if the user's coordinates
-	// on a timeline ever appear twice.
+	var val string
+	{
+		upd := schema.Update{
+			Obj: schema.UpdateObj{
+				Metadata: req.Obj.Metadata,
+				Property: schema.UpdateObjProperty{
+					Text: req.Obj.Property.Text,
+				},
+			},
+		}
+
+		byt, err := json.Marshal(upd)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+
+		val = string(byt)
+	}
+
 	{
 		k := fmt.Sprintf(key.Update, oid, tid)
-		e := uel.Join(uid, oid, req.Obj.Property.Text, usr)
+		v := val
 		s := uid
 
-		err = c.redigo.Sorted().Create().Element(k, e, s)
+		err = c.redigo.Sorted().Create().Element(k, v, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

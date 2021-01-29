@@ -1,6 +1,7 @@
 package updater
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 
@@ -10,7 +11,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/index"
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/value/timeline/element"
+	"github.com/venturemark/apiserver/pkg/schema"
 )
 
 // Update provides a storage primitive to modify timelines associated with a
@@ -31,42 +32,41 @@ func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 		}
 	}
 
-	// Properties can be updated separately. We only need to figure out which
-	// information are given so that we only update the specified fields. For
-	// any field not being specified within the update request we fetch the
-	// current state and default to it accordingly.
-	var des string
-	var nam string
-	var sta string
+	var tim *schema.Timeline
 	{
 		k := fmt.Sprintf(key.Timeline, oid)
 
-		str, err := u.redigo.Sorted().Search().Score(k, tid, tid)
+		s, err := u.redigo.Sorted().Search().Score(k, tid, tid)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
-		_, d, n, s, err := element.Split(str[0])
+		tim = &schema.Timeline{}
+		err = json.Unmarshal([]byte(s[0]), tim)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 
 		if req.Obj.Property.Desc != nil {
-			des = *req.Obj.Property.Desc
-		} else {
-			des = d
+			tim.Obj.Property.Desc = *req.Obj.Property.Desc
 		}
 
 		if req.Obj.Property.Name != nil {
-			nam = *req.Obj.Property.Name
-		} else {
-			nam = n
+			tim.Obj.Property.Name = *req.Obj.Property.Name
 		}
 
 		if req.Obj.Property.Stat != nil {
-			sta = *req.Obj.Property.Stat
-		} else {
-			sta = s
+			tim.Obj.Property.Stat = *req.Obj.Property.Stat
 		}
+	}
+
+	var val string
+	{
+		byt, err := json.Marshal(tim)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+
+		val = string(byt)
 	}
 
 	// We store timelines in a sorted set. The elements of the sorted set are
@@ -77,16 +77,16 @@ func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 	var upd bool
 	{
 		k := fmt.Sprintf(key.Timeline, oid)
-		e := element.Join(tid, des, nam, sta)
+		v := val
 		s := tid
 
 		var i string
-		if nam != "" {
+		if req.Obj.Property.Name != nil {
 			// If the name got updated we need to update its index as well.
-			i = index.New(index.Name, nam)
+			i = index.New(index.Name, tim.Obj.Property.Name)
 		}
 
-		upd, err = u.redigo.Sorted().Update().Value(k, e, s, i)
+		upd, err = u.redigo.Sorted().Update().Value(k, v, s, i)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

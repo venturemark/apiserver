@@ -12,7 +12,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/index"
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/value/audience/element"
+	"github.com/venturemark/apiserver/pkg/schema"
 )
 
 func (u *Updater) Update(req *audience.UpdateI) (*audience.UpdateO, error) {
@@ -34,23 +34,18 @@ func (u *Updater) Update(req *audience.UpdateI) (*audience.UpdateO, error) {
 	var cur []byte
 	{
 		k := fmt.Sprintf(key.Audience, oid)
-		str, err := u.redigo.Sorted().Search().Score(k, aid, aid)
+		s, err := u.redigo.Sorted().Search().Score(k, aid, aid)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 
-		_, n, t, u, err := element.Split(str[0])
+		aud := &schema.Audience{}
+		err = json.Unmarshal([]byte(s[0]), aud)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 
-		obj := &audience.CreateI_Obj_Property{
-			Name: n,
-			Tmln: t,
-			User: u,
-		}
-
-		cur, err = json.Marshal(obj)
+		cur, err = json.Marshal(aud)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -76,22 +71,24 @@ func (u *Updater) Update(req *audience.UpdateI) (*audience.UpdateO, error) {
 		}
 	}
 
-	var des []byte
+	var val string
 	{
 		patch, err := jsonpatch.DecodePatch(pat)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 
-		des, err = patch.Apply(cur)
+		des, err := patch.Apply(cur)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
+
+		val = string(des)
 	}
 
-	var obj audience.CreateI_Obj_Property
+	var aud schema.Audience
 	{
-		err := json.Unmarshal(des, &obj)
+		err := json.Unmarshal([]byte(val), &aud)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -100,11 +97,11 @@ func (u *Updater) Update(req *audience.UpdateI) (*audience.UpdateO, error) {
 	var upd bool
 	{
 		k := fmt.Sprintf(key.Audience, oid)
-		e := element.Join(aid, obj.Name, obj.Tmln, obj.User)
+		v := val
 		s := aid
-		i := index.New(index.Name, obj.Name)
+		i := index.New(index.Name, aud.Obj.Property.Name)
 
-		upd, err = u.redigo.Sorted().Update().Value(k, e, s, i)
+		upd, err = u.redigo.Sorted().Update().Value(k, v, s, i)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

@@ -1,6 +1,7 @@
 package state
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 
@@ -10,7 +11,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/value/timeline/element"
+	"github.com/venturemark/apiserver/pkg/schema"
 )
 
 type VerifierConfig struct {
@@ -72,17 +73,18 @@ func (v *Verifier) Verify(req *timeline.DeleteI) (bool, error) {
 	{
 		k := fmt.Sprintf(key.Timeline, oid)
 
-		str, err := v.redigo.Sorted().Search().Score(k, tid, tid)
+		s, err := v.redigo.Sorted().Search().Score(k, tid, tid)
 		if err != nil {
 			return false, tracer.Mask(err)
 		}
 
-		_, _, _, s, err := element.Split(str[0])
+		tim := &schema.Timeline{}
+		err = json.Unmarshal([]byte(s[0]), tim)
 		if err != nil {
 			return false, tracer.Mask(err)
 		}
 
-		if s != "archived" {
+		if tim.Obj.Property.Stat != "archived" {
 			return false, nil
 		}
 	}

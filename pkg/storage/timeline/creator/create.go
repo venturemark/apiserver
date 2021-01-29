@@ -1,6 +1,7 @@
 package creator
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"time"
@@ -11,7 +12,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/index"
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/value/timeline/element"
+	"github.com/venturemark/apiserver/pkg/schema"
 )
 
 // Create provides a storage primitive to persist timelines associated with a
@@ -36,18 +37,34 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 		tid = float64(time.Now().UTC().UnixNano())
 	}
 
-	// We store timelines in a sorted set. The elements of the sorted set are
-	// concatenated strings of t and e. Here t is the unix timestamp referring
-	// to the time right now at creation time. Here e is the timeline name. We
-	// track t as part of the element within the sorted set to guarantee a
-	// unique element.
+	var val string
+	{
+		tim := schema.Timeline{
+			Obj: schema.TimelineObj{
+				Metadata: req.Obj.Metadata,
+				Property: schema.TimelineObjProperty{
+					Desc: req.Obj.Property.Desc,
+					Name: req.Obj.Property.Name,
+					Stat: "active",
+				},
+			},
+		}
+
+		byt, err := json.Marshal(tim)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+
+		val = string(byt)
+	}
+
 	{
 		k := fmt.Sprintf(key.Timeline, oid)
-		e := element.Join(tid, req.Obj.Property.Desc, req.Obj.Property.Name, "active")
+		v := val
 		s := tid
 		i := index.New(index.Name, req.Obj.Property.Name)
 
-		err = c.redigo.Sorted().Create().Element(k, e, s, i)
+		err = c.redigo.Sorted().Create().Element(k, v, s, i)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

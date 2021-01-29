@@ -1,6 +1,7 @@
 package creator
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"time"
@@ -11,7 +12,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/index"
 	"github.com/venturemark/apiserver/pkg/key"
 	"github.com/venturemark/apiserver/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/value/audience/element"
+	"github.com/venturemark/apiserver/pkg/schema"
 )
 
 func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
@@ -34,19 +35,34 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 		aid = float64(time.Now().UTC().UnixNano())
 	}
 
-	// We store audiences in a sorted set. The elements of the sorted set are
-	// concatenated strings of t, n and u. Here t is the unix timestamp
-	// referring to the time right now at creation time. Here n is the audience
-	// name. Here u is a list of users associated to that audience. We track t
-	// as part of the element within the sorted set to guarantee a unique
-	// element.
+	var val string
+	{
+		aud := schema.Audience{
+			Obj: schema.AudienceObj{
+				Metadata: req.Obj.Metadata,
+				Property: schema.AudienceObjProperty{
+					Name: req.Obj.Property.Name,
+					Tmln: req.Obj.Property.Tmln,
+					User: req.Obj.Property.User,
+				},
+			},
+		}
+
+		byt, err := json.Marshal(aud)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+
+		val = string(byt)
+	}
+
 	{
 		k := fmt.Sprintf(key.Audience, oid)
-		e := element.Join(aid, req.Obj.Property.Name, req.Obj.Property.Tmln, req.Obj.Property.User)
+		v := val
 		s := aid
 		i := index.New(index.Name, req.Obj.Property.Name)
 
-		err = c.redigo.Sorted().Create().Element(k, e, s, i)
+		err = c.redigo.Sorted().Create().Element(k, v, s, i)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

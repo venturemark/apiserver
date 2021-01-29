@@ -15,8 +15,6 @@ import (
 	"github.com/venturemark/apiserver/pkg/handler"
 	"github.com/venturemark/apiserver/pkg/handler/audience"
 	"github.com/venturemark/apiserver/pkg/handler/message"
-	"github.com/venturemark/apiserver/pkg/handler/metric"
-	"github.com/venturemark/apiserver/pkg/handler/metupd"
 	"github.com/venturemark/apiserver/pkg/handler/texupd"
 	"github.com/venturemark/apiserver/pkg/handler/timeline"
 	"github.com/venturemark/apiserver/pkg/handler/update"
@@ -114,32 +112,6 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 		}
 	}
 
-	var metricHandler *metric.Handler
-	{
-		c := metric.HandlerConfig{
-			Logger:  r.logger,
-			Storage: redisStorage,
-		}
-
-		metricHandler, err = metric.NewHandler(c)
-		if err != nil {
-			return tracer.Mask(err)
-		}
-	}
-
-	var metupdHandler *metupd.Handler
-	{
-		c := metupd.HandlerConfig{
-			Logger:  r.logger,
-			Storage: redisStorage,
-		}
-
-		metupdHandler, err = metupd.NewHandler(c)
-		if err != nil {
-			return tracer.Mask(err)
-		}
-	}
-
 	var texupdHandler *texupd.Handler
 	{
 		c := texupd.HandlerConfig{
@@ -186,8 +158,6 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 			Handlers: []handler.Interface{
 				audienceHandler,
 				messageHandler,
-				metricHandler,
-				metupdHandler,
 				texupdHandler,
 				timelineHandler,
 				updateHandler,
