@@ -42,6 +42,10 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 		uid = float64(time.Now().UTC().UnixNano())
 	}
 
+	{
+		req.Obj.Metadata[metadata.UpdateID] = strconv.FormatFloat(uid, 'f', -1, 64)
+	}
+
 	var val string
 	{
 		upd := schema.Update{
@@ -77,7 +81,7 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 		res = &texupd.CreateO{
 			Obj: &texupd.CreateO_Obj{
 				Metadata: map[string]string{
-					metadata.UpdateID: strconv.Itoa(int(uid)),
+					metadata.UpdateID: req.Obj.Metadata[metadata.UpdateID],
 				},
 			},
 		}

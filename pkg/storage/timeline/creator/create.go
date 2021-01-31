@@ -36,6 +36,10 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 		tid = float64(time.Now().UTC().UnixNano())
 	}
 
+	{
+		req.Obj.Metadata[metadata.TimelineID] = strconv.FormatFloat(tid, 'f', -1, 64)
+	}
+
 	var val string
 	{
 		tim := schema.Timeline{
@@ -74,7 +78,7 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 		res = &timeline.CreateO{
 			Obj: &timeline.CreateO_Obj{
 				Metadata: map[string]string{
-					metadata.TimelineID: strconv.Itoa(int(tid)),
+					metadata.TimelineID: req.Obj.Metadata[metadata.TimelineID],
 				},
 			},
 		}
