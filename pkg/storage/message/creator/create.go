@@ -45,6 +45,10 @@ func (c *Creator) Create(req *message.CreateI) (*message.CreateO, error) {
 		mid = float64(time.Now().UTC().UnixNano())
 	}
 
+	{
+		req.Obj.Metadata[metadata.MessageID] = strconv.FormatFloat(mid, 'f', -1, 64)
+	}
+
 	var val string
 	{
 		mes := schema.Message{
@@ -81,7 +85,7 @@ func (c *Creator) Create(req *message.CreateI) (*message.CreateO, error) {
 		res = &message.CreateO{
 			Obj: &message.CreateO_Obj{
 				Metadata: map[string]string{
-					metadata.MessageID: strconv.Itoa(int(mid)),
+					metadata.MessageID: req.Obj.Metadata[metadata.MessageID],
 				},
 			},
 		}

@@ -34,6 +34,10 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 		aid = float64(time.Now().UTC().UnixNano())
 	}
 
+	{
+		req.Obj.Metadata[metadata.AudienceID] = strconv.FormatFloat(aid, 'f', -1, 64)
+	}
+
 	var val string
 	{
 		aud := schema.Audience{
@@ -72,7 +76,7 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 		res = &audience.CreateO{
 			Obj: &audience.CreateO_Obj{
 				Metadata: map[string]string{
-					metadata.AudienceID: strconv.Itoa(int(aid)),
+					metadata.AudienceID: req.Obj.Metadata[metadata.AudienceID],
 				},
 			},
 		}
