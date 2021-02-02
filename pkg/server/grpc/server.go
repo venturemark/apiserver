@@ -1,6 +1,8 @@
 package grpc
 
 import (
+	"context"
+	"fmt"
 	"net"
 
 	"github.com/xh3b4sd/logger"
@@ -99,6 +101,8 @@ func (s *Server) Listen() error {
 			return tracer.Mask(err)
 		}
 	}
+
+	s.logger.Log(context.Background(), "level", "info", "message", fmt.Sprintf("serving running at %s", l.Addr().String()))
 
 	err = s.server.Serve(l)
 	if err != nil {
