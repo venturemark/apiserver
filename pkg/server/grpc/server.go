@@ -102,7 +102,7 @@ func (s *Server) Listen() error {
 		}
 	}
 
-	s.logger.Log(context.Background(), "level", "info", "message", fmt.Sprintf("serving running at %s", l.Addr().String()))
+	s.logger.Log(context.Background(), "level", "info", "message", fmt.Sprintf("server running at %s", l.Addr().String()))
 
 	err = s.server.Serve(l)
 	if err != nil {
