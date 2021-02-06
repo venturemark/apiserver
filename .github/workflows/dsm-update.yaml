@@ -1,10 +1,11 @@
 name: "dsm-update"
 
-on:
-  push:
-    branches:
-      - "main"
-      - "master"
+on: "push"
+# on:
+#   push:
+#     branches:
+#       - "main"
+#       - "master"
 
 jobs:
   dsm-update:
@@ -47,6 +48,7 @@ jobs:
           git remote set-url origin git@github.com:venturemark/flux.git
 
       - name: "Update Project Version"
+        working-directory: "${{ runner.temp }}/venturemark/flux/"
         run: |
           dsm update -r HelmRelease -n apiserver -k spec.values.image.tag -v ${{ github.sha }}
 
