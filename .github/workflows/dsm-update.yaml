@@ -50,6 +50,7 @@ jobs:
       - name: "Update Project Version"
         working-directory: "${{ runner.temp }}/venturemark/flux/"
         run: |
+          go get github.com/xh3b4sd/dsm
           dsm update -r HelmRelease -n apiserver -k spec.values.image.tag -v ${{ github.sha }}
 
       - name: "Commit And Push"
