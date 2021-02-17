@@ -1,0 +1,18 @@
+apiVersion: "security.istio.io/v1beta1"
+kind: "RequestAuthentication"
+metadata:
+  name: "{{ .Release.Name }}"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ .Release.Name }}"
+  jwtRules:
+    - issuer: "https://vm001.us.auth0.com/"
+      jwksUri: "https://vm001.us.auth0.com/.well-known/jwks.json"
+      audiences:
+        - "{{ .Release.Name }}"
+        - "https://vm001.us.auth0.com/userinfo"
+      forwardOriginalToken: true
+      fromHeaders:
+        - name: "Authorization"
+          prefix: "Bearer"
