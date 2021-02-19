@@ -3,19 +3,31 @@ package texupd
 import (
 	"context"
 
+	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/texupd"
 	"github.com/xh3b4sd/tracer"
+
+	"github.com/venturemark/apiserver/pkg/context/user"
 )
 
-func (h *Handler) Create(ctx context.Context, obj *texupd.CreateI) (*texupd.CreateO, error) {
+func (h *Handler) Create(ctx context.Context, req *texupd.CreateI) (*texupd.CreateO, error) {
 	{
-		ok, err := h.storage.TexUpd.Creator.Verify(obj)
+		u, ok := user.FromContext(ctx)
+		if !ok {
+			return nil, tracer.Mask(invalidUserError)
+		}
+
+		req.Obj.Metadata[metadata.UserID] = u
+	}
+
+	{
+		ok, err := h.storage.TexUpd.Creator.Verify(req)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 
 		if ok {
-			res, err := h.storage.TexUpd.Creator.Create(obj)
+			res, err := h.storage.TexUpd.Creator.Create(req)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}

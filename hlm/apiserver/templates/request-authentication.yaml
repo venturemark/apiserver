@@ -16,3 +16,5 @@ spec:
       fromHeaders:
         - name: "Authorization"
           prefix: "Bearer"
+        - name: "Authorization"
+          prefix: "bearer"
