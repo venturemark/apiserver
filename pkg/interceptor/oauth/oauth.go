@@ -3,6 +3,7 @@ package oauth
 import (
 	"context"
 	"crypto/sha256"
+	"fmt"
 	"regexp"
 
 	"github.com/lestrrat-go/jwx/jwt"
@@ -82,7 +83,7 @@ func (e *Interceptor) Interceptor() grpc.UnaryServerInterceptor {
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
-			u = string(h.Sum(nil))
+			u = fmt.Sprintf("%x", h.Sum(nil))
 		}
 
 		{
