@@ -18,11 +18,11 @@ architecture looks as follows.
 
 In our case this may be the [webclient] or any other client talking to the
 `apiserver`. Authenticating requests works by providing a valid JWT in the
-`authentication` header of the gRPC request using the `bearer` scheme.
+`authorization` header of the gRPC request using the `bearer` scheme.
 
 ```
 {
-    "authentication": "bearer <header.payload.signature>"
+    "authorization": "bearer <header.payload.signature>"
 }
 ```
 
@@ -41,7 +41,7 @@ the original access token.
 
 The `apiserver` assumes any request is legitimately made by the user providing
 their access token. All the `apiserver` is doing is to execute an [interceptor]
-which looks up the `authentication` header in order to take out the `sub` claim.
+which looks up the `authorization` header in order to take out the `sub` claim.
 This is the user ID we work with internally.
 
 
