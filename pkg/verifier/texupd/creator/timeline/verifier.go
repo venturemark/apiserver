@@ -63,7 +63,7 @@ func (v *Verifier) Verify(req *texupd.CreateI) (bool, error) {
 			return false, tracer.Mask(err)
 		}
 
-		k := fmt.Sprintf(key.Timeline, oid)
+		k := fmt.Sprintf(key.TimelineResource, oid)
 		s := i
 
 		exi, err := v.redigo.Sorted().Exists().Score(k, s)

@@ -38,7 +38,7 @@ func (d *Deleter) Delete(req *texupd.DeleteI) (*texupd.DeleteO, error) {
 
 	var upd *schema.Update
 	{
-		k := fmt.Sprintf(key.Update, oid, tid)
+		k := fmt.Sprintf(key.UpdateResource, oid, tid)
 		s, err := d.redigo.Sorted().Search().Score(k, uid, uid)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -68,7 +68,7 @@ func (d *Deleter) Delete(req *texupd.DeleteI) (*texupd.DeleteO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Update, oid, tid)
+		k := fmt.Sprintf(key.UpdateResource, oid, tid)
 		s := uid
 
 		err = d.redigo.Sorted().Delete().Score(k, s)

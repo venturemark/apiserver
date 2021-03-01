@@ -30,7 +30,7 @@ func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 
 	var str []string
 	{
-		k := fmt.Sprintf(key.Update, oid, tid)
+		k := fmt.Sprintf(key.UpdateResource, oid, tid)
 		str, err = s.redigo.Sorted().Search().Index(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)

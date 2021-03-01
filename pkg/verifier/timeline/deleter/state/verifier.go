@@ -70,7 +70,7 @@ func (v *Verifier) Verify(req *timeline.DeleteI) (bool, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Timeline, oid)
+		k := fmt.Sprintf(key.TimelineResource, oid)
 
 		s, err := v.redigo.Sorted().Search().Score(k, tid, tid)
 		if err != nil {

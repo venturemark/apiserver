@@ -82,7 +82,7 @@ func (s *Searcher) searchAll(req *timeline.SearchI) ([]string, error) {
 	// having support for chunking.
 	var str []string
 	{
-		k := fmt.Sprintf(key.Timeline, oid)
+		k := fmt.Sprintf(key.TimelineResource, oid)
 		str, err = s.redigo.Sorted().Search().Index(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -135,7 +135,7 @@ func (s *Searcher) searchUsr(req *timeline.SearchI) ([]string, error) {
 				}
 			}
 
-			k := fmt.Sprintf(key.Timeline, oid)
+			k := fmt.Sprintf(key.TimelineResource, oid)
 			str, err := s.redigo.Sorted().Search().Score(k, tid, tid)
 			if err != nil {
 				return nil, tracer.Mask(err)

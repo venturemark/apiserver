@@ -38,7 +38,7 @@ func (u *Updater) Update(req *texupd.UpdateI) (*texupd.UpdateO, error) {
 
 	var upd *schema.Update
 	{
-		k := fmt.Sprintf(key.Update, oid, tid)
+		k := fmt.Sprintf(key.UpdateResource, oid, tid)
 		s, err := u.redigo.Sorted().Search().Score(k, uid, uid)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -65,7 +65,7 @@ func (u *Updater) Update(req *texupd.UpdateI) (*texupd.UpdateO, error) {
 
 	var mod bool
 	{
-		k := fmt.Sprintf(key.Update, oid, tid)
+		k := fmt.Sprintf(key.UpdateResource, oid, tid)
 		v := val
 		s := uid
 

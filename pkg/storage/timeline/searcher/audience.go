@@ -24,7 +24,7 @@ func (s *Searcher) searchAud(req *timeline.SearchI) (*audience.SearchO, error) {
 	// having support for chunking.
 	var str []string
 	{
-		k := fmt.Sprintf(key.Audience, oid)
+		k := fmt.Sprintf(key.AudienceResource, oid)
 		str, err = s.redigo.Sorted().Search().Index(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)

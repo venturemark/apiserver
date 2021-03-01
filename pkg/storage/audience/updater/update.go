@@ -32,7 +32,7 @@ func (u *Updater) Update(req *audience.UpdateI) (*audience.UpdateO, error) {
 
 	var cur []byte
 	{
-		k := fmt.Sprintf(key.Audience, oid)
+		k := fmt.Sprintf(key.AudienceResource, oid)
 		s, err := u.redigo.Sorted().Search().Score(k, aid, aid)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -95,7 +95,7 @@ func (u *Updater) Update(req *audience.UpdateI) (*audience.UpdateO, error) {
 
 	var upd bool
 	{
-		k := fmt.Sprintf(key.Audience, oid)
+		k := fmt.Sprintf(key.AudienceResource, oid)
 		v := val
 		s := aid
 		i := index.New(index.Name, aud.Obj.Property.Name)

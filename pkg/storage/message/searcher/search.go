@@ -35,7 +35,7 @@ func (s *Searcher) Search(req *message.SearchI) (*message.SearchO, error) {
 	// having support for chunking.
 	var str []string
 	{
-		k := fmt.Sprintf(key.Message, oid, tid, uid)
+		k := fmt.Sprintf(key.MessageResource, oid, tid, uid)
 		str, err = s.redigo.Sorted().Search().Index(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)

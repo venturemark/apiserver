@@ -24,6 +24,11 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 		oid = req.Obj.Metadata[metadata.OrganizationID]
 	}
 
+	var usr string
+	{
+		usr = req.Obj.Metadata[metadata.UserID]
+	}
+
 	// We manage data on a timeline. Our main identifier is a unix timestamp in
 	// nano seconds, normalized to the UTC timezone. Our discovery mechanisms is
 	// designed based on this very unix timestamp. Everything starts with time,
@@ -62,12 +67,22 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Timeline, oid)
+		k := fmt.Sprintf(key.TimelineResource, oid)
 		v := val
 		s := tid
 		i := index.New(index.Name, req.Obj.Property.Name)
 
 		err = c.redigo.Sorted().Create().Element(k, v, s, i)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	{
+		k := fmt.Sprintf(key.Owner, fmt.Sprintf(key.TimelineResource, oid))
+		v := usr
+
+		err = c.redigo.Simple().Create().Element(k, v)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

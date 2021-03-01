@@ -33,7 +33,7 @@ func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 
 	var tim *schema.Timeline
 	{
-		k := fmt.Sprintf(key.Timeline, oid)
+		k := fmt.Sprintf(key.TimelineResource, oid)
 
 		s, err := u.redigo.Sorted().Search().Score(k, tid, tid)
 		if err != nil {
@@ -75,7 +75,7 @@ func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 	// unique element.
 	var upd bool
 	{
-		k := fmt.Sprintf(key.Timeline, oid)
+		k := fmt.Sprintf(key.TimelineResource, oid)
 		v := val
 		s := tid
 

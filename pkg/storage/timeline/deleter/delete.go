@@ -33,7 +33,7 @@ func (d *Deleter) Delete(req *timeline.DeleteI) (*timeline.DeleteO, error) {
 
 	var tim *schema.Timeline
 	{
-		k := fmt.Sprintf(key.Timeline, oid)
+		k := fmt.Sprintf(key.TimelineResource, oid)
 		s, err := d.redigo.Sorted().Search().Score(k, tid, tid)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -63,7 +63,7 @@ func (d *Deleter) Delete(req *timeline.DeleteI) (*timeline.DeleteO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Timeline, oid)
+		k := fmt.Sprintf(key.TimelineResource, oid)
 		s := tid
 
 		err = d.redigo.Sorted().Delete().Score(k, s)

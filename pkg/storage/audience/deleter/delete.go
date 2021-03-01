@@ -31,7 +31,7 @@ func (d *Deleter) Delete(req *audience.DeleteI) (*audience.DeleteO, error) {
 
 	var aud *schema.Audience
 	{
-		k := fmt.Sprintf(key.Audience, oid)
+		k := fmt.Sprintf(key.AudienceResource, oid)
 		s, err := d.redigo.Sorted().Search().Score(k, aid, aid)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -61,7 +61,7 @@ func (d *Deleter) Delete(req *audience.DeleteI) (*audience.DeleteO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Audience, oid)
+		k := fmt.Sprintf(key.AudienceResource, oid)
 		s := aid
 
 		err = d.redigo.Sorted().Delete().Score(k, s)
