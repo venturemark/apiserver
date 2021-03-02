@@ -3,19 +3,31 @@ package texupd
 import (
 	"context"
 
+	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/texupd"
 	"github.com/xh3b4sd/tracer"
+
+	"github.com/venturemark/apiserver/pkg/context/user"
 )
 
-func (h *Handler) Update(ctx context.Context, obj *texupd.UpdateI) (*texupd.UpdateO, error) {
+func (h *Handler) Update(ctx context.Context, req *texupd.UpdateI) (*texupd.UpdateO, error) {
 	{
-		ok, err := h.storage.TexUpd.Updater.Verify(obj)
+		u, ok := user.FromContext(ctx)
+		if !ok {
+			return nil, tracer.Mask(invalidUserError)
+		}
+
+		req.Obj.Metadata[metadata.UserID] = u
+	}
+
+	{
+		ok, err := h.storage.TexUpd.Updater.Verify(req)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 
 		if ok {
-			res, err := h.storage.TexUpd.Updater.Update(obj)
+			res, err := h.storage.TexUpd.Updater.Update(req)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}

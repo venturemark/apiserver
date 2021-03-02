@@ -1,7 +1,5 @@
 # Playground
 
-
-
 You can build and run it like this if you have `go` installed. Note that the
 server does not log anything at this point.
 

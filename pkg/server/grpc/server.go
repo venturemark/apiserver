@@ -11,6 +11,7 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"github.com/venturemark/apiserver/pkg/handler"
+	"github.com/venturemark/apiserver/pkg/interceptor/oauth"
 	"github.com/venturemark/apiserver/pkg/interceptor/stack"
 )
 
@@ -49,21 +50,34 @@ func NewServer(config ServerConfig) (*Server, error) {
 
 	var err error
 
-	var e *stack.Interceptor
+	var oau *oauth.Interceptor
 	{
-		c := stack.InterceptorConfig{
+		c := oauth.InterceptorConfig{
 			Logger: config.Logger,
 		}
 
-		e, err = stack.NewInterceptor(c)
+		oau, err = oauth.NewInterceptor(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 	}
 
-	var u []grpc.UnaryServerInterceptor
+	var sta *stack.Interceptor
 	{
-		u = append(u, e.Interceptor())
+		c := stack.InterceptorConfig{
+			Logger: config.Logger,
+		}
+
+		sta, err = stack.NewInterceptor(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	var cui []grpc.UnaryServerInterceptor
+	{
+		cui = append(cui, sta.Interceptor()) // stack first for error logging
+		cui = append(cui, oau.Interceptor())
 	}
 
 	s := &Server{
@@ -71,7 +85,7 @@ func NewServer(config ServerConfig) (*Server, error) {
 		handlers: config.Handlers,
 
 		server: grpc.NewServer(
-			grpc.ChainUnaryInterceptor(u...),
+			grpc.ChainUnaryInterceptor(cui...),
 		),
 
 		host: config.Host,
