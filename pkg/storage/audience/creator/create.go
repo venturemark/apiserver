@@ -76,7 +76,6 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 		}
 	}
 
-	//     rx    o1 o2
 	{
 		k := fmt.Sprintf(key.AudienceOwner, oid)
 		v := val
