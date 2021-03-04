@@ -24,21 +24,25 @@ func (c *Creator) Create(req *role.CreateI) (*role.CreateO, error) {
 	// tracked IDs once in seconds, which caused problems when progammatically
 	// faking demo timelines, because only one timeline per second could be
 	// created.
-	var rid float64
+	var roi float64
 	{
-		rid = float64(time.Now().UTC().UnixNano())
+		roi = float64(time.Now().UTC().UnixNano())
 	}
 
-	var sha string
+	var rei string
 	{
-		sha = resource.Hash(req.Obj[0].Metadata)
+		rei = resource.Hash(req.Obj[0].Metadata)
+	}
+
+	var sid string
+	{
+		sid = req.Obj[0].Metadata[metadata.SubjectID]
 	}
 
 	{
-		req.Obj[0].Metadata[metadata.RoleID] = strconv.FormatFloat(rid, 'f', -1, 64)
+		req.Obj[0].Metadata[metadata.RoleID] = strconv.FormatFloat(roi, 'f', -1, 64)
 	}
 
-	var res string
 	var val string
 	{
 		rol := schema.Role{
@@ -56,16 +60,16 @@ func (c *Creator) Create(req *role.CreateI) (*role.CreateO, error) {
 			return nil, tracer.Mask(err)
 		}
 
-		res = rol.Resource()
 		val = string(byt)
 	}
 
 	{
-		k := fmt.Sprintf(key.Role, sha)
+		k := fmt.Sprintf(key.Role, rei)
 		v := val
-		s := rid
+		s := roi
+		i := sid
 
-		err = c.redigo.Sorted().Create().Element(k, v, s)
+		err = c.redigo.Sorted().Create().Element(k, v, s, i)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
