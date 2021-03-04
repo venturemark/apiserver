@@ -83,7 +83,7 @@ func (s *Searcher) searchAll(req *timeline.SearchI) ([]string, error) {
 	var str []string
 	{
 		k := fmt.Sprintf(key.Timeline, oid)
-		str, err = s.redigo.Sorted().Search().Index(k, 0, -1)
+		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
