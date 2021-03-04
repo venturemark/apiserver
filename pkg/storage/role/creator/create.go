@@ -8,6 +8,7 @@ import (
 
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
+	"github.com/venturemark/apicommon/pkg/resource"
 	"github.com/venturemark/apicommon/pkg/schema"
 	"github.com/venturemark/apigengo/pkg/pbf/role"
 	"github.com/xh3b4sd/tracer"
@@ -28,15 +29,16 @@ func (c *Creator) Create(req *role.CreateI) (*role.CreateO, error) {
 		rid = float64(time.Now().UTC().UnixNano())
 	}
 
-	var sid string
+	var sha string
 	{
-		sid = req.Obj[0].Metadata[metadata.SubjectID]
+		sha = resource.Hash(req.Obj[0].Metadata)
 	}
 
 	{
 		req.Obj[0].Metadata[metadata.RoleID] = strconv.FormatFloat(rid, 'f', -1, 64)
 	}
 
+	var res string
 	var val string
 	{
 		rol := schema.Role{
@@ -54,11 +56,12 @@ func (c *Creator) Create(req *role.CreateI) (*role.CreateO, error) {
 			return nil, tracer.Mask(err)
 		}
 
+		res = rol.Resource()
 		val = string(byt)
 	}
 
 	{
-		k := fmt.Sprintf(key.Role, sid)
+		k := fmt.Sprintf(key.Role, sha)
 		v := val
 		s := rid
 
