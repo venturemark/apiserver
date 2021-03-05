@@ -17,11 +17,6 @@ import (
 func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 	var err error
 
-	var oid string
-	{
-		oid = req.Obj.Metadata[metadata.OrganizationID]
-	}
-
 	// We manage data on a timeline. Our main identifier is a unix timestamp in
 	// nano seconds, normalized to the UTC timezone. Our discovery mechanisms is
 	// designed based on this very unix timestamp. Everything starts with time,
@@ -32,6 +27,11 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 	var aid float64
 	{
 		aid = float64(time.Now().UTC().UnixNano())
+	}
+
+	var vid string
+	{
+		vid = req.Obj.Metadata[metadata.VentureID]
 	}
 
 	{
@@ -60,7 +60,7 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Audience, oid)
+		k := fmt.Sprintf(key.Audience, vid)
 		v := val
 		s := aid
 		i := index.New(index.Name, req.Obj.Property.Name)

@@ -20,11 +20,6 @@ import (
 func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 	var err error
 
-	var oid string
-	{
-		oid = req.Obj.Metadata[metadata.OrganizationID]
-	}
-
 	var tid string
 	{
 		tid = req.Obj.Metadata[metadata.TimelineID]
@@ -40,6 +35,11 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 	var uid float64
 	{
 		uid = float64(time.Now().UTC().UnixNano())
+	}
+
+	var vid string
+	{
+		vid = req.Obj.Metadata[metadata.VentureID]
 	}
 
 	{
@@ -66,7 +66,7 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Update, oid, tid)
+		k := fmt.Sprintf(key.Update, vid, tid)
 		v := val
 		s := uid
 

@@ -37,7 +37,7 @@ func Test_Timeline_Verify_False(t *testing.T) {
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.OrganizationID: "org-al9qy",
+						metadata.VentureID: "org-al9qy",
 					},
 				},
 			},
@@ -45,8 +45,7 @@ func Test_Timeline_Verify_False(t *testing.T) {
 				return true, nil
 			},
 		},
-		// Case 3 ensures that create input without organization ID is not
-		// valid.
+		// Case 3 ensures that create input without venture ID is not valid.
 		{
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
@@ -65,8 +64,8 @@ func Test_Timeline_Verify_False(t *testing.T) {
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.OrganizationID: "org-al9qy",
-						metadata.TimelineID:     "0",
+						metadata.VentureID:  "org-al9qy",
+						metadata.TimelineID: "0",
 					},
 				},
 			},
@@ -124,8 +123,8 @@ func Test_Timeline_Verify_True(t *testing.T) {
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.OrganizationID: "org-al9qy",
-						metadata.TimelineID:     "1606329189",
+						metadata.VentureID:  "org-al9qy",
+						metadata.TimelineID: "1606329189",
 					},
 				},
 			},
@@ -138,8 +137,8 @@ func Test_Timeline_Verify_True(t *testing.T) {
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.OrganizationID: "org-w4ndz",
-						metadata.TimelineID:     "1605559909",
+						metadata.VentureID:  "org-w4ndz",
+						metadata.TimelineID: "1605559909",
 					},
 				},
 			},

@@ -18,11 +18,6 @@ import (
 func (d *Deleter) Delete(req *texupd.DeleteI) (*texupd.DeleteO, error) {
 	var err error
 
-	var oid string
-	{
-		oid = req.Obj.Metadata[metadata.OrganizationID]
-	}
-
 	var tid string
 	{
 		tid = req.Obj.Metadata[metadata.TimelineID]
@@ -36,9 +31,14 @@ func (d *Deleter) Delete(req *texupd.DeleteI) (*texupd.DeleteO, error) {
 		}
 	}
 
+	var vid string
+	{
+		vid = req.Obj.Metadata[metadata.VentureID]
+	}
+
 	var upd *schema.Update
 	{
-		k := fmt.Sprintf(key.Update, oid, tid)
+		k := fmt.Sprintf(key.Update, vid, tid)
 		s, err := d.redigo.Sorted().Search().Score(k, uid, uid)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -68,7 +68,7 @@ func (d *Deleter) Delete(req *texupd.DeleteI) (*texupd.DeleteO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Update, oid, tid)
+		k := fmt.Sprintf(key.Update, vid, tid)
 		s := uid
 
 		err = d.redigo.Sorted().Delete().Score(k, s)

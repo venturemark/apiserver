@@ -18,11 +18,6 @@ import (
 func (u *Updater) Update(req *texupd.UpdateI) (*texupd.UpdateO, error) {
 	var err error
 
-	var oid string
-	{
-		oid = req.Obj.Metadata[metadata.OrganizationID]
-	}
-
 	var tid string
 	{
 		tid = req.Obj.Metadata[metadata.TimelineID]
@@ -36,9 +31,14 @@ func (u *Updater) Update(req *texupd.UpdateI) (*texupd.UpdateO, error) {
 		}
 	}
 
+	var vid string
+	{
+		vid = req.Obj.Metadata[metadata.VentureID]
+	}
+
 	var upd *schema.Update
 	{
-		k := fmt.Sprintf(key.Update, oid, tid)
+		k := fmt.Sprintf(key.Update, vid, tid)
 		s, err := u.redigo.Sorted().Search().Score(k, uid, uid)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -65,7 +65,7 @@ func (u *Updater) Update(req *texupd.UpdateI) (*texupd.UpdateO, error) {
 
 	var mod bool
 	{
-		k := fmt.Sprintf(key.Update, oid, tid)
+		k := fmt.Sprintf(key.Update, vid, tid)
 		v := val
 		s := uid
 

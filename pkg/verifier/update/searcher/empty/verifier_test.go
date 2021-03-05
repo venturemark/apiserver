@@ -60,8 +60,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.OrganizationID: "<id>",
-							metadata.TimelineID:     "<id>",
+							metadata.VentureID:  "<id>",
+							metadata.TimelineID: "<id>",
 						},
 					},
 					{
@@ -78,8 +78,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.OrganizationID: "<id>",
-							metadata.TimelineID:     "<id>",
+							metadata.VentureID:  "<id>",
+							metadata.TimelineID: "<id>",
 						},
 						Property: &update.SearchI_Obj_Property{},
 					},
@@ -92,15 +92,14 @@ func Test_Empty_Verify_False(t *testing.T) {
 				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.OrganizationID: "<id>",
+							metadata.VentureID: "<id>",
 						},
 						Property: &update.SearchI_Obj_Property{},
 					},
 				},
 			},
 		},
-		// Case 8 ensures that search input without organization ID is not
-		// valid.
+		// Case 8 ensures that search input without venture ID is not valid.
 		{
 			req: &update.SearchI{
 				Obj: []*update.SearchI_Obj{
@@ -151,8 +150,8 @@ func Test_Empty_Verify_True(t *testing.T) {
 				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.OrganizationID: "<id>",
-							metadata.TimelineID:     "<id>",
+							metadata.VentureID:  "<id>",
+							metadata.TimelineID: "<id>",
 						},
 					},
 				},
@@ -164,8 +163,8 @@ func Test_Empty_Verify_True(t *testing.T) {
 				Obj: []*update.SearchI_Obj{
 					{
 						Metadata: map[string]string{
-							metadata.OrganizationID: "<id>",
-							metadata.TimelineID:     "<id>",
+							metadata.VentureID:  "<id>",
+							metadata.TimelineID: "<id>",
 						},
 					},
 				},

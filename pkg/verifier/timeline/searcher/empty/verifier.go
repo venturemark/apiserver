@@ -17,9 +17,6 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if there is any information given for searching timelines. The
-// only piece of information we need is the organization ID provided with the
-// object metadata. It is only allowed to provide one search object.
 func (v *Verifier) Verify(req *timeline.SearchI) (bool, error) {
 	{
 		if len(req.Obj) != 1 {
@@ -31,7 +28,7 @@ func (v *Verifier) Verify(req *timeline.SearchI) (bool, error) {
 	}
 
 	{
-		if req.Obj[0].Metadata[metadata.OrganizationID] == "" {
+		if req.Obj[0].Metadata[metadata.VentureID] == "" {
 			return false, nil
 		}
 		if req.Obj[0].Metadata[metadata.UserID] == "" {
