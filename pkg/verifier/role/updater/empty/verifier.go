@@ -34,9 +34,6 @@ func (v *Verifier) Verify(req *role.UpdateI) (bool, error) {
 		if req.Obj[0].Metadata[metadata.RoleID] == "" {
 			return false, nil
 		}
-		if req.Obj[0].Metadata[metadata.SubjectID] == "" {
-			return false, nil
-		}
 	}
 
 	{

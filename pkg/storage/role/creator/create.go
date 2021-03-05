@@ -17,6 +17,11 @@ import (
 func (c *Creator) Create(req *role.CreateI) (*role.CreateO, error) {
 	var err error
 
+	var reh string
+	{
+		reh = resource.Hash(req.Obj[0].Metadata)
+	}
+
 	// We manage data on a timeline. Our main identifier is a unix timestamp in
 	// nano seconds, normalized to the UTC timezone. Our discovery mechanisms is
 	// designed based on this very unix timestamp. Everything starts with time,
@@ -27,11 +32,6 @@ func (c *Creator) Create(req *role.CreateI) (*role.CreateO, error) {
 	var roi float64
 	{
 		roi = float64(time.Now().UTC().UnixNano())
-	}
-
-	var rei string
-	{
-		rei = resource.Hash(req.Obj[0].Metadata)
 	}
 
 	var sid string
@@ -64,7 +64,7 @@ func (c *Creator) Create(req *role.CreateI) (*role.CreateO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Role, rei)
+		k := fmt.Sprintf(key.Role, reh)
 		v := val
 		s := roi
 		i := sid

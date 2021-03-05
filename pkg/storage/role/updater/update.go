@@ -8,6 +8,7 @@ import (
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
+	"github.com/venturemark/apicommon/pkg/resource"
 	"github.com/venturemark/apicommon/pkg/schema"
 	"github.com/venturemark/apigengo/pkg/pbf/role"
 	"github.com/xh3b4sd/tracer"
@@ -24,14 +25,14 @@ func (u *Updater) Update(req *role.UpdateI) (*role.UpdateO, error) {
 		}
 	}
 
-	var sid string
+	var reh string
 	{
-		sid = req.Obj[0].Metadata[metadata.SubjectID]
+		reh = resource.Hash(req.Obj[0].Metadata)
 	}
 
 	var cur []byte
 	{
-		k := fmt.Sprintf(key.Role, sid)
+		k := fmt.Sprintf(key.Role, reh)
 		s, err := u.redigo.Sorted().Search().Score(k, rid, rid)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -86,7 +87,7 @@ func (u *Updater) Update(req *role.UpdateI) (*role.UpdateO, error) {
 
 	var upd bool
 	{
-		k := fmt.Sprintf(key.Role, sid)
+		k := fmt.Sprintf(key.Role, reh)
 		v := val
 		s := rid
 

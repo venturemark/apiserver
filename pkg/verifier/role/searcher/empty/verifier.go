@@ -28,7 +28,7 @@ func (v *Verifier) Verify(req *role.SearchI) (bool, error) {
 	}
 
 	{
-		if req.Obj[0].Metadata[metadata.SubjectID] == "" {
+		if req.Obj[0].Metadata[metadata.VentureID] == "" {
 			return false, nil
 		}
 	}
