@@ -10,7 +10,7 @@ require (
 	github.com/venturemark/apicommon v0.2.0
 	github.com/venturemark/apigengo v0.0.0-20210129164645-bb5f1f84dae1
 	github.com/xh3b4sd/logger v0.1.2
-	github.com/xh3b4sd/redigo v0.15.0
+	github.com/xh3b4sd/redigo v0.16.0
 	github.com/xh3b4sd/rescue v0.2.1
 	github.com/xh3b4sd/tracer v0.3.1
 	google.golang.org/grpc v1.36.0
