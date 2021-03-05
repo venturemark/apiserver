@@ -31,7 +31,7 @@ func (v *Verifier) Verify(req *timeline.DeleteI) (bool, error) {
 	}
 
 	{
-		if req.Obj.Metadata[metadata.OrganizationID] == "" {
+		if req.Obj.Metadata[metadata.VentureID] == "" {
 			return false, nil
 		}
 		if req.Obj.Metadata[metadata.TimelineID] == "" {

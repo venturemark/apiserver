@@ -18,19 +18,19 @@ import (
 func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 	var err error
 
-	var oid string
-	{
-		oid = req.Obj[0].Metadata[metadata.OrganizationID]
-	}
-
 	var tid string
 	{
 		tid = req.Obj[0].Metadata[metadata.TimelineID]
 	}
 
+	var vid string
+	{
+		vid = req.Obj[0].Metadata[metadata.VentureID]
+	}
+
 	var str []string
 	{
-		k := fmt.Sprintf(key.Update, oid, tid)
+		k := fmt.Sprintf(key.Update, vid, tid)
 		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)

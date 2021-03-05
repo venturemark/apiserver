@@ -42,8 +42,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 4 ensures that create input without organization ID in the
-		// metadata is not valid.
+		// Case 4 ensures that create input without venture ID in the metadata
+		// is not valid.
 		{
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
@@ -57,13 +57,12 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 5 ensures that create input without timeline ID is not
-		// valid.
+		// Case 5 ensures that create input without timeline ID is not valid.
 		{
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.OrganizationID: "<id>",
+						metadata.VentureID: "<id>",
 					},
 					Property: &texupd.CreateI_Obj_Property{
 						Text: "Lorem ipsum ...",
@@ -76,8 +75,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.OrganizationID: "<id>",
-						metadata.TimelineID:     "<id>",
+						metadata.VentureID:  "<id>",
+						metadata.TimelineID: "<id>",
 					},
 					Property: &texupd.CreateI_Obj_Property{
 						Text: "",
@@ -90,8 +89,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.OrganizationID: "<id>",
-						metadata.TimelineID:     "<id>",
+						metadata.VentureID:  "<id>",
+						metadata.TimelineID: "<id>",
 					},
 					Property: &texupd.CreateI_Obj_Property{
 						Text: "foo bar",
@@ -136,9 +135,9 @@ func Test_Empty_Verify_True(t *testing.T) {
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.OrganizationID: "<id>",
-						metadata.TimelineID:     "<id>",
-						metadata.UserID:         "<id>",
+						metadata.VentureID:  "<id>",
+						metadata.TimelineID: "<id>",
+						metadata.UserID:     "<id>",
 					},
 					Property: &texupd.CreateI_Obj_Property{
 						Text: "Lorem ipsum ...",
@@ -151,9 +150,9 @@ func Test_Empty_Verify_True(t *testing.T) {
 			req: &texupd.CreateI{
 				Obj: &texupd.CreateI_Obj{
 					Metadata: map[string]string{
-						metadata.OrganizationID: "<id>",
-						metadata.TimelineID:     "<id>",
-						metadata.UserID:         "<id>",
+						metadata.VentureID:  "<id>",
+						metadata.TimelineID: "<id>",
+						metadata.UserID:     "<id>",
 					},
 					Property: &texupd.CreateI_Obj_Property{
 						Text: "Foo barr ...",

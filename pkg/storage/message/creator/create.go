@@ -18,9 +18,16 @@ import (
 func (c *Creator) Create(req *message.CreateI) (*message.CreateO, error) {
 	var err error
 
-	var oid string
+	// We manage data on a timeline. Our main identifier is a unix timestamp in
+	// nano seconds, normalized to the UTC timezone. Our discovery mechanisms is
+	// designed based on this very unix timestamp. Everything starts with time,
+	// which means that pseudo random IDs are irrelevant for us. Note that we
+	// tracked IDs once in seconds, which caused problems when progammatically
+	// faking demo timelines, because only one timeline per second could be
+	// created.
+	var mid float64
 	{
-		oid = req.Obj.Metadata[metadata.OrganizationID]
+		mid = float64(time.Now().UTC().UnixNano())
 	}
 
 	var tid string
@@ -33,16 +40,9 @@ func (c *Creator) Create(req *message.CreateI) (*message.CreateO, error) {
 		uid = req.Obj.Metadata[metadata.UpdateID]
 	}
 
-	// We manage data on a timeline. Our main identifier is a unix timestamp in
-	// nano seconds, normalized to the UTC timezone. Our discovery mechanisms is
-	// designed based on this very unix timestamp. Everything starts with time,
-	// which means that pseudo random IDs are irrelevant for us. Note that we
-	// tracked IDs once in seconds, which caused problems when progammatically
-	// faking demo timelines, because only one timeline per second could be
-	// created.
-	var mid float64
+	var vid string
 	{
-		mid = float64(time.Now().UTC().UnixNano())
+		vid = req.Obj.Metadata[metadata.VentureID]
 	}
 
 	{
@@ -70,7 +70,7 @@ func (c *Creator) Create(req *message.CreateI) (*message.CreateO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Message, oid, tid, uid)
+		k := fmt.Sprintf(key.Message, vid, tid, uid)
 		v := val
 		s := mid
 

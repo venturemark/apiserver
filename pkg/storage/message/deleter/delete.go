@@ -15,11 +15,6 @@ import (
 func (c *Deleter) Delete(req *message.DeleteI) (*message.DeleteO, error) {
 	var err error
 
-	var oid string
-	{
-		oid = req.Obj.Metadata[metadata.OrganizationID]
-	}
-
 	var mid float64
 	{
 		mid, err = strconv.ParseFloat(req.Obj.Metadata[metadata.MessageID], 64)
@@ -38,8 +33,13 @@ func (c *Deleter) Delete(req *message.DeleteI) (*message.DeleteO, error) {
 		uid = req.Obj.Metadata[metadata.UpdateID]
 	}
 
+	var vid string
 	{
-		k := fmt.Sprintf(key.Message, oid, tid, uid)
+		vid = req.Obj.Metadata[metadata.VentureID]
+	}
+
+	{
+		k := fmt.Sprintf(key.Message, vid, tid, uid)
 		s := mid
 
 		err = c.redigo.Sorted().Delete().Score(k, s)

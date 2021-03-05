@@ -45,15 +45,6 @@ func (v *Verifier) Verify(req *timeline.DeleteI) (bool, error) {
 		}
 	}
 
-	var oid string
-	{
-		oid = req.Obj.Metadata[metadata.OrganizationID]
-
-		if oid == "" {
-			return false, nil
-		}
-	}
-
 	var tid float64
 	{
 		s := req.Obj.Metadata[metadata.TimelineID]
@@ -69,8 +60,17 @@ func (v *Verifier) Verify(req *timeline.DeleteI) (bool, error) {
 		tid = f
 	}
 
+	var vid string
 	{
-		k := fmt.Sprintf(key.Timeline, oid)
+		vid = req.Obj.Metadata[metadata.VentureID]
+
+		if vid == "" {
+			return false, nil
+		}
+	}
+
+	{
+		k := fmt.Sprintf(key.Timeline, vid)
 
 		s, err := v.redigo.Sorted().Search().Score(k, tid, tid)
 		if err != nil {

@@ -18,11 +18,6 @@ import (
 func (d *Deleter) Delete(req *timeline.DeleteI) (*timeline.DeleteO, error) {
 	var err error
 
-	var oid string
-	{
-		oid = req.Obj.Metadata[metadata.OrganizationID]
-	}
-
 	var tid float64
 	{
 		tid, err = strconv.ParseFloat(req.Obj.Metadata[metadata.TimelineID], 64)
@@ -31,9 +26,14 @@ func (d *Deleter) Delete(req *timeline.DeleteI) (*timeline.DeleteO, error) {
 		}
 	}
 
+	var vid string
+	{
+		vid = req.Obj.Metadata[metadata.VentureID]
+	}
+
 	var tim *schema.Timeline
 	{
-		k := fmt.Sprintf(key.Timeline, oid)
+		k := fmt.Sprintf(key.Timeline, vid)
 		s, err := d.redigo.Sorted().Search().Score(k, tid, tid)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -63,7 +63,7 @@ func (d *Deleter) Delete(req *timeline.DeleteI) (*timeline.DeleteO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Timeline, oid)
+		k := fmt.Sprintf(key.Timeline, vid)
 		s := tid
 
 		err = d.redigo.Sorted().Delete().Score(k, s)

@@ -17,10 +17,6 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if there is any information given for creating timelines. We
-// need the organization ID and timeline ID provided with the object metadata.
-// We need at least one of the existing properties to be specified in order to
-// update the specified timeline.
 func (v *Verifier) Verify(req *timeline.UpdateI) (bool, error) {
 	{
 		if req.Obj == nil {
@@ -35,7 +31,7 @@ func (v *Verifier) Verify(req *timeline.UpdateI) (bool, error) {
 	}
 
 	{
-		if req.Obj.Metadata[metadata.OrganizationID] == "" {
+		if req.Obj.Metadata[metadata.VentureID] == "" {
 			return false, nil
 		}
 		if req.Obj.Metadata[metadata.TimelineID] == "" {

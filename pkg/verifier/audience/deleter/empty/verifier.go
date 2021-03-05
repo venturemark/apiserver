@@ -17,9 +17,6 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if there is any information given for deleting audiences. What
-// we need is the audience ID, the organization ID and the user ID associated
-// with the audience.
 func (v *Verifier) Verify(req *audience.DeleteI) (bool, error) {
 	{
 		if req.Obj == nil {
@@ -34,7 +31,7 @@ func (v *Verifier) Verify(req *audience.DeleteI) (bool, error) {
 		if req.Obj.Metadata[metadata.AudienceID] == "" {
 			return false, nil
 		}
-		if req.Obj.Metadata[metadata.OrganizationID] == "" {
+		if req.Obj.Metadata[metadata.VentureID] == "" {
 			return false, nil
 		}
 		if req.Obj.Metadata[metadata.UserID] == "" {

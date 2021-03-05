@@ -17,10 +17,6 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if there is any information given for searching updates. The
-// information we need is the organization ID and the timeline ID provided with
-// the object metadata. It is only allowed to provide one search object since no
-// more complex search queries are implemented yet.
 func (v *Verifier) Verify(req *update.SearchI) (bool, error) {
 	{
 		if req.Api != nil {
@@ -38,7 +34,7 @@ func (v *Verifier) Verify(req *update.SearchI) (bool, error) {
 	}
 
 	{
-		if req.Obj[0].Metadata[metadata.OrganizationID] == "" {
+		if req.Obj[0].Metadata[metadata.VentureID] == "" {
 			return false, nil
 		}
 		if req.Obj[0].Metadata[metadata.TimelineID] == "" {

@@ -17,9 +17,6 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if there is any information given for creating timelines. The
-// only piece of information we need is the organization ID provided with the
-// object metadata.
 func (v *Verifier) Verify(req *timeline.CreateI) (bool, error) {
 	{
 		if req.Obj == nil {
@@ -34,7 +31,7 @@ func (v *Verifier) Verify(req *timeline.CreateI) (bool, error) {
 	}
 
 	{
-		if req.Obj.Metadata[metadata.OrganizationID] == "" {
+		if req.Obj.Metadata[metadata.VentureID] == "" {
 			return false, nil
 		}
 	}

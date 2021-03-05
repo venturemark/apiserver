@@ -14,16 +14,16 @@ import (
 func (s *Searcher) Search(req *audience.SearchI) (*audience.SearchO, error) {
 	var err error
 
-	var oid string
+	var vid string
 	{
-		oid = req.Obj[0].Metadata[metadata.OrganizationID]
+		vid = req.Obj[0].Metadata[metadata.VentureID]
 	}
 
 	// With redis we use ZREVRANGE which allows us to search for objects while
 	// having support for chunking.
 	var str []string
 	{
-		k := fmt.Sprintf(key.Audience, oid)
+		k := fmt.Sprintf(key.Audience, vid)
 		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)

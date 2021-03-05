@@ -42,8 +42,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 4 ensures that update input without organization ID in the
-		// metadata is not valid.
+		// Case 4 ensures that update input without venture ID in the metadata
+		// is not valid.
 		{
 			req: &texupd.UpdateI{
 				Obj: &texupd.UpdateI_Obj{
@@ -57,13 +57,12 @@ func Test_Empty_Verify_False(t *testing.T) {
 				},
 			},
 		},
-		// Case 5 ensures that update input without timeline ID is not
-		// valid.
+		// Case 5 ensures that update input without timeline ID is not valid.
 		{
 			req: &texupd.UpdateI{
 				Obj: &texupd.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.OrganizationID: "org-al9qy",
+						metadata.VentureID: "org-al9qy",
 					},
 					Property: &texupd.UpdateI_Obj_Property{
 						Text: "Lorem ipsum ...",
@@ -76,8 +75,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 			req: &texupd.UpdateI{
 				Obj: &texupd.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.OrganizationID: "org-al9qy",
-						metadata.TimelineID:     "1606329189",
+						metadata.VentureID:  "org-al9qy",
+						metadata.TimelineID: "1606329189",
 					},
 					Property: &texupd.UpdateI_Obj_Property{
 						Text: "",
@@ -91,8 +90,8 @@ func Test_Empty_Verify_False(t *testing.T) {
 			req: &texupd.UpdateI{
 				Obj: &texupd.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.OrganizationID: "<id>",
-						metadata.TimelineID:     "<id>",
+						metadata.VentureID:  "<id>",
+						metadata.TimelineID: "<id>",
 					},
 					Property: &texupd.UpdateI_Obj_Property{
 						Text: "Lorem ipsum ...",
@@ -137,9 +136,9 @@ func Test_Empty_Verify_True(t *testing.T) {
 			req: &texupd.UpdateI{
 				Obj: &texupd.UpdateI_Obj{
 					Metadata: map[string]string{
-						metadata.OrganizationID: "<id>",
-						metadata.TimelineID:     "<id>",
-						metadata.UpdateID:       "<id>",
+						metadata.VentureID:  "<id>",
+						metadata.TimelineID: "<id>",
+						metadata.UpdateID:   "<id>",
 					},
 					Property: &texupd.UpdateI_Obj_Property{
 						Text: "Lorem ipsum ...",
