@@ -4,7 +4,7 @@ go 1.15
 
 require (
 	github.com/evanphx/json-patch v0.5.2
-	github.com/google/go-cmp v0.5.4
+	github.com/google/go-cmp v0.5.5
 	github.com/lestrrat-go/jwx v1.1.4
 	github.com/spf13/cobra v1.1.3
 	github.com/venturemark/apicommon v0.2.0
