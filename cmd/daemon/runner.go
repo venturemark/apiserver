@@ -15,6 +15,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/handler"
 	"github.com/venturemark/apiserver/pkg/handler/audience"
 	"github.com/venturemark/apiserver/pkg/handler/message"
+	"github.com/venturemark/apiserver/pkg/handler/role"
 	"github.com/venturemark/apiserver/pkg/handler/texupd"
 	"github.com/venturemark/apiserver/pkg/handler/timeline"
 	"github.com/venturemark/apiserver/pkg/handler/update"
@@ -112,6 +113,19 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 		}
 	}
 
+	var roleHandler *role.Handler
+	{
+		c := role.HandlerConfig{
+			Logger:  r.logger,
+			Storage: redisStorage,
+		}
+
+		roleHandler, err = role.NewHandler(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
+
 	var texupdHandler *texupd.Handler
 	{
 		c := texupd.HandlerConfig{
@@ -158,6 +172,7 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 			Handlers: []handler.Interface{
 				audienceHandler,
 				messageHandler,
+				roleHandler,
 				texupdHandler,
 				timelineHandler,
 				updateHandler,

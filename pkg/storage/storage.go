@@ -8,6 +8,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/storage/audience"
 	"github.com/venturemark/apiserver/pkg/storage/message"
+	"github.com/venturemark/apiserver/pkg/storage/role"
 	"github.com/venturemark/apiserver/pkg/storage/texupd"
 	"github.com/venturemark/apiserver/pkg/storage/timeline"
 	"github.com/venturemark/apiserver/pkg/storage/update"
@@ -22,6 +23,7 @@ type Config struct {
 type Storage struct {
 	Audience *audience.Audience
 	Message  *message.Message
+	Role     *role.Role
 	TexUpd   *texupd.TexUpd
 	Timeline *timeline.Timeline
 	Update   *update.Update
@@ -53,6 +55,20 @@ func New(config Config) (*Storage, error) {
 		}
 
 		messageStorage, err = message.New(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	var roleStorage *role.Role
+	{
+		c := role.Config{
+			Logger: config.Logger,
+			Redigo: config.Redigo,
+			Rescue: config.Rescue,
+		}
+
+		roleStorage, err = role.New(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -103,6 +119,7 @@ func New(config Config) (*Storage, error) {
 	s := &Storage{
 		Audience: audienceStorage,
 		Message:  messageStorage,
+		Role:     roleStorage,
 		TexUpd:   texupdStorage,
 		Timeline: timelineStorage,
 		Update:   updateStorage,
