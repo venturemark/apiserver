@@ -28,6 +28,9 @@ func (v *Verifier) Verify(req *role.CreateI) (bool, error) {
 	}
 
 	{
+		if req.Obj[0].Metadata[metadata.ResourceID] == "" {
+			return false, nil
+		}
 		if req.Obj[0].Metadata[metadata.ResourceKind] == "" {
 			return false, nil
 		}

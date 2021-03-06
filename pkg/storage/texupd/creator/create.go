@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
-	"time"
 
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
@@ -20,30 +19,22 @@ import (
 func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 	var err error
 
-	var tid string
+	var tii string
 	{
-		tid = req.Obj.Metadata[metadata.TimelineID]
+		tii = req.Obj.Metadata[metadata.TimelineID]
 	}
 
-	// We manage data on a timeline. Our main identifier is a unix timestamp in
-	// nano seconds, normalized to the UTC timezone. Our discovery mechanisms is
-	// designed based on the unix timestamp, which acts ad ID. Everything starts
-	// with time, which means that pseudo random IDs are irrelevant for us. Note
-	// that we tracked IDs once in seconds, which caused problems when
-	// progammatically faking demo timelines, because only one timeline per
-	// second could be created.
-	var uid float64
+	var upi float64
 	{
-		uid = float64(time.Now().UTC().UnixNano())
+		upi, err = strconv.ParseFloat(req.Obj.Metadata[metadata.UpdateID], 64)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
 	}
 
-	var vid string
+	var vei string
 	{
-		vid = req.Obj.Metadata[metadata.VentureID]
-	}
-
-	{
-		req.Obj.Metadata[metadata.UpdateID] = strconv.FormatFloat(uid, 'f', -1, 64)
+		vei = req.Obj.Metadata[metadata.VentureID]
 	}
 
 	var val string
@@ -66,9 +57,9 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Update, vid, tid)
+		k := fmt.Sprintf(key.Update, vei, tii)
 		v := val
-		s := uid
+		s := upi
 
 		err = c.redigo.Sorted().Create().Element(k, v, s)
 		if err != nil {

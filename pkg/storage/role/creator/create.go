@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
-	"time"
 
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
@@ -21,25 +20,17 @@ func (c *Creator) Create(req *role.CreateI) (*role.CreateO, error) {
 		rei = req.Obj[0].Metadata[metadata.ResourceID]
 	}
 
-	// We manage data on a timeline. Our main identifier is a unix timestamp in
-	// nano seconds, normalized to the UTC timezone. Our discovery mechanisms is
-	// designed based on this very unix timestamp. Everything starts with time,
-	// which means that pseudo random IDs are irrelevant for us. Note that we
-	// tracked IDs once in seconds, which caused problems when progammatically
-	// faking demo timelines, because only one timeline per second could be
-	// created.
 	var roi float64
 	{
-		roi = float64(time.Now().UTC().UnixNano())
+		roi, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.RoleID], 64)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
 	}
 
 	var sui string
 	{
 		sui = req.Obj[0].Metadata[metadata.SubjectID]
-	}
-
-	{
-		req.Obj[0].Metadata[metadata.RoleID] = strconv.FormatFloat(roi, 'f', -1, 64)
 	}
 
 	var val string

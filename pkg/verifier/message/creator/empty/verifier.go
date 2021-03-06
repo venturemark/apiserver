@@ -33,9 +33,6 @@ func (v *Verifier) Verify(req *message.CreateI) (bool, error) {
 	}
 
 	{
-		if req.Obj.Metadata[metadata.VentureID] == "" {
-			return false, nil
-		}
 		if req.Obj.Metadata[metadata.TimelineID] == "" {
 			return false, nil
 		}
@@ -43,6 +40,9 @@ func (v *Verifier) Verify(req *message.CreateI) (bool, error) {
 			return false, nil
 		}
 		if req.Obj.Metadata[metadata.UserID] == "" {
+			return false, nil
+		}
+		if req.Obj.Metadata[metadata.VentureID] == "" {
 			return false, nil
 		}
 	}

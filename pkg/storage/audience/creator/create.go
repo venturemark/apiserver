@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
-	"time"
 
 	"github.com/venturemark/apicommon/pkg/index"
 	"github.com/venturemark/apicommon/pkg/key"
@@ -17,25 +16,17 @@ import (
 func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 	var err error
 
-	// We manage data on a timeline. Our main identifier is a unix timestamp in
-	// nano seconds, normalized to the UTC timezone. Our discovery mechanisms is
-	// designed based on this very unix timestamp. Everything starts with time,
-	// which means that pseudo random IDs are irrelevant for us. Note that we
-	// tracked IDs once in seconds, which caused problems when progammatically
-	// faking demo timelines, because only one timeline per second could be
-	// created.
-	var aid float64
+	var aui float64
 	{
-		aid = float64(time.Now().UTC().UnixNano())
+		aui, err = strconv.ParseFloat(req.Obj.Metadata[metadata.AudienceID], 64)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
 	}
 
-	var vid string
+	var vei string
 	{
-		vid = req.Obj.Metadata[metadata.VentureID]
-	}
-
-	{
-		req.Obj.Metadata[metadata.AudienceID] = strconv.FormatFloat(aid, 'f', -1, 64)
+		vei = req.Obj.Metadata[metadata.VentureID]
 	}
 
 	var val string
@@ -60,9 +51,9 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Audience, vid)
+		k := fmt.Sprintf(key.Audience, vei)
 		v := val
-		s := aid
+		s := aui
 		i := index.New(index.Name, req.Obj.Property.Name)
 
 		err = c.redigo.Sorted().Create().Element(k, v, s, i)

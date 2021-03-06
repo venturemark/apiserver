@@ -2,6 +2,8 @@ package role
 
 import (
 	"context"
+	"strconv"
+	"time"
 
 	"github.com/venturemark/apicommon/pkg/hash"
 	"github.com/venturemark/apicommon/pkg/metadata"
@@ -20,6 +22,12 @@ func (h *Handler) Create(ctx context.Context, req *role.CreateI) (*role.CreateO,
 
 		for i := range req.Obj {
 			req.Obj[i].Metadata[metadata.UserID] = u
+		}
+	}
+
+	{
+		for i := range req.Obj {
+			req.Obj[i].Metadata[metadata.RoleID] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
 		}
 	}
 
@@ -49,9 +57,7 @@ func (h *Handler) Create(ctx context.Context, req *role.CreateI) (*role.CreateO,
 		if !ok {
 			return nil, tracer.Mask(invalidInputError)
 		}
-	}
 
-	{
 		res, err := h.storage.Role.Creator.Create(req)
 		if err != nil {
 			return nil, tracer.Mask(err)
