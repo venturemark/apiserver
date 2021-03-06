@@ -8,7 +8,6 @@ import (
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
-	"github.com/venturemark/apicommon/pkg/resource"
 	"github.com/venturemark/apicommon/pkg/schema"
 	"github.com/venturemark/apigengo/pkg/pbf/role"
 	"github.com/xh3b4sd/tracer"
@@ -17,23 +16,23 @@ import (
 func (u *Updater) Update(req *role.UpdateI) (*role.UpdateO, error) {
 	var err error
 
-	var rid float64
+	var rei string
 	{
-		rid, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.RoleID], 64)
+		rei = req.Obj[0].Metadata[metadata.ResourceID]
+	}
+
+	var roi float64
+	{
+		roi, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.RoleID], 64)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 	}
 
-	var reh string
-	{
-		reh = resource.Hash(req.Obj[0].Metadata)
-	}
-
 	var cur []byte
 	{
-		k := fmt.Sprintf(key.Role, reh)
-		s, err := u.redigo.Sorted().Search().Score(k, rid, rid)
+		k := fmt.Sprintf(key.Role, rei)
+		s, err := u.redigo.Sorted().Search().Score(k, roi, roi)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -87,9 +86,9 @@ func (u *Updater) Update(req *role.UpdateI) (*role.UpdateO, error) {
 
 	var upd bool
 	{
-		k := fmt.Sprintf(key.Role, reh)
+		k := fmt.Sprintf(key.Role, rei)
 		v := val
-		s := rid
+		s := roi
 
 		upd, err = u.redigo.Sorted().Update().Value(k, v, s)
 		if err != nil {

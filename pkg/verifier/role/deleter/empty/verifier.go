@@ -28,6 +28,9 @@ func (v *Verifier) Verify(req *role.DeleteI) (bool, error) {
 	}
 
 	{
+		if req.Obj[0].Metadata[metadata.ResourceKind] == "" {
+			return false, nil
+		}
 		if req.Obj[0].Metadata[metadata.RoleID] == "" {
 			return false, nil
 		}

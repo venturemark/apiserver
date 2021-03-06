@@ -8,7 +8,6 @@ import (
 
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
-	"github.com/venturemark/apicommon/pkg/resource"
 	"github.com/venturemark/apicommon/pkg/schema"
 	"github.com/venturemark/apigengo/pkg/pbf/role"
 	"github.com/xh3b4sd/tracer"
@@ -17,9 +16,9 @@ import (
 func (c *Creator) Create(req *role.CreateI) (*role.CreateO, error) {
 	var err error
 
-	var reh string
+	var rei string
 	{
-		reh = resource.Hash(req.Obj[0].Metadata)
+		rei = req.Obj[0].Metadata[metadata.ResourceID]
 	}
 
 	// We manage data on a timeline. Our main identifier is a unix timestamp in
@@ -34,9 +33,9 @@ func (c *Creator) Create(req *role.CreateI) (*role.CreateO, error) {
 		roi = float64(time.Now().UTC().UnixNano())
 	}
 
-	var sid string
+	var sui string
 	{
-		sid = req.Obj[0].Metadata[metadata.SubjectID]
+		sui = req.Obj[0].Metadata[metadata.SubjectID]
 	}
 
 	{
@@ -48,10 +47,6 @@ func (c *Creator) Create(req *role.CreateI) (*role.CreateO, error) {
 		rol := schema.Role{
 			Obj: schema.RoleObj{
 				Metadata: req.Obj[0].Metadata,
-				Property: schema.RoleObjProperty{
-					Kin: req.Obj[0].Property.Kin,
-					Res: req.Obj[0].Property.Res,
-				},
 			},
 		}
 
@@ -64,10 +59,10 @@ func (c *Creator) Create(req *role.CreateI) (*role.CreateO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Role, reh)
+		k := fmt.Sprintf(key.Role, rei)
 		v := val
 		s := roi
-		i := sid
+		i := sui
 
 		err = c.redigo.Sorted().Create().Element(k, v, s, i)
 		if err != nil {

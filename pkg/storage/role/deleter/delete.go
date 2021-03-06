@@ -7,7 +7,6 @@ import (
 
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
-	"github.com/venturemark/apicommon/pkg/resource"
 	"github.com/venturemark/apicommon/pkg/schema"
 	"github.com/venturemark/apigengo/pkg/pbf/role"
 	"github.com/xh3b4sd/rescue/pkg/task"
@@ -17,14 +16,14 @@ import (
 func (d *Deleter) Delete(req *role.DeleteI) (*role.DeleteO, error) {
 	var err error
 
-	var reh string
+	var rei string
 	{
-		reh = resource.Hash(req.Obj[0].Metadata)
+		rei = req.Obj[0].Metadata[metadata.ResourceID]
 	}
 
-	var rid float64
+	var roi float64
 	{
-		rid, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.RoleID], 64)
+		roi, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.RoleID], 64)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -32,8 +31,8 @@ func (d *Deleter) Delete(req *role.DeleteI) (*role.DeleteO, error) {
 
 	var rol *schema.Role
 	{
-		k := fmt.Sprintf(key.Role, reh)
-		s, err := d.redigo.Sorted().Search().Score(k, rid, rid)
+		k := fmt.Sprintf(key.Role, rei)
+		s, err := d.redigo.Sorted().Search().Score(k, roi, roi)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -62,8 +61,8 @@ func (d *Deleter) Delete(req *role.DeleteI) (*role.DeleteO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Role, reh)
-		s := rid
+		k := fmt.Sprintf(key.Role, rei)
+		s := roi
 
 		err = d.redigo.Sorted().Delete().Score(k, s)
 		if err != nil {

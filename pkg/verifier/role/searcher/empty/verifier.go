@@ -28,16 +28,7 @@ func (v *Verifier) Verify(req *role.SearchI) (bool, error) {
 	}
 
 	{
-		if req.Obj[0].Metadata[metadata.VentureID] == "" {
-			return false, nil
-		}
-	}
-
-	{
-		// Any search request with object property specifics is not valid for
-		// search requests at this point. We will extend functionality here
-		// later.
-		if req.Obj[0].Property != nil {
+		if req.Obj[0].Metadata[metadata.ResourceKind] == "" {
 			return false, nil
 		}
 	}
