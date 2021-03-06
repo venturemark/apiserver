@@ -2,9 +2,13 @@ package audience
 
 import (
 	"context"
+	"strconv"
+	"time"
 
+	"github.com/venturemark/apicommon/pkg/hash"
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/audience"
+	"github.com/venturemark/apigengo/pkg/pbf/role"
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/context/user"
@@ -21,20 +25,55 @@ func (h *Handler) Create(ctx context.Context, req *audience.CreateI) (*audience.
 	}
 
 	{
+		req.Obj.Metadata[metadata.AudienceID] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
+	}
+
+	{
+		rol := &role.CreateI{
+			Obj: []*role.CreateI_Obj{
+				{
+					Metadata: map[string]string{
+						metadata.AudienceID:   req.Obj.Metadata[metadata.AudienceID],
+						metadata.ResourceID:   hash.Audience(req.Obj.Metadata),
+						metadata.ResourceKind: "audience",
+						metadata.RoleID:       strconv.FormatInt(time.Now().UTC().UnixNano(), 10),
+						metadata.RoleKind:     "owner",
+						metadata.SubjectID:    req.Obj.Metadata[metadata.UserID],
+					},
+				},
+			},
+		}
+
+		ok, err := h.storage.Role.Creator.Verify(rol)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+
+		if !ok {
+			return nil, tracer.Mask(invalidInputError)
+		}
+
+		_, err = h.storage.Role.Creator.Create(rol)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	{
 		ok, err := h.storage.Audience.Creator.Verify(req)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 
-		if ok {
-			res, err := h.storage.Audience.Creator.Create(req)
-			if err != nil {
-				return nil, tracer.Mask(err)
-			}
-
-			return res, nil
+		if !ok {
+			return nil, tracer.Mask(invalidInputError)
 		}
-	}
 
-	return nil, tracer.Mask(invalidInputError)
+		res, err := h.storage.Audience.Creator.Create(req)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+
+		return res, nil
+	}
 }

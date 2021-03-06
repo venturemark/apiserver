@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/venturemark/apicommon/pkg/key"
-	"github.com/venturemark/apicommon/pkg/resource"
+	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apicommon/pkg/schema"
 	"github.com/venturemark/apigengo/pkg/pbf/role"
 	"github.com/xh3b4sd/tracer"
@@ -14,16 +14,16 @@ import (
 func (s *Searcher) Search(req *role.SearchI) (*role.SearchO, error) {
 	var err error
 
-	var reh string
+	var rei string
 	{
-		reh = resource.Hash(req.Obj[0].Metadata)
+		rei = req.Obj[0].Metadata[metadata.ResourceID]
 	}
 
 	// With redis we use ZREVRANGE which allows us to search for objects while
 	// having support for chunking.
 	var str []string
 	{
-		k := fmt.Sprintf(key.Role, reh)
+		k := fmt.Sprintf(key.Role, rei)
 		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -43,10 +43,6 @@ func (s *Searcher) Search(req *role.SearchI) (*role.SearchO, error) {
 
 			o := &role.SearchO_Obj{
 				Metadata: rol.Obj.Metadata,
-				Property: &role.SearchO_Obj_Property{
-					Kin: rol.Obj.Property.Kin,
-					Res: rol.Obj.Property.Res,
-				},
 			}
 
 			res.Obj = append(res.Obj, o)

@@ -17,23 +17,18 @@ import (
 func (u *Updater) Update(req *audience.UpdateI) (*audience.UpdateO, error) {
 	var err error
 
-	var aid float64
+	var aui float64
 	{
-		aid, err = strconv.ParseFloat(req.Obj.Metadata[metadata.AudienceID], 64)
+		aui, err = strconv.ParseFloat(req.Obj.Metadata[metadata.AudienceID], 64)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 	}
 
-	var vid string
-	{
-		vid = req.Obj.Metadata[metadata.VentureID]
-	}
-
 	var cur []byte
 	{
-		k := fmt.Sprintf(key.Audience, vid)
-		s, err := u.redigo.Sorted().Search().Score(k, aid, aid)
+		k := fmt.Sprintf(key.Audience)
+		s, err := u.redigo.Sorted().Search().Score(k, aui, aui)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -95,9 +90,9 @@ func (u *Updater) Update(req *audience.UpdateI) (*audience.UpdateO, error) {
 
 	var upd bool
 	{
-		k := fmt.Sprintf(key.Audience, vid)
+		k := fmt.Sprintf(key.Audience)
 		v := val
-		s := aid
+		s := aui
 		i := index.New(index.Name, aud.Obj.Property.Name)
 
 		upd, err = u.redigo.Sorted().Update().Value(k, v, s, i)

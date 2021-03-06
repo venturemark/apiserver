@@ -33,10 +33,10 @@ func (v *Verifier) Verify(req *audience.CreateI) (bool, error) {
 	}
 
 	{
-		if req.Obj.Metadata[metadata.VentureID] == "" {
+		if req.Obj.Metadata[metadata.UserID] == "" {
 			return false, nil
 		}
-		if req.Obj.Metadata[metadata.UserID] == "" {
+		if req.Obj.Metadata[metadata.VentureID] == "" {
 			return false, nil
 		}
 	}

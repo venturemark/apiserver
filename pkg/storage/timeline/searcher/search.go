@@ -73,16 +73,16 @@ func (s *Searcher) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 func (s *Searcher) searchAll(req *timeline.SearchI) ([]string, error) {
 	var err error
 
-	var vid string
+	var vei string
 	{
-		vid = req.Obj[0].Metadata[metadata.VentureID]
+		vei = req.Obj[0].Metadata[metadata.VentureID]
 	}
 
 	// With redis we use ZREVRANGE which allows us to search for objects while
 	// having support for chunking.
 	var str []string
 	{
-		k := fmt.Sprintf(key.Timeline, vid)
+		k := fmt.Sprintf(key.Timeline, vei)
 		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -108,9 +108,9 @@ func (s *Searcher) searchUsr(req *timeline.SearchI) ([]string, error) {
 		uid = req.Obj[0].Metadata[metadata.UserID]
 	}
 
-	var vid string
+	var vei string
 	{
-		vid = req.Obj[0].Metadata[metadata.VentureID]
+		vei = req.Obj[0].Metadata[metadata.VentureID]
 	}
 
 	var tim []string
@@ -127,16 +127,16 @@ func (s *Searcher) searchUsr(req *timeline.SearchI) ([]string, error) {
 	var res []string
 	{
 		for _, t := range tim {
-			var tid float64
+			var tii float64
 			{
-				tid, err = strconv.ParseFloat(t, 64)
+				tii, err = strconv.ParseFloat(t, 64)
 				if err != nil {
 					return nil, tracer.Mask(err)
 				}
 			}
 
-			k := fmt.Sprintf(key.Timeline, vid)
-			str, err := s.redigo.Sorted().Search().Score(k, tid, tid)
+			k := fmt.Sprintf(key.Timeline, vei)
+			str, err := s.redigo.Sorted().Search().Score(k, tii, tii)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}

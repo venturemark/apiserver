@@ -24,14 +24,9 @@ func (d *Deleter) Delete(req *audience.DeleteI) (*audience.DeleteO, error) {
 		}
 	}
 
-	var vid string
-	{
-		vid = req.Obj.Metadata[metadata.VentureID]
-	}
-
 	var aud *schema.Audience
 	{
-		k := fmt.Sprintf(key.Audience, vid)
+		k := fmt.Sprintf(key.Audience)
 		s, err := d.redigo.Sorted().Search().Score(k, aid, aid)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -61,7 +56,7 @@ func (d *Deleter) Delete(req *audience.DeleteI) (*audience.DeleteO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Audience, vid)
+		k := fmt.Sprintf(key.Audience)
 		s := aid
 
 		err = d.redigo.Sorted().Delete().Score(k, s)
