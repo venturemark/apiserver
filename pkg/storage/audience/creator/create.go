@@ -24,11 +24,6 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 		}
 	}
 
-	var vei string
-	{
-		vei = req.Obj.Metadata[metadata.VentureID]
-	}
-
 	var val string
 	{
 		aud := schema.Audience{
@@ -51,7 +46,7 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Audience, vei)
+		k := fmt.Sprintf(key.Audience)
 		v := val
 		s := aui
 		i := index.New(index.Name, req.Obj.Property.Name)

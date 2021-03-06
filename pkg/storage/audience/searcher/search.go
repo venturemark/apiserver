@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/venturemark/apicommon/pkg/key"
-	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apicommon/pkg/schema"
 	"github.com/venturemark/apigengo/pkg/pbf/audience"
 	"github.com/xh3b4sd/tracer"
@@ -14,16 +13,11 @@ import (
 func (s *Searcher) Search(req *audience.SearchI) (*audience.SearchO, error) {
 	var err error
 
-	var vid string
-	{
-		vid = req.Obj[0].Metadata[metadata.VentureID]
-	}
-
 	// With redis we use ZREVRANGE which allows us to search for objects while
 	// having support for chunking.
 	var str []string
 	{
-		k := fmt.Sprintf(key.Audience, vid)
+		k := fmt.Sprintf(key.Audience)
 		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
