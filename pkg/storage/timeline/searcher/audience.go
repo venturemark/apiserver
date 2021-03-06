@@ -15,16 +15,16 @@ import (
 func (s *Searcher) searchAud(req *timeline.SearchI) (*audience.SearchO, error) {
 	var err error
 
-	var vid string
+	var vei string
 	{
-		vid = req.Obj[0].Metadata[metadata.VentureID]
+		vei = req.Obj[0].Metadata[metadata.VentureID]
 	}
 
 	// With redis we use ZREVRANGE which allows us to search for objects while
 	// having support for chunking.
 	var str []string
 	{
-		k := fmt.Sprintf(key.Audience, vid)
+		k := fmt.Sprintf(key.Audience, vei)
 		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)

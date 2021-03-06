@@ -30,7 +30,6 @@ func (h *Handler) Create(ctx context.Context, req *audience.CreateI) (*audience.
 						metadata.ResourceKind: "audience",
 						metadata.RoleKind:     "owner",
 						metadata.SubjectID:    req.Obj.Metadata[metadata.UserID],
-						metadata.VentureID:    req.Obj.Metadata[metadata.VentureID],
 					},
 				},
 			},

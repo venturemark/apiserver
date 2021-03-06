@@ -26,6 +26,8 @@ func (h *Handler) Create(ctx context.Context, req *role.CreateI) (*role.CreateO,
 	{
 		for i := range req.Obj {
 			switch req.Obj[i].Metadata[metadata.ResourceKind] {
+			case "audience":
+				req.Obj[i].Metadata[metadata.ResourceID] = hash.Audience(req.Obj[i].Metadata)
 			case "message":
 				req.Obj[i].Metadata[metadata.ResourceID] = hash.Message(req.Obj[i].Metadata)
 			case "timeline":

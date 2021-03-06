@@ -26,18 +26,18 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 	// tracked IDs once in seconds, which caused problems when progammatically
 	// faking demo timelines, because only one timeline per second could be
 	// created.
-	var tid float64
+	var tii float64
 	{
-		tid = float64(time.Now().UTC().UnixNano())
+		tii = float64(time.Now().UTC().UnixNano())
 	}
 
-	var vid string
+	var vei string
 	{
-		vid = req.Obj.Metadata[metadata.VentureID]
+		vei = req.Obj.Metadata[metadata.VentureID]
 	}
 
 	{
-		req.Obj.Metadata[metadata.TimelineID] = strconv.FormatFloat(tid, 'f', -1, 64)
+		req.Obj.Metadata[metadata.TimelineID] = strconv.FormatFloat(tii, 'f', -1, 64)
 	}
 
 	var val string
@@ -62,9 +62,9 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Timeline, vid)
+		k := fmt.Sprintf(key.Timeline, vei)
 		v := val
-		s := tid
+		s := tii
 		i := index.New(index.Name, req.Obj.Property.Name)
 
 		err = c.redigo.Sorted().Create().Element(k, v, s, i)

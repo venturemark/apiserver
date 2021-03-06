@@ -18,24 +18,24 @@ import (
 func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 	var err error
 
-	var tid float64
+	var tii float64
 	{
-		tid, err = strconv.ParseFloat(req.Obj.Metadata[metadata.TimelineID], 64)
+		tii, err = strconv.ParseFloat(req.Obj.Metadata[metadata.TimelineID], 64)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 	}
 
-	var vid string
+	var vei string
 	{
-		vid = req.Obj.Metadata[metadata.VentureID]
+		vei = req.Obj.Metadata[metadata.VentureID]
 	}
 
 	var tim *schema.Timeline
 	{
-		k := fmt.Sprintf(key.Timeline, vid)
+		k := fmt.Sprintf(key.Timeline, vei)
 
-		s, err := u.redigo.Sorted().Search().Score(k, tid, tid)
+		s, err := u.redigo.Sorted().Search().Score(k, tii, tii)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -75,9 +75,9 @@ func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 	// unique element.
 	var upd bool
 	{
-		k := fmt.Sprintf(key.Timeline, vid)
+		k := fmt.Sprintf(key.Timeline, vei)
 		v := val
-		s := tid
+		s := tii
 
 		var i string
 		if req.Obj.Property.Name != nil {
