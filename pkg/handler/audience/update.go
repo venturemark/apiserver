@@ -29,9 +29,7 @@ func (h *Handler) Update(ctx context.Context, req *audience.UpdateI) (*audience.
 		if !ok {
 			return nil, tracer.Mask(invalidInputError)
 		}
-	}
 
-	{
 		res, err := h.storage.Audience.Updater.Update(req)
 		if err != nil {
 			return nil, tracer.Mask(err)

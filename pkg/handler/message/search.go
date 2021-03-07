@@ -31,9 +31,7 @@ func (h *Handler) Search(ctx context.Context, req *message.SearchI) (*message.Se
 		if !ok {
 			return nil, tracer.Mask(invalidInputError)
 		}
-	}
 
-	{
 		res, err := h.storage.Message.Searcher.Search(req)
 		if err != nil {
 			return nil, tracer.Mask(err)
