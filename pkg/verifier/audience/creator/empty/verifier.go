@@ -17,8 +17,6 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if there is any information given for creating audiences. What
-// we need is the name of the audience and a list of user IDs associated to it.
 func (v *Verifier) Verify(req *audience.CreateI) (bool, error) {
 	{
 		if req.Obj == nil {

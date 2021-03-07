@@ -17,7 +17,6 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if there is any information given for searching messages.
 func (v *Verifier) Verify(req *message.SearchI) (bool, error) {
 	{
 		// We need a single object with a single metadata label for the user's

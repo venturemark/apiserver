@@ -1,14 +1,12 @@
-package state
+package exist
 
 import (
-	"encoding/json"
 	"fmt"
 	"strconv"
 
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
-	"github.com/venturemark/apicommon/pkg/schema"
-	"github.com/venturemark/apigengo/pkg/pbf/timeline"
+	"github.com/venturemark/apigengo/pkg/pbf/audience"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
 )
@@ -33,7 +31,9 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-func (v *Verifier) Verify(req *timeline.DeleteI) (bool, error) {
+func (v *Verifier) Verify(req *audience.DeleteI) (bool, error) {
+	var err error
+
 	{
 		if req.Obj == nil {
 			return false, nil
@@ -43,45 +43,24 @@ func (v *Verifier) Verify(req *timeline.DeleteI) (bool, error) {
 		}
 	}
 
-	var tii float64
+	var aui float64
 	{
-		s := req.Obj.Metadata[metadata.TimelineID]
-		if s == "" {
-			return false, nil
-		}
-
-		f, err := strconv.ParseFloat(s, 64)
+		aui, err = strconv.ParseFloat(req.Obj.Metadata[metadata.AudienceID], 64)
 		if err != nil {
 			return false, tracer.Mask(err)
-		}
-
-		tii = f
-	}
-
-	var vei string
-	{
-		vei = req.Obj.Metadata[metadata.VentureID]
-
-		if vei == "" {
-			return false, nil
 		}
 	}
 
 	{
-		k := fmt.Sprintf(key.Timeline, vei)
+		k := fmt.Sprintf(key.Audience)
+		s := aui
 
-		s, err := v.redigo.Sorted().Search().Score(k, tii, tii)
+		exi, err := v.redigo.Sorted().Exists().Score(k, s)
 		if err != nil {
 			return false, tracer.Mask(err)
 		}
 
-		tim := &schema.Timeline{}
-		err = json.Unmarshal([]byte(s[0]), tim)
-		if err != nil {
-			return false, tracer.Mask(err)
-		}
-
-		if tim.Obj.Property.Stat != "archived" {
+		if !exi {
 			return false, nil
 		}
 	}

@@ -29,8 +29,6 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if a text update is too old to be modified. We have a
-// theshold of 5 minutes after creation.
 func (v *Verifier) Verify(req *texupd.UpdateI) (bool, error) {
 	{
 		if req.Obj == nil {
@@ -41,16 +39,16 @@ func (v *Verifier) Verify(req *texupd.UpdateI) (bool, error) {
 		}
 	}
 
-	var uid string
+	var upi string
 	{
-		uid = req.Obj.Metadata[metadata.UpdateID]
-		if uid == "" {
+		upi = req.Obj.Metadata[metadata.UpdateID]
+		if upi == "" {
 			return false, nil
 		}
 	}
 
 	{
-		i, err := strconv.ParseInt(uid, 10, 64)
+		i, err := strconv.ParseInt(upi, 10, 64)
 		if err != nil {
 			return false, tracer.Mask(err)
 		}

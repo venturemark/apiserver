@@ -17,8 +17,6 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if there is any information given for creating messages. What
-// we need is the text of the message and sufficient metadata for association.
 func (v *Verifier) Verify(req *message.CreateI) (bool, error) {
 	{
 		if req.Obj == nil {

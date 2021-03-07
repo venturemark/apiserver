@@ -16,8 +16,6 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks for the timeline name and the timeline description to respect
-// the defined character limits.
 func (v *Verifier) Verify(req *timeline.UpdateI) (bool, error) {
 	{
 		if req.Obj == nil {

@@ -17,7 +17,6 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if there is any information given for updating text updates.
 func (v *Verifier) Verify(req *texupd.UpdateI) (bool, error) {
 	{
 		if req.Obj == nil {

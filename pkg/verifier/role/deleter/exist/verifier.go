@@ -1,4 +1,4 @@
-package timeline
+package exist
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
-	"github.com/venturemark/apigengo/pkg/pbf/texupd"
+	"github.com/venturemark/apigengo/pkg/pbf/role"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
 )
@@ -31,40 +31,34 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if the timeline which the text update should be created for
-// does even exist. Creating text updates requires a timeline to exist.
-func (v *Verifier) Verify(req *texupd.CreateI) (bool, error) {
+func (v *Verifier) Verify(req *role.DeleteI) (bool, error) {
+	var err error
+
 	{
-		if req.Obj == nil {
+		if len(req.Obj) != 1 {
 			return false, nil
 		}
-		if req.Obj.Metadata == nil {
+		if req.Obj[0].Metadata == nil {
 			return false, nil
 		}
 	}
 
-	var tii string
-	var vei string
+	var rei string
 	{
-		tii = req.Obj.Metadata[metadata.TimelineID]
-		vei = req.Obj.Metadata[metadata.VentureID]
-
-		if tii == "" {
-			return false, nil
-		}
-		if vei == "" {
-			return false, nil
-		}
+		rei = req.Obj[0].Metadata[metadata.ResourceID]
 	}
 
+	var roi float64
 	{
-		i, err := strconv.ParseFloat(tii, 64)
+		roi, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.RoleID], 64)
 		if err != nil {
 			return false, tracer.Mask(err)
 		}
+	}
 
-		k := fmt.Sprintf(key.Timeline, vei)
-		s := i
+	{
+		k := fmt.Sprintf(key.Role, rei)
+		s := roi
 
 		exi, err := v.redigo.Sorted().Exists().Score(k, s)
 		if err != nil {
