@@ -8,6 +8,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/verifier/role/deleter"
 	"github.com/venturemark/apiserver/pkg/verifier/role/deleter/empty"
+	"github.com/venturemark/apiserver/pkg/verifier/role/deleter/exist"
 )
 
 type Config struct {
@@ -47,6 +48,18 @@ func New(config Config) (*Deleter, error) {
 		}
 	}
 
+	var existVerifier *exist.Verifier
+	{
+		c := exist.VerifierConfig{
+			Redigo: config.Redigo,
+		}
+
+		existVerifier, err = exist.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	d := &Deleter{
 		logger: config.Logger,
 		redigo: config.Redigo,
@@ -54,6 +67,7 @@ func New(config Config) (*Deleter, error) {
 
 		verify: []deleter.Interface{
 			emptyVerifier,
+			existVerifier,
 		},
 	}
 

@@ -17,8 +17,6 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if there is any information given for updating audiences. What
-// we need is metadata and json patch input.
 func (v *Verifier) Verify(req *audience.UpdateI) (bool, error) {
 	{
 		if req.Obj == nil {

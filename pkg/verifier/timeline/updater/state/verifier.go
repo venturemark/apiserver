@@ -16,7 +16,6 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if the timeline state, if given, is either active or archived.
 func (v *Verifier) Verify(req *timeline.UpdateI) (bool, error) {
 	{
 		if req.Obj == nil {

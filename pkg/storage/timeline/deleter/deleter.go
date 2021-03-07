@@ -8,6 +8,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/deleter"
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/deleter/empty"
+	"github.com/venturemark/apiserver/pkg/verifier/timeline/deleter/exist"
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/deleter/state"
 )
 
@@ -60,6 +61,18 @@ func New(config Config) (*Deleter, error) {
 		}
 	}
 
+	var existVerifier *exist.Verifier
+	{
+		c := exist.VerifierConfig{
+			Redigo: config.Redigo,
+		}
+
+		existVerifier, err = exist.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	d := &Deleter{
 		logger: config.Logger,
 		redigo: config.Redigo,
@@ -67,6 +80,7 @@ func New(config Config) (*Deleter, error) {
 
 		verify: []deleter.Interface{
 			emptyVerifier,
+			existVerifier,
 			stateVerifier,
 		},
 	}

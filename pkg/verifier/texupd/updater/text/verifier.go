@@ -16,7 +16,6 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks for text to not be longer than 280 characters.
 func (v *Verifier) Verify(req *texupd.UpdateI) (bool, error) {
 	{
 		if req.Obj == nil {
