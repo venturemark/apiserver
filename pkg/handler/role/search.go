@@ -49,9 +49,7 @@ func (h *Handler) Search(ctx context.Context, req *role.SearchI) (*role.SearchO,
 		if !ok {
 			return nil, tracer.Mask(invalidInputError)
 		}
-	}
 
-	{
 		res, err := h.storage.Role.Searcher.Search(req)
 		if err != nil {
 			return nil, tracer.Mask(err)

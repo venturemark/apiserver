@@ -31,9 +31,7 @@ func (h *Handler) Search(ctx context.Context, req *timeline.SearchI) (*timeline.
 		if !ok {
 			return nil, tracer.Mask(invalidInputError)
 		}
-	}
 
-	{
 		res, err := h.storage.Timeline.Searcher.Search(req)
 		if err != nil {
 			return nil, tracer.Mask(err)

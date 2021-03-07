@@ -49,9 +49,7 @@ func (h *Handler) Update(ctx context.Context, req *role.UpdateI) (*role.UpdateO,
 		if !ok {
 			return nil, tracer.Mask(invalidInputError)
 		}
-	}
 
-	{
 		res, err := h.storage.Role.Updater.Update(req)
 		if err != nil {
 			return nil, tracer.Mask(err)

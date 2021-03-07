@@ -29,9 +29,7 @@ func (h *Handler) Delete(ctx context.Context, req *message.DeleteI) (*message.De
 		if !ok {
 			return nil, tracer.Mask(invalidInputError)
 		}
-	}
 
-	{
 		res, err := h.storage.Message.Deleter.Delete(req)
 		if err != nil {
 			return nil, tracer.Mask(err)
