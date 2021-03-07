@@ -5,6 +5,21 @@ import (
 	"github.com/venturemark/apigengo/pkg/pbf/role"
 )
 
+var (
+	resources = []string{
+		"audience",
+		"message",
+		"timeline",
+		"update",
+		"venture",
+	}
+
+	roles = []string{
+		"member",
+		"owner",
+	}
+)
+
 type VerifierConfig struct {
 }
 
@@ -42,5 +57,33 @@ func (v *Verifier) Verify(req *role.CreateI) (bool, error) {
 		}
 	}
 
+	{
+		l := resources
+		s := req.Obj[0].Metadata[metadata.ResourceKind]
+
+		if !contains(l, s) {
+			return false, nil
+		}
+	}
+
+	{
+		l := roles
+		s := req.Obj[0].Metadata[metadata.RoleKind]
+
+		if !contains(l, s) {
+			return false, nil
+		}
+	}
+
 	return true, nil
+}
+
+func contains(l []string, s string) bool {
+	for _, e := range l {
+		if e == s {
+			return true
+		}
+	}
+
+	return false
 }
