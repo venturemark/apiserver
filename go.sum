@@ -261,8 +261,8 @@ github.com/subosito/gotenv v1.2.0/go.mod h1:N0PQaV/YGNqwC0u51sEeR/aUtSLEXKX9iv69
 github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
 github.com/venturemark/apicommon v0.2.1-0.20210306221649-b82f9a1f9219 h1:I9MtHxbqwQmQ0v8EmqDGkJ5ImbNvV8xFFBpFEJ1d4xw=
 github.com/venturemark/apicommon v0.2.1-0.20210306221649-b82f9a1f9219/go.mod h1:ZMX36rBOB00RXCDdE3Jfe0uC9HNHyOwveD3ad874KuI=
-github.com/venturemark/apigengo v0.0.0-20210306160842-bf7b4a94aa92 h1:9gAIfBzHJxxyr3dyWUx/irPWDfZ+TxWVetjve0rrM78=
-github.com/venturemark/apigengo v0.0.0-20210306160842-bf7b4a94aa92/go.mod h1:fJtSDhgKu+UHfox3YVyRsbksWqQO7SYPLCEgIPEbR10=
+github.com/venturemark/apigengo v0.0.0-20210308111857-4ac80b51af61 h1:bE6stmDVBnWyTH1uKW9C8Dubjjkvhcct7jSt5LO/nyg=
+github.com/venturemark/apigengo v0.0.0-20210308111857-4ac80b51af61/go.mod h1:fJtSDhgKu+UHfox3YVyRsbksWqQO7SYPLCEgIPEbR10=
 github.com/xh3b4sd/budget v0.2.0 h1:xqnGRFwrwXW/hJnf5SCatXIVp/iHfC4ZFVYGmYZmT2Q=
 github.com/xh3b4sd/budget v0.2.0/go.mod h1:u4Ci+UNDDCeDNjEOCPYQduvWg+T4G8frIYDxs/YG/ss=
 github.com/xh3b4sd/logger v0.1.2 h1:zEE3obzyrGofvTNbT+T2U654e9XwqmGbzyktdRB1BR8=

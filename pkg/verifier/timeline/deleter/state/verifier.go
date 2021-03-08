@@ -35,17 +35,17 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 
 func (v *Verifier) Verify(req *timeline.DeleteI) (bool, error) {
 	{
-		if req.Obj == nil {
+		if len(req.Obj) != 1 {
 			return false, nil
 		}
-		if req.Obj.Metadata == nil {
+		if req.Obj[0].Metadata == nil {
 			return false, nil
 		}
 	}
 
 	var tii float64
 	{
-		s := req.Obj.Metadata[metadata.TimelineID]
+		s := req.Obj[0].Metadata[metadata.TimelineID]
 		if s == "" {
 			return false, nil
 		}
@@ -60,7 +60,7 @@ func (v *Verifier) Verify(req *timeline.DeleteI) (bool, error) {
 
 	var vei string
 	{
-		vei = req.Obj.Metadata[metadata.VentureID]
+		vei = req.Obj[0].Metadata[metadata.VentureID]
 
 		if vei == "" {
 			return false, nil

@@ -17,7 +17,9 @@ func (h *Handler) Update(ctx context.Context, req *texupd.UpdateI) (*texupd.Upda
 			return nil, tracer.Mask(invalidUserError)
 		}
 
-		req.Obj.Metadata[metadata.UserID] = u
+		for i := range req.Obj {
+			req.Obj[i].Metadata[metadata.UserID] = u
+		}
 	}
 
 	{

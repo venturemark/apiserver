@@ -7,7 +7,7 @@ import (
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/verifier/role/updater"
-	"github.com/venturemark/apiserver/pkg/verifier/role/updater/empty"
+	"github.com/venturemark/apiserver/pkg/verifier/role/updater/patch"
 )
 
 type Config struct {
@@ -37,11 +37,11 @@ func New(config Config) (*Updater, error) {
 
 	var err error
 
-	var emptyVerifier *empty.Verifier
+	var patchVerifier *patch.Verifier
 	{
-		c := empty.VerifierConfig{}
+		c := patch.VerifierConfig{}
 
-		emptyVerifier, err = empty.NewVerifier(c)
+		patchVerifier, err = patch.NewVerifier(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -53,7 +53,7 @@ func New(config Config) (*Updater, error) {
 		rescue: config.Rescue,
 
 		verify: []updater.Interface{
-			emptyVerifier,
+			patchVerifier,
 		},
 	}
 

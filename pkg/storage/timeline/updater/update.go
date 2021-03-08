@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 
+	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/venturemark/apicommon/pkg/index"
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
@@ -20,7 +21,7 @@ func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 
 	var tii float64
 	{
-		tii, err = strconv.ParseFloat(req.Obj.Metadata[metadata.TimelineID], 64)
+		tii, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.TimelineID], 64)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -28,62 +29,78 @@ func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 
 	var vei string
 	{
-		vei = req.Obj.Metadata[metadata.VentureID]
+		vei = req.Obj[0].Metadata[metadata.VentureID]
 	}
 
-	var tim *schema.Timeline
+	var cur []byte
 	{
 		k := fmt.Sprintf(key.Timeline, vei)
-
 		s, err := u.redigo.Sorted().Search().Score(k, tii, tii)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
-		tim = &schema.Timeline{}
+
+		tim := &schema.Timeline{}
 		err = json.Unmarshal([]byte(s[0]), tim)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 
-		if req.Obj.Property.Desc != nil {
-			tim.Obj.Property.Desc = *req.Obj.Property.Desc
+		cur, err = json.Marshal(tim)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	var pat []byte
+	{
+		var p []map[string]string
+
+		for _, j := range req.Obj[0].Jsnpatch {
+			m := map[string]string{
+				"op":    j.GetOpe(),
+				"path":  j.GetPat(),
+				"value": j.GetVal(),
+			}
+
+			p = append(p, m)
 		}
 
-		if req.Obj.Property.Name != nil {
-			tim.Obj.Property.Name = *req.Obj.Property.Name
-		}
-
-		if req.Obj.Property.Stat != nil {
-			tim.Obj.Property.Stat = *req.Obj.Property.Stat
+		pat, err = json.Marshal(p)
+		if err != nil {
+			return nil, tracer.Mask(err)
 		}
 	}
 
 	var val string
 	{
-		byt, err := json.Marshal(tim)
+		patch, err := jsonpatch.DecodePatch(pat)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 
-		val = string(byt)
+		des, err := patch.Apply(cur)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+
+		val = string(des)
 	}
 
-	// We store timelines in a sorted set. The elements of the sorted set are
-	// concatenated strings of t and e. Here t is the unix timestamp referring
-	// to the time right now at creation time. Here e is the timeline name. We
-	// track t as part of the element within the sorted set to guarantee a
-	// unique element.
+	var tim schema.Timeline
+	{
+		err := json.Unmarshal([]byte(val), &tim)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	var upd bool
 	{
 		k := fmt.Sprintf(key.Timeline, vei)
 		v := val
 		s := tii
-
-		var i string
-		if req.Obj.Property.Name != nil {
-			// If the name got updated we need to update its index as well.
-			i = index.New(index.Name, tim.Obj.Property.Name)
-		}
+		i := index.New(index.Name, tim.Obj.Property.Name)
 
 		upd, err = u.redigo.Sorted().Update().Value(k, v, s, i)
 		if err != nil {
@@ -94,13 +111,15 @@ func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 	var res *timeline.UpdateO
 	{
 		res = &timeline.UpdateO{
-			Obj: &timeline.UpdateO_Obj{
-				Metadata: map[string]string{},
+			Obj: []*timeline.UpdateO_Obj{
+				{
+					Metadata: map[string]string{},
+				},
 			},
 		}
 
 		if upd {
-			res.Obj.Metadata[metadata.TimelineStatus] = "updated"
+			res.Obj[0].Metadata[metadata.TimelineStatus] = "updated"
 		}
 	}
 

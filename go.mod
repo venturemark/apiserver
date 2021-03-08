@@ -8,7 +8,7 @@ require (
 	github.com/lestrrat-go/jwx v1.1.4
 	github.com/spf13/cobra v1.1.3
 	github.com/venturemark/apicommon v0.2.1-0.20210306221649-b82f9a1f9219
-	github.com/venturemark/apigengo v0.0.0-20210306160842-bf7b4a94aa92
+	github.com/venturemark/apigengo v0.0.0-20210308111857-4ac80b51af61
 	github.com/xh3b4sd/logger v0.1.2
 	github.com/xh3b4sd/redigo v0.16.0
 	github.com/xh3b4sd/rescue v0.2.1

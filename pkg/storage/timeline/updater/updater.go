@@ -7,9 +7,7 @@ import (
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/updater"
-	"github.com/venturemark/apiserver/pkg/verifier/timeline/updater/empty"
-	"github.com/venturemark/apiserver/pkg/verifier/timeline/updater/length"
-	"github.com/venturemark/apiserver/pkg/verifier/timeline/updater/state"
+	"github.com/venturemark/apiserver/pkg/verifier/timeline/updater/patch"
 )
 
 type Config struct {
@@ -39,31 +37,11 @@ func New(config Config) (*Updater, error) {
 
 	var err error
 
-	var emptyVerifier *empty.Verifier
+	var patchVerifier *patch.Verifier
 	{
-		c := empty.VerifierConfig{}
+		c := patch.VerifierConfig{}
 
-		emptyVerifier, err = empty.NewVerifier(c)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
-	var lengthVerifier *length.Verifier
-	{
-		c := length.VerifierConfig{}
-
-		lengthVerifier, err = length.NewVerifier(c)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
-	var stateVerifier *state.Verifier
-	{
-		c := state.VerifierConfig{}
-
-		stateVerifier, err = state.NewVerifier(c)
+		patchVerifier, err = patch.NewVerifier(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -75,9 +53,7 @@ func New(config Config) (*Updater, error) {
 		rescue: config.Rescue,
 
 		verify: []updater.Interface{
-			emptyVerifier,
-			lengthVerifier,
-			stateVerifier,
+			patchVerifier,
 		},
 	}
 

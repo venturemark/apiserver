@@ -18,28 +18,28 @@ import (
 func (d *Deleter) Delete(req *texupd.DeleteI) (*texupd.DeleteO, error) {
 	var err error
 
-	var tid string
+	var tii string
 	{
-		tid = req.Obj.Metadata[metadata.TimelineID]
+		tii = req.Obj[0].Metadata[metadata.TimelineID]
 	}
 
-	var uid float64
+	var upi float64
 	{
-		uid, err = strconv.ParseFloat(req.Obj.Metadata[metadata.UpdateID], 64)
+		upi, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.UpdateID], 64)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 	}
 
-	var vid string
+	var vei string
 	{
-		vid = req.Obj.Metadata[metadata.VentureID]
+		vei = req.Obj[0].Metadata[metadata.VentureID]
 	}
 
 	var upd *schema.Update
 	{
-		k := fmt.Sprintf(key.Update, vid, tid)
-		s, err := d.redigo.Sorted().Search().Score(k, uid, uid)
+		k := fmt.Sprintf(key.Update, vei, tii)
+		s, err := d.redigo.Sorted().Search().Score(k, upi, upi)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -68,8 +68,8 @@ func (d *Deleter) Delete(req *texupd.DeleteI) (*texupd.DeleteO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Update, vid, tid)
-		s := uid
+		k := fmt.Sprintf(key.Update, vei, tii)
+		s := upi
 
 		err = d.redigo.Sorted().Delete().Score(k, s)
 		if err != nil {
@@ -80,9 +80,11 @@ func (d *Deleter) Delete(req *texupd.DeleteI) (*texupd.DeleteO, error) {
 	var res *texupd.DeleteO
 	{
 		res = &texupd.DeleteO{
-			Obj: &texupd.DeleteO_Obj{
-				Metadata: map[string]string{
-					metadata.UpdateStatus: "deleted",
+			Obj: []*texupd.DeleteO_Obj{
+				{
+					Metadata: map[string]string{
+						metadata.UpdateStatus: "deleted",
+					},
 				},
 			},
 		}

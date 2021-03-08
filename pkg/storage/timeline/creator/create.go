@@ -20,7 +20,7 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 
 	var tii float64
 	{
-		tii, err = strconv.ParseFloat(req.Obj.Metadata[metadata.TimelineID], 64)
+		tii, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.TimelineID], 64)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -28,17 +28,17 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 
 	var vei string
 	{
-		vei = req.Obj.Metadata[metadata.VentureID]
+		vei = req.Obj[0].Metadata[metadata.VentureID]
 	}
 
 	var val string
 	{
 		tim := schema.Timeline{
 			Obj: schema.TimelineObj{
-				Metadata: req.Obj.Metadata,
+				Metadata: req.Obj[0].Metadata,
 				Property: schema.TimelineObjProperty{
-					Desc: req.Obj.Property.Desc,
-					Name: req.Obj.Property.Name,
+					Desc: req.Obj[0].Property.Desc,
+					Name: req.Obj[0].Property.Name,
 					Stat: "active",
 				},
 			},
@@ -56,7 +56,7 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 		k := fmt.Sprintf(key.Timeline, vei)
 		v := val
 		s := tii
-		i := index.New(index.Name, req.Obj.Property.Name)
+		i := index.New(index.Name, req.Obj[0].Property.Name)
 
 		err = c.redigo.Sorted().Create().Element(k, v, s, i)
 		if err != nil {
@@ -67,9 +67,11 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 	var res *timeline.CreateO
 	{
 		res = &timeline.CreateO{
-			Obj: &timeline.CreateO_Obj{
-				Metadata: map[string]string{
-					metadata.TimelineID: req.Obj.Metadata[metadata.TimelineID],
+			Obj: []*timeline.CreateO_Obj{
+				{
+					Metadata: map[string]string{
+						metadata.TimelineID: req.Obj[0].Metadata[metadata.TimelineID],
+					},
 				},
 			},
 		}

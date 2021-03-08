@@ -1,8 +1,8 @@
-package empty
+package patch
 
 import (
 	"github.com/venturemark/apicommon/pkg/metadata"
-	"github.com/venturemark/apigengo/pkg/pbf/role"
+	"github.com/venturemark/apigengo/pkg/pbf/texupd"
 )
 
 type VerifierConfig struct {
@@ -17,7 +17,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-func (v *Verifier) Verify(req *role.UpdateI) (bool, error) {
+func (v *Verifier) Verify(req *texupd.UpdateI) (bool, error) {
 	{
 		if len(req.Obj) != 1 {
 			return false, nil
@@ -31,7 +31,13 @@ func (v *Verifier) Verify(req *role.UpdateI) (bool, error) {
 	}
 
 	{
-		if req.Obj[0].Metadata[metadata.RoleID] == "" {
+		if req.Obj[0].Metadata[metadata.TimelineID] == "" {
+			return false, nil
+		}
+		if req.Obj[0].Metadata[metadata.UpdateID] == "" {
+			return false, nil
+		}
+		if req.Obj[0].Metadata[metadata.VentureID] == "" {
 			return false, nil
 		}
 	}
@@ -52,6 +58,21 @@ func (v *Verifier) Verify(req *role.UpdateI) (bool, error) {
 				return false, nil
 			}
 			if !opeRem && valEmp {
+				return false, nil
+			}
+		}
+	}
+
+	{
+		for i := range req.Obj[0].Jsnpatch {
+			if req.Obj[0].Jsnpatch[i].Pat != "/obj/property/text" {
+				continue
+			}
+
+			valEmp := req.Obj[0].Jsnpatch[i].Val != nil && *req.Obj[0].Jsnpatch[i].Val == ""
+			valLen := req.Obj[0].Jsnpatch[i].Val != nil && len(*req.Obj[0].Jsnpatch[i].Val) <= 280
+
+			if !valEmp && !valLen {
 				return false, nil
 			}
 		}

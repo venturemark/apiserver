@@ -18,7 +18,7 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 
 	var aui float64
 	{
-		aui, err = strconv.ParseFloat(req.Obj.Metadata[metadata.AudienceID], 64)
+		aui, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.AudienceID], 64)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -28,11 +28,11 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 	{
 		aud := schema.Audience{
 			Obj: schema.AudienceObj{
-				Metadata: req.Obj.Metadata,
+				Metadata: req.Obj[0].Metadata,
 				Property: schema.AudienceObjProperty{
-					Name: req.Obj.Property.Name,
-					Tmln: req.Obj.Property.Tmln,
-					User: req.Obj.Property.User,
+					Name: req.Obj[0].Property.Name,
+					Tmln: req.Obj[0].Property.Tmln,
+					User: req.Obj[0].Property.User,
 				},
 			},
 		}
@@ -49,7 +49,7 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 		k := fmt.Sprintf(key.Audience)
 		v := val
 		s := aui
-		i := index.New(index.Name, req.Obj.Property.Name)
+		i := index.New(index.Name, req.Obj[0].Property.Name)
 
 		err = c.redigo.Sorted().Create().Element(k, v, s, i)
 		if err != nil {
@@ -60,9 +60,11 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 	var res *audience.CreateO
 	{
 		res = &audience.CreateO{
-			Obj: &audience.CreateO_Obj{
-				Metadata: map[string]string{
-					metadata.AudienceID: req.Obj.Metadata[metadata.AudienceID],
+			Obj: []*audience.CreateO_Obj{
+				{
+					Metadata: map[string]string{
+						metadata.AudienceID: req.Obj[0].Metadata[metadata.AudienceID],
+					},
 				},
 			},
 		}

@@ -15,32 +15,32 @@ import (
 func (c *Deleter) Delete(req *message.DeleteI) (*message.DeleteO, error) {
 	var err error
 
-	var mid float64
+	var mei float64
 	{
-		mid, err = strconv.ParseFloat(req.Obj.Metadata[metadata.MessageID], 64)
+		mei, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.MessageID], 64)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 	}
 
-	var tid string
+	var tii string
 	{
-		tid = req.Obj.Metadata[metadata.TimelineID]
+		tii = req.Obj[0].Metadata[metadata.TimelineID]
 	}
 
-	var uid string
+	var upi string
 	{
-		uid = req.Obj.Metadata[metadata.UpdateID]
+		upi = req.Obj[0].Metadata[metadata.UpdateID]
 	}
 
-	var vid string
+	var vei string
 	{
-		vid = req.Obj.Metadata[metadata.VentureID]
+		vei = req.Obj[0].Metadata[metadata.VentureID]
 	}
 
 	{
-		k := fmt.Sprintf(key.Message, vid, tid, uid)
-		s := mid
+		k := fmt.Sprintf(key.Message, vei, tii, upi)
+		s := mei
 
 		err = c.redigo.Sorted().Delete().Score(k, s)
 		if err != nil {
@@ -51,9 +51,11 @@ func (c *Deleter) Delete(req *message.DeleteI) (*message.DeleteO, error) {
 	var res *message.DeleteO
 	{
 		res = &message.DeleteO{
-			Obj: &message.DeleteO_Obj{
-				Metadata: map[string]string{
-					metadata.MessageStatus: "deleted",
+			Obj: []*message.DeleteO_Obj{
+				{
+					Metadata: map[string]string{
+						metadata.MessageStatus: "deleted",
+					},
 				},
 			},
 		}

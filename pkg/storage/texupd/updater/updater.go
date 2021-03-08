@@ -7,8 +7,7 @@ import (
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/verifier/texupd/updater"
-	"github.com/venturemark/apiserver/pkg/verifier/texupd/updater/empty"
-	"github.com/venturemark/apiserver/pkg/verifier/texupd/updater/text"
+	"github.com/venturemark/apiserver/pkg/verifier/texupd/updater/patch"
 	"github.com/venturemark/apiserver/pkg/verifier/texupd/updater/time"
 )
 
@@ -39,21 +38,11 @@ func New(config Config) (*Updater, error) {
 
 	var err error
 
-	var emptyVerifier *empty.Verifier
+	var patchVerifier *patch.Verifier
 	{
-		c := empty.VerifierConfig{}
+		c := patch.VerifierConfig{}
 
-		emptyVerifier, err = empty.NewVerifier(c)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
-	var textVerifier *text.Verifier
-	{
-		c := text.VerifierConfig{}
-
-		textVerifier, err = text.NewVerifier(c)
+		patchVerifier, err = patch.NewVerifier(c)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -77,8 +66,7 @@ func New(config Config) (*Updater, error) {
 		rescue: config.Rescue,
 
 		verify: []updater.Interface{
-			emptyVerifier,
-			textVerifier,
+			patchVerifier,
 			timeVerifier,
 		},
 	}

@@ -35,17 +35,17 @@ func (v *Verifier) Verify(req *timeline.DeleteI) (bool, error) {
 	var err error
 
 	{
-		if req.Obj == nil {
+		if len(req.Obj) != 1 {
 			return false, nil
 		}
-		if req.Obj.Metadata == nil {
+		if req.Obj[0].Metadata == nil {
 			return false, nil
 		}
 	}
 
 	var tii float64
 	{
-		tii, err = strconv.ParseFloat(req.Obj.Metadata[metadata.TimelineID], 64)
+		tii, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.TimelineID], 64)
 		if err != nil {
 			return false, tracer.Mask(err)
 		}
@@ -53,7 +53,7 @@ func (v *Verifier) Verify(req *timeline.DeleteI) (bool, error) {
 
 	var vei string
 	{
-		vei = req.Obj.Metadata[metadata.VentureID]
+		vei = req.Obj[0].Metadata[metadata.VentureID]
 	}
 
 	{

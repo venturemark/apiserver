@@ -19,25 +19,25 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 
 func (v *Verifier) Verify(req *timeline.CreateI) (bool, error) {
 	{
-		if req.Obj == nil {
-			return false, nil
+		if len(req.Obj) != 1 {
+			return true, nil
 		}
-		if req.Obj.Metadata == nil {
-			return false, nil
+		if req.Obj[0].Metadata == nil {
+			return true, nil
 		}
-		if req.Obj.Property == nil {
+		if req.Obj[0].Property == nil {
+			return true, nil
+		}
+	}
+
+	{
+		if req.Obj[0].Metadata[metadata.VentureID] == "" {
 			return false, nil
 		}
 	}
 
 	{
-		if req.Obj.Metadata[metadata.VentureID] == "" {
-			return false, nil
-		}
-	}
-
-	{
-		if req.Obj.Property.Name == "" {
+		if req.Obj[0].Property.Name == "" {
 			return false, nil
 		}
 	}

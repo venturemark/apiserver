@@ -35,10 +35,10 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 // does even exist. Creating text updates requires a timeline to exist.
 func (v *Verifier) Verify(req *texupd.CreateI) (bool, error) {
 	{
-		if req.Obj == nil {
+		if len(req.Obj) != 1 {
 			return false, nil
 		}
-		if req.Obj.Metadata == nil {
+		if req.Obj[0].Metadata == nil {
 			return false, nil
 		}
 	}
@@ -46,8 +46,8 @@ func (v *Verifier) Verify(req *texupd.CreateI) (bool, error) {
 	var tii string
 	var vei string
 	{
-		tii = req.Obj.Metadata[metadata.TimelineID]
-		vei = req.Obj.Metadata[metadata.VentureID]
+		tii = req.Obj[0].Metadata[metadata.TimelineID]
+		vei = req.Obj[0].Metadata[metadata.VentureID]
 
 		if tii == "" {
 			return false, nil

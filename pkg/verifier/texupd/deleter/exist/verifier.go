@@ -35,17 +35,17 @@ func (v *Verifier) Verify(req *texupd.DeleteI) (bool, error) {
 	var err error
 
 	{
-		if req.Obj == nil {
+		if len(req.Obj) != 1 {
 			return false, nil
 		}
-		if req.Obj.Metadata == nil {
+		if req.Obj[0].Metadata == nil {
 			return false, nil
 		}
 	}
 
 	var upi float64
 	{
-		upi, err = strconv.ParseFloat(req.Obj.Metadata[metadata.UpdateID], 64)
+		upi, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.UpdateID], 64)
 		if err != nil {
 			return false, tracer.Mask(err)
 		}
@@ -53,12 +53,12 @@ func (v *Verifier) Verify(req *texupd.DeleteI) (bool, error) {
 
 	var tii string
 	{
-		tii = req.Obj.Metadata[metadata.TimelineID]
+		tii = req.Obj[0].Metadata[metadata.TimelineID]
 	}
 
 	var vei string
 	{
-		vei = req.Obj.Metadata[metadata.VentureID]
+		vei = req.Obj[0].Metadata[metadata.VentureID]
 	}
 
 	{

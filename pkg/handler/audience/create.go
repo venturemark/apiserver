@@ -21,11 +21,15 @@ func (h *Handler) Create(ctx context.Context, req *audience.CreateI) (*audience.
 			return nil, tracer.Mask(invalidUserError)
 		}
 
-		req.Obj.Metadata[metadata.UserID] = u
+		for i := range req.Obj {
+			req.Obj[i].Metadata[metadata.UserID] = u
+		}
 	}
 
 	{
-		req.Obj.Metadata[metadata.AudienceID] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
+		for i := range req.Obj {
+			req.Obj[i].Metadata[metadata.AudienceID] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
+		}
 	}
 
 	{
@@ -33,12 +37,12 @@ func (h *Handler) Create(ctx context.Context, req *audience.CreateI) (*audience.
 			Obj: []*role.CreateI_Obj{
 				{
 					Metadata: map[string]string{
-						metadata.AudienceID:   req.Obj.Metadata[metadata.AudienceID],
-						metadata.ResourceID:   hash.Audience(req.Obj.Metadata),
+						metadata.AudienceID:   req.Obj[0].Metadata[metadata.AudienceID],
+						metadata.ResourceID:   hash.Audience(req.Obj[0].Metadata),
 						metadata.ResourceKind: "audience",
 						metadata.RoleID:       strconv.FormatInt(time.Now().UTC().UnixNano(), 10),
 						metadata.RoleKind:     "owner",
-						metadata.SubjectID:    req.Obj.Metadata[metadata.UserID],
+						metadata.SubjectID:    req.Obj[0].Metadata[metadata.UserID],
 					},
 				},
 			},
