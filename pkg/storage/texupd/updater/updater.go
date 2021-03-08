@@ -8,6 +8,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/verifier/texupd/updater"
 	"github.com/venturemark/apiserver/pkg/verifier/texupd/updater/patch"
+	"github.com/venturemark/apiserver/pkg/verifier/texupd/updater/time"
 )
 
 type Config struct {
@@ -47,6 +48,18 @@ func New(config Config) (*Updater, error) {
 		}
 	}
 
+	var timeVerifier *time.Verifier
+	{
+		c := time.VerifierConfig{
+			Now: now(),
+		}
+
+		timeVerifier, err = time.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	u := &Updater{
 		logger: config.Logger,
 		redigo: config.Redigo,
@@ -54,6 +67,7 @@ func New(config Config) (*Updater, error) {
 
 		verify: []updater.Interface{
 			patchVerifier,
+			timeVerifier,
 		},
 	}
 
