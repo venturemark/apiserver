@@ -19,34 +19,34 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 
 func (v *Verifier) Verify(req *message.CreateI) (bool, error) {
 	{
-		if req.Obj == nil {
+		if len(req.Obj) != 1 {
 			return false, nil
 		}
-		if req.Obj.Metadata == nil {
+		if req.Obj[0].Metadata == nil {
 			return false, nil
 		}
-		if req.Obj.Property == nil {
-			return false, nil
-		}
-	}
-
-	{
-		if req.Obj.Metadata[metadata.TimelineID] == "" {
-			return false, nil
-		}
-		if req.Obj.Metadata[metadata.UpdateID] == "" {
-			return false, nil
-		}
-		if req.Obj.Metadata[metadata.UserID] == "" {
-			return false, nil
-		}
-		if req.Obj.Metadata[metadata.VentureID] == "" {
+		if req.Obj[0].Property == nil {
 			return false, nil
 		}
 	}
 
 	{
-		if req.Obj.Property.Text == "" {
+		if req.Obj[0].Metadata[metadata.TimelineID] == "" {
+			return false, nil
+		}
+		if req.Obj[0].Metadata[metadata.UpdateID] == "" {
+			return false, nil
+		}
+		if req.Obj[0].Metadata[metadata.UserID] == "" {
+			return false, nil
+		}
+		if req.Obj[0].Metadata[metadata.VentureID] == "" {
+			return false, nil
+		}
+	}
+
+	{
+		if req.Obj[0].Property.Text == "" {
 			return false, nil
 		}
 	}

@@ -16,26 +16,26 @@ import (
 func (s *Searcher) Search(req *message.SearchI) (*message.SearchO, error) {
 	var err error
 
-	var tid string
+	var tii string
 	{
-		tid = req.Obj[0].Metadata[metadata.TimelineID]
+		tii = req.Obj[0].Metadata[metadata.TimelineID]
 	}
 
-	var uid string
+	var upi string
 	{
-		uid = req.Obj[0].Metadata[metadata.UpdateID]
+		upi = req.Obj[0].Metadata[metadata.UpdateID]
 	}
 
-	var vid string
+	var vei string
 	{
-		vid = req.Obj[0].Metadata[metadata.VentureID]
+		vei = req.Obj[0].Metadata[metadata.VentureID]
 	}
 
 	// With redis we use ZREVRANGE which allows us to search for objects while
 	// having support for chunking.
 	var str []string
 	{
-		k := fmt.Sprintf(key.Message, vid, tid, uid)
+		k := fmt.Sprintf(key.Message, vei, tii, upi)
 		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)

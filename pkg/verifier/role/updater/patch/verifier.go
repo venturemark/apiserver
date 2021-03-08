@@ -1,8 +1,8 @@
-package empty
+package patch
 
 import (
 	"github.com/venturemark/apicommon/pkg/metadata"
-	"github.com/venturemark/apigengo/pkg/pbf/audience"
+	"github.com/venturemark/apigengo/pkg/pbf/role"
 )
 
 type VerifierConfig struct {
@@ -17,30 +17,27 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-func (v *Verifier) Verify(req *audience.UpdateI) (bool, error) {
+func (v *Verifier) Verify(req *role.UpdateI) (bool, error) {
 	{
-		if req.Obj == nil {
+		if len(req.Obj) != 1 {
 			return false, nil
 		}
-		if req.Obj.Metadata == nil {
+		if req.Obj[0].Metadata == nil {
 			return false, nil
 		}
-		if len(req.Obj.Jsnpatch) == 0 {
+		if len(req.Obj[0].Jsnpatch) == 0 {
 			return false, nil
 		}
 	}
 
 	{
-		if req.Obj.Metadata[metadata.AudienceID] == "" {
-			return false, nil
-		}
-		if req.Obj.Metadata[metadata.VentureID] == "" {
+		if req.Obj[0].Metadata[metadata.RoleID] == "" {
 			return false, nil
 		}
 	}
 
 	{
-		for _, j := range req.Obj.Jsnpatch {
+		for _, j := range req.Obj[0].Jsnpatch {
 			opeAdd := j.Ope == "add"
 			opeRem := j.Ope == "remove"
 			opeRep := j.Ope == "replace"

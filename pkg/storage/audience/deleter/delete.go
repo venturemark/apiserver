@@ -18,7 +18,7 @@ func (d *Deleter) Delete(req *audience.DeleteI) (*audience.DeleteO, error) {
 
 	var aid float64
 	{
-		aid, err = strconv.ParseFloat(req.Obj.Metadata[metadata.AudienceID], 64)
+		aid, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.AudienceID], 64)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -68,9 +68,11 @@ func (d *Deleter) Delete(req *audience.DeleteI) (*audience.DeleteO, error) {
 	var res *audience.DeleteO
 	{
 		res = &audience.DeleteO{
-			Obj: &audience.DeleteO_Obj{
-				Metadata: map[string]string{
-					metadata.AudienceStatus: "deleted",
+			Obj: []*audience.DeleteO_Obj{
+				{
+					Metadata: map[string]string{
+						metadata.AudienceStatus: "deleted",
+					},
 				},
 			},
 		}

@@ -18,19 +18,19 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 
 func (v *Verifier) Verify(req *timeline.CreateI) (bool, error) {
 	{
-		if req.Obj == nil {
+		if len(req.Obj) != 1 {
 			return true, nil
 		}
-		if req.Obj.Property == nil {
+		if req.Obj[0].Property == nil {
 			return true, nil
 		}
 	}
 
 	{
-		if len(req.Obj.Property.Desc) > 280 {
+		if len(req.Obj[0].Property.Desc) > 280 {
 			return false, nil
 		}
-		if len(req.Obj.Property.Name) > 32 {
+		if len(req.Obj[0].Property.Name) > 32 {
 			return false, nil
 		}
 	}

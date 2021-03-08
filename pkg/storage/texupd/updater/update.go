@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 
+	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apicommon/pkg/schema"
@@ -18,58 +19,86 @@ import (
 func (u *Updater) Update(req *texupd.UpdateI) (*texupd.UpdateO, error) {
 	var err error
 
-	var tid string
+	var tii string
 	{
-		tid = req.Obj.Metadata[metadata.TimelineID]
+		tii = req.Obj[0].Metadata[metadata.TimelineID]
 	}
 
-	var uid float64
+	var upi float64
 	{
-		uid, err = strconv.ParseFloat(req.Obj.Metadata[metadata.UpdateID], 64)
+		upi, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.UpdateID], 64)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 	}
 
-	var vid string
+	var vei string
 	{
-		vid = req.Obj.Metadata[metadata.VentureID]
+		vei = req.Obj[0].Metadata[metadata.VentureID]
 	}
 
-	var upd *schema.Update
+	var cur []byte
 	{
-		k := fmt.Sprintf(key.Update, vid, tid)
-		s, err := u.redigo.Sorted().Search().Score(k, uid, uid)
+		k := fmt.Sprintf(key.Update, vei, tii)
+		s, err := u.redigo.Sorted().Search().Score(k, upi, upi)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 
-		upd = &schema.Update{}
-		err = json.Unmarshal([]byte(s[0]), upd)
+		rol := &schema.Role{}
+		err = json.Unmarshal([]byte(s[0]), rol)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 
-		upd.Obj.Property.Text = req.Obj.Property.Text
+		cur, err = json.Marshal(rol)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	var pat []byte
+	{
+		var p []map[string]string
+
+		for _, j := range req.Obj[0].Jsnpatch {
+			m := map[string]string{
+				"op":    j.GetOpe(),
+				"path":  j.GetPat(),
+				"value": j.GetVal(),
+			}
+
+			p = append(p, m)
+		}
+
+		pat, err = json.Marshal(p)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
 	}
 
 	var val string
 	{
-		byt, err := json.Marshal(upd)
+		patch, err := jsonpatch.DecodePatch(pat)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 
-		val = string(byt)
+		des, err := patch.Apply(cur)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+
+		val = string(des)
 	}
 
-	var mod bool
+	var upd bool
 	{
-		k := fmt.Sprintf(key.Update, vid, tid)
+		k := fmt.Sprintf(key.Update, vei, tii)
 		v := val
-		s := uid
+		s := upi
 
-		mod, err = u.redigo.Sorted().Update().Value(k, v, s)
+		upd, err = u.redigo.Sorted().Update().Value(k, v, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -78,13 +107,15 @@ func (u *Updater) Update(req *texupd.UpdateI) (*texupd.UpdateO, error) {
 	var res *texupd.UpdateO
 	{
 		res = &texupd.UpdateO{
-			Obj: &texupd.UpdateO_Obj{
-				Metadata: map[string]string{},
+			Obj: []*texupd.UpdateO_Obj{
+				{
+					Metadata: map[string]string{},
+				},
 			},
 		}
 
-		if mod {
-			res.Obj.Metadata[metadata.UpdateStatus] = "updated"
+		if upd {
+			res.Obj[0].Metadata[metadata.UpdateStatus] = "updated"
 		}
 	}
 

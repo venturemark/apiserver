@@ -21,11 +21,15 @@ func (h *Handler) Create(ctx context.Context, req *texupd.CreateI) (*texupd.Crea
 			return nil, tracer.Mask(invalidUserError)
 		}
 
-		req.Obj.Metadata[metadata.UserID] = u
+		for i := range req.Obj {
+			req.Obj[i].Metadata[metadata.UserID] = u
+		}
 	}
 
 	{
-		req.Obj.Metadata[metadata.UpdateID] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
+		for i := range req.Obj {
+			req.Obj[i].Metadata[metadata.UpdateID] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
+		}
 	}
 
 	{
@@ -33,14 +37,14 @@ func (h *Handler) Create(ctx context.Context, req *texupd.CreateI) (*texupd.Crea
 			Obj: []*role.CreateI_Obj{
 				{
 					Metadata: map[string]string{
-						metadata.ResourceID:   hash.Update(req.Obj.Metadata),
+						metadata.ResourceID:   hash.Update(req.Obj[0].Metadata),
 						metadata.ResourceKind: "update",
 						metadata.RoleID:       strconv.FormatInt(time.Now().UTC().UnixNano(), 10),
 						metadata.RoleKind:     "owner",
-						metadata.SubjectID:    req.Obj.Metadata[metadata.UserID],
-						metadata.TimelineID:   req.Obj.Metadata[metadata.TimelineID],
-						metadata.UpdateID:     req.Obj.Metadata[metadata.UpdateID],
-						metadata.VentureID:    req.Obj.Metadata[metadata.VentureID],
+						metadata.SubjectID:    req.Obj[0].Metadata[metadata.UserID],
+						metadata.TimelineID:   req.Obj[0].Metadata[metadata.TimelineID],
+						metadata.UpdateID:     req.Obj[0].Metadata[metadata.UpdateID],
+						metadata.VentureID:    req.Obj[0].Metadata[metadata.VentureID],
 					},
 				},
 			},

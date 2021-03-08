@@ -20,7 +20,7 @@ func (d *Deleter) Delete(req *timeline.DeleteI) (*timeline.DeleteO, error) {
 
 	var tii float64
 	{
-		tii, err = strconv.ParseFloat(req.Obj.Metadata[metadata.TimelineID], 64)
+		tii, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.TimelineID], 64)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -28,7 +28,7 @@ func (d *Deleter) Delete(req *timeline.DeleteI) (*timeline.DeleteO, error) {
 
 	var vei string
 	{
-		vei = req.Obj.Metadata[metadata.VentureID]
+		vei = req.Obj[0].Metadata[metadata.VentureID]
 	}
 
 	var tim *schema.Timeline
@@ -75,9 +75,11 @@ func (d *Deleter) Delete(req *timeline.DeleteI) (*timeline.DeleteO, error) {
 	var res *timeline.DeleteO
 	{
 		res = &timeline.DeleteO{
-			Obj: &timeline.DeleteO_Obj{
-				Metadata: map[string]string{
-					metadata.TimelineStatus: "deleted",
+			Obj: []*timeline.DeleteO_Obj{
+				{
+					Metadata: map[string]string{
+						metadata.TimelineStatus: "deleted",
+					},
 				},
 			},
 		}

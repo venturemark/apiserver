@@ -35,17 +35,17 @@ func (v *Verifier) Verify(req *audience.DeleteI) (bool, error) {
 	var err error
 
 	{
-		if req.Obj == nil {
+		if len(req.Obj) != 1 {
 			return false, nil
 		}
-		if req.Obj.Metadata == nil {
+		if req.Obj[0].Metadata == nil {
 			return false, nil
 		}
 	}
 
 	var aui float64
 	{
-		aui, err = strconv.ParseFloat(req.Obj.Metadata[metadata.AudienceID], 64)
+		aui, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.AudienceID], 64)
 		if err != nil {
 			return false, tracer.Mask(err)
 		}

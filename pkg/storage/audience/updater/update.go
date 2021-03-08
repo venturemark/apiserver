@@ -19,7 +19,7 @@ func (u *Updater) Update(req *audience.UpdateI) (*audience.UpdateO, error) {
 
 	var aui float64
 	{
-		aui, err = strconv.ParseFloat(req.Obj.Metadata[metadata.AudienceID], 64)
+		aui, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.AudienceID], 64)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -49,7 +49,7 @@ func (u *Updater) Update(req *audience.UpdateI) (*audience.UpdateO, error) {
 	{
 		var p []map[string]string
 
-		for _, j := range req.Obj.Jsnpatch {
+		for _, j := range req.Obj[0].Jsnpatch {
 			m := map[string]string{
 				"op":    j.GetOpe(),
 				"path":  j.GetPat(),
@@ -104,13 +104,15 @@ func (u *Updater) Update(req *audience.UpdateI) (*audience.UpdateO, error) {
 	var res *audience.UpdateO
 	{
 		res = &audience.UpdateO{
-			Obj: &audience.UpdateO_Obj{
-				Metadata: map[string]string{},
+			Obj: []*audience.UpdateO_Obj{
+				{
+					Metadata: map[string]string{},
+				},
 			},
 		}
 
 		if upd {
-			res.Obj.Metadata[metadata.AudienceStatus] = "updated"
+			res.Obj[0].Metadata[metadata.AudienceStatus] = "updated"
 		}
 	}
 

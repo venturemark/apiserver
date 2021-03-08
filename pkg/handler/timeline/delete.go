@@ -17,7 +17,9 @@ func (h *Handler) Delete(ctx context.Context, req *timeline.DeleteI) (*timeline.
 			return nil, tracer.Mask(invalidUserError)
 		}
 
-		req.Obj.Metadata[metadata.UserID] = u
+		for i := range req.Obj {
+			req.Obj[i].Metadata[metadata.UserID] = u
+		}
 	}
 
 	{

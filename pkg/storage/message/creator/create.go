@@ -19,7 +19,7 @@ func (c *Creator) Create(req *message.CreateI) (*message.CreateO, error) {
 
 	var mei float64
 	{
-		mei, err = strconv.ParseFloat(req.Obj.Metadata[metadata.MessageID], 64)
+		mei, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.MessageID], 64)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -27,27 +27,27 @@ func (c *Creator) Create(req *message.CreateI) (*message.CreateO, error) {
 
 	var tii string
 	{
-		tii = req.Obj.Metadata[metadata.TimelineID]
+		tii = req.Obj[0].Metadata[metadata.TimelineID]
 	}
 
 	var upi string
 	{
-		upi = req.Obj.Metadata[metadata.UpdateID]
+		upi = req.Obj[0].Metadata[metadata.UpdateID]
 	}
 
 	var vei string
 	{
-		vei = req.Obj.Metadata[metadata.VentureID]
+		vei = req.Obj[0].Metadata[metadata.VentureID]
 	}
 
 	var val string
 	{
 		mes := schema.Message{
 			Obj: schema.MessageObj{
-				Metadata: req.Obj.Metadata,
+				Metadata: req.Obj[0].Metadata,
 				Property: schema.MessageObjProperty{
-					Text: req.Obj.Property.Text,
-					Reid: req.Obj.Property.Reid,
+					Text: req.Obj[0].Property.Text,
+					Reid: req.Obj[0].Property.Reid,
 				},
 			},
 		}
@@ -74,9 +74,11 @@ func (c *Creator) Create(req *message.CreateI) (*message.CreateO, error) {
 	var res *message.CreateO
 	{
 		res = &message.CreateO{
-			Obj: &message.CreateO_Obj{
-				Metadata: map[string]string{
-					metadata.MessageID: req.Obj.Metadata[metadata.MessageID],
+			Obj: []*message.CreateO_Obj{
+				{
+					Metadata: map[string]string{
+						metadata.MessageID: req.Obj[0].Metadata[metadata.MessageID],
+					},
 				},
 			},
 		}

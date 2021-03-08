@@ -21,12 +21,12 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 
 	var tii string
 	{
-		tii = req.Obj.Metadata[metadata.TimelineID]
+		tii = req.Obj[0].Metadata[metadata.TimelineID]
 	}
 
 	var upi float64
 	{
-		upi, err = strconv.ParseFloat(req.Obj.Metadata[metadata.UpdateID], 64)
+		upi, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.UpdateID], 64)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -34,16 +34,16 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 
 	var vei string
 	{
-		vei = req.Obj.Metadata[metadata.VentureID]
+		vei = req.Obj[0].Metadata[metadata.VentureID]
 	}
 
 	var val string
 	{
 		upd := schema.Update{
 			Obj: schema.UpdateObj{
-				Metadata: req.Obj.Metadata,
+				Metadata: req.Obj[0].Metadata,
 				Property: schema.UpdateObjProperty{
-					Text: req.Obj.Property.Text,
+					Text: req.Obj[0].Property.Text,
 				},
 			},
 		}
@@ -70,9 +70,11 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 	var res *texupd.CreateO
 	{
 		res = &texupd.CreateO{
-			Obj: &texupd.CreateO_Obj{
-				Metadata: map[string]string{
-					metadata.UpdateID: req.Obj.Metadata[metadata.UpdateID],
+			Obj: []*texupd.CreateO_Obj{
+				{
+					Metadata: map[string]string{
+						metadata.UpdateID: req.Obj[0].Metadata[metadata.UpdateID],
+					},
 				},
 			},
 		}
