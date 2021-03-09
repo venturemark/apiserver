@@ -2,10 +2,8 @@ package searcher
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/venturemark/apicommon/pkg/key"
-	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apicommon/pkg/schema"
 	"github.com/venturemark/apigengo/pkg/pbf/update"
 	"github.com/xh3b4sd/tracer"
@@ -18,19 +16,14 @@ import (
 func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 	var err error
 
-	var tii string
+	var upk *key.Key
 	{
-		tii = req.Obj[0].Metadata[metadata.TimelineID]
-	}
-
-	var vei string
-	{
-		vei = req.Obj[0].Metadata[metadata.VentureID]
+		upk = key.Update(req.Obj[0].Metadata)
 	}
 
 	var str []string
 	{
-		k := fmt.Sprintf(key.Update, vei, tii)
+		k := upk.List()
 		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)

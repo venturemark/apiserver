@@ -2,8 +2,6 @@ package creator
 
 import (
 	"encoding/json"
-	"fmt"
-	"strconv"
 
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
@@ -19,22 +17,9 @@ import (
 func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 	var err error
 
-	var tii string
+	var upk *key.Key
 	{
-		tii = req.Obj[0].Metadata[metadata.TimelineID]
-	}
-
-	var upi float64
-	{
-		upi, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.UpdateID], 64)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
-	var vei string
-	{
-		vei = req.Obj[0].Metadata[metadata.VentureID]
+		upk = key.Update(req.Obj[0].Metadata)
 	}
 
 	var val string
@@ -57,9 +42,9 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Update, vei, tii)
+		k := upk.List()
 		v := val
-		s := upi
+		s := upk.ID().F()
 
 		err = c.redigo.Sorted().Create().Element(k, v, s)
 		if err != nil {
@@ -73,7 +58,7 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 			Obj: []*texupd.CreateO_Obj{
 				{
 					Metadata: map[string]string{
-						metadata.UpdateID: req.Obj[0].Metadata[metadata.UpdateID],
+						metadata.UpdateID: upk.ID().S(),
 					},
 				},
 			},

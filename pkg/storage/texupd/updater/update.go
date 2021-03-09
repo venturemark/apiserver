@@ -2,8 +2,6 @@ package updater
 
 import (
 	"encoding/json"
-	"fmt"
-	"strconv"
 
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/venturemark/apicommon/pkg/key"
@@ -19,28 +17,15 @@ import (
 func (u *Updater) Update(req *texupd.UpdateI) (*texupd.UpdateO, error) {
 	var err error
 
-	var tii string
+	var upk *key.Key
 	{
-		tii = req.Obj[0].Metadata[metadata.TimelineID]
-	}
-
-	var upi float64
-	{
-		upi, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.UpdateID], 64)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
-	var vei string
-	{
-		vei = req.Obj[0].Metadata[metadata.VentureID]
+		upk = key.Update(req.Obj[0].Metadata)
 	}
 
 	var cur []byte
 	{
-		k := fmt.Sprintf(key.Update, vei, tii)
-		s, err := u.redigo.Sorted().Search().Score(k, upi, upi)
+		k := upk.List()
+		s, err := u.redigo.Sorted().Search().Score(k, upk.ID().F(), upk.ID().F())
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -94,9 +79,9 @@ func (u *Updater) Update(req *texupd.UpdateI) (*texupd.UpdateO, error) {
 
 	var upd bool
 	{
-		k := fmt.Sprintf(key.Update, vei, tii)
+		k := upk.List()
 		v := val
-		s := upi
+		s := upk.ID().F()
 
 		upd, err = u.redigo.Sorted().Update().Value(k, v, s)
 		if err != nil {

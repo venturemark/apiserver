@@ -2,10 +2,8 @@ package searcher
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/venturemark/apicommon/pkg/key"
-	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apicommon/pkg/schema"
 	"github.com/venturemark/apigengo/pkg/pbf/message"
 	"github.com/xh3b4sd/tracer"
@@ -16,26 +14,16 @@ import (
 func (s *Searcher) Search(req *message.SearchI) (*message.SearchO, error) {
 	var err error
 
-	var tii string
+	var mek *key.Key
 	{
-		tii = req.Obj[0].Metadata[metadata.TimelineID]
-	}
-
-	var upi string
-	{
-		upi = req.Obj[0].Metadata[metadata.UpdateID]
-	}
-
-	var vei string
-	{
-		vei = req.Obj[0].Metadata[metadata.VentureID]
+		mek = key.Message(req.Obj[0].Metadata)
 	}
 
 	// With redis we use ZREVRANGE which allows us to search for objects while
 	// having support for chunking.
 	var str []string
 	{
-		k := fmt.Sprintf(key.Message, vei, tii, upi)
+		k := mek.List()
 		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)

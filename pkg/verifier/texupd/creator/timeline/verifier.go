@@ -1,11 +1,7 @@
 package timeline
 
 import (
-	"fmt"
-	"strconv"
-
 	"github.com/venturemark/apicommon/pkg/key"
-	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/texupd"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
@@ -31,8 +27,6 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if the timeline which the text update should be created for
-// does even exist. Creating text updates requires a timeline to exist.
 func (v *Verifier) Verify(req *texupd.CreateI) (bool, error) {
 	{
 		if len(req.Obj) != 1 {
@@ -43,28 +37,14 @@ func (v *Verifier) Verify(req *texupd.CreateI) (bool, error) {
 		}
 	}
 
-	var tii string
-	var vei string
+	var tik *key.Key
 	{
-		tii = req.Obj[0].Metadata[metadata.TimelineID]
-		vei = req.Obj[0].Metadata[metadata.VentureID]
-
-		if tii == "" {
-			return false, nil
-		}
-		if vei == "" {
-			return false, nil
-		}
+		tik = key.Timeline(req.Obj[0].Metadata)
 	}
 
 	{
-		i, err := strconv.ParseFloat(tii, 64)
-		if err != nil {
-			return false, tracer.Mask(err)
-		}
-
-		k := fmt.Sprintf(key.Timeline, vei)
-		s := i
+		k := tik.List()
+		s := tik.ID().F()
 
 		exi, err := v.redigo.Sorted().Exists().Score(k, s)
 		if err != nil {

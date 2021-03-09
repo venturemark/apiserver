@@ -2,8 +2,6 @@ package updater
 
 import (
 	"encoding/json"
-	"fmt"
-	"strconv"
 
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/venturemark/apicommon/pkg/index"
@@ -17,18 +15,15 @@ import (
 func (u *Updater) Update(req *audience.UpdateI) (*audience.UpdateO, error) {
 	var err error
 
-	var aui float64
+	var auk *key.Key
 	{
-		aui, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.AudienceID], 64)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
+		auk = key.Audience(req.Obj[0].Metadata)
 	}
 
 	var cur []byte
 	{
-		k := fmt.Sprintf(key.Audience)
-		s, err := u.redigo.Sorted().Search().Score(k, aui, aui)
+		k := auk.List()
+		s, err := u.redigo.Sorted().Search().Score(k, auk.ID().F(), auk.ID().F())
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -90,9 +85,9 @@ func (u *Updater) Update(req *audience.UpdateI) (*audience.UpdateO, error) {
 
 	var upd bool
 	{
-		k := fmt.Sprintf(key.Audience)
+		k := auk.List()
 		v := val
-		s := aui
+		s := auk.ID().F()
 		i := index.New(index.Name, aud.Obj.Property.Name)
 
 		upd, err = u.redigo.Sorted().Update().Value(k, v, s, i)

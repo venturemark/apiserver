@@ -2,8 +2,6 @@ package creator
 
 import (
 	"encoding/json"
-	"fmt"
-	"strconv"
 
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
@@ -17,27 +15,9 @@ import (
 func (c *Creator) Create(req *message.CreateI) (*message.CreateO, error) {
 	var err error
 
-	var mei float64
+	var mek *key.Key
 	{
-		mei, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.MessageID], 64)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
-	var tii string
-	{
-		tii = req.Obj[0].Metadata[metadata.TimelineID]
-	}
-
-	var upi string
-	{
-		upi = req.Obj[0].Metadata[metadata.UpdateID]
-	}
-
-	var vei string
-	{
-		vei = req.Obj[0].Metadata[metadata.VentureID]
+		mek = key.Message(req.Obj[0].Metadata)
 	}
 
 	var val string
@@ -61,9 +41,9 @@ func (c *Creator) Create(req *message.CreateI) (*message.CreateO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Message, vei, tii, upi)
+		k := mek.List()
 		v := val
-		s := mei
+		s := mek.ID().F()
 
 		err = c.redigo.Sorted().Create().Element(k, v, s)
 		if err != nil {
@@ -77,7 +57,7 @@ func (c *Creator) Create(req *message.CreateI) (*message.CreateO, error) {
 			Obj: []*message.CreateO_Obj{
 				{
 					Metadata: map[string]string{
-						metadata.MessageID: req.Obj[0].Metadata[metadata.MessageID],
+						metadata.MessageID: mek.ID().S(),
 					},
 				},
 			},

@@ -2,8 +2,6 @@ package creator
 
 import (
 	"encoding/json"
-	"fmt"
-	"strconv"
 
 	"github.com/venturemark/apicommon/pkg/index"
 	"github.com/venturemark/apicommon/pkg/key"
@@ -18,17 +16,9 @@ import (
 func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 	var err error
 
-	var tii float64
+	var tik *key.Key
 	{
-		tii, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.TimelineID], 64)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
-	var vei string
-	{
-		vei = req.Obj[0].Metadata[metadata.VentureID]
+		tik = key.Timeline(req.Obj[0].Metadata)
 	}
 
 	var val string
@@ -53,9 +43,9 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Timeline, vei)
+		k := tik.List()
 		v := val
-		s := tii
+		s := tik.ID().F()
 		i := index.New(index.Name, req.Obj[0].Property.Name)
 
 		err = c.redigo.Sorted().Create().Element(k, v, s, i)

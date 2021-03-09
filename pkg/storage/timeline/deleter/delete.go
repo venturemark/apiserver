@@ -2,8 +2,6 @@ package deleter
 
 import (
 	"encoding/json"
-	"fmt"
-	"strconv"
 
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
@@ -18,23 +16,15 @@ import (
 func (d *Deleter) Delete(req *timeline.DeleteI) (*timeline.DeleteO, error) {
 	var err error
 
-	var tii float64
+	var tik *key.Key
 	{
-		tii, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.TimelineID], 64)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
-	var vei string
-	{
-		vei = req.Obj[0].Metadata[metadata.VentureID]
+		tik = key.Timeline(req.Obj[0].Metadata)
 	}
 
 	var tim *schema.Timeline
 	{
-		k := fmt.Sprintf(key.Timeline, vei)
-		s, err := d.redigo.Sorted().Search().Score(k, tii, tii)
+		k := tik.List()
+		s, err := d.redigo.Sorted().Search().Score(k, tik.ID().F(), tik.ID().F())
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -63,8 +53,8 @@ func (d *Deleter) Delete(req *timeline.DeleteI) (*timeline.DeleteO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Timeline, vei)
-		s := tii
+		k := tik.List()
+		s := tik.ID().F()
 
 		err = d.redigo.Sorted().Delete().Score(k, s)
 		if err != nil {

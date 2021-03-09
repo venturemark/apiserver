@@ -1,11 +1,7 @@
 package exist
 
 import (
-	"fmt"
-	"strconv"
-
 	"github.com/venturemark/apicommon/pkg/key"
-	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/timeline"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
@@ -32,8 +28,6 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 }
 
 func (v *Verifier) Verify(req *timeline.DeleteI) (bool, error) {
-	var err error
-
 	{
 		if len(req.Obj) != 1 {
 			return false, nil
@@ -43,22 +37,14 @@ func (v *Verifier) Verify(req *timeline.DeleteI) (bool, error) {
 		}
 	}
 
-	var tii float64
+	var tik *key.Key
 	{
-		tii, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.TimelineID], 64)
-		if err != nil {
-			return false, tracer.Mask(err)
-		}
-	}
-
-	var vei string
-	{
-		vei = req.Obj[0].Metadata[metadata.VentureID]
+		tik = key.Timeline(req.Obj[0].Metadata)
 	}
 
 	{
-		k := fmt.Sprintf(key.Timeline, vei)
-		s := tii
+		k := tik.List()
+		s := tik.ID().F()
 
 		exi, err := v.redigo.Sorted().Exists().Score(k, s)
 		if err != nil {

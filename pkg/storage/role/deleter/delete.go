@@ -2,8 +2,6 @@ package deleter
 
 import (
 	"encoding/json"
-	"fmt"
-	"strconv"
 
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
@@ -16,23 +14,15 @@ import (
 func (d *Deleter) Delete(req *role.DeleteI) (*role.DeleteO, error) {
 	var err error
 
-	var rei string
+	var rok *key.Key
 	{
-		rei = req.Obj[0].Metadata[metadata.ResourceID]
-	}
-
-	var roi float64
-	{
-		roi, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.RoleID], 64)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
+		rok = key.Role(req.Obj[0].Metadata)
 	}
 
 	var rol *schema.Role
 	{
-		k := fmt.Sprintf(key.Role, rei)
-		s, err := d.redigo.Sorted().Search().Score(k, roi, roi)
+		k := rok.List()
+		s, err := d.redigo.Sorted().Search().Score(k, rok.ID().F(), rok.ID().F())
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -61,8 +51,8 @@ func (d *Deleter) Delete(req *role.DeleteI) (*role.DeleteO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Role, rei)
-		s := roi
+		k := rok.List()
+		s := rok.ID().F()
 
 		err = d.redigo.Sorted().Delete().Score(k, s)
 		if err != nil {
