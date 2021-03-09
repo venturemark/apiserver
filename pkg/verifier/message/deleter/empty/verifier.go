@@ -28,9 +28,6 @@ func (v *Verifier) Verify(req *message.DeleteI) (bool, error) {
 	}
 
 	{
-		if req.Obj[0].Metadata[metadata.VentureID] == "" {
-			return false, nil
-		}
 		if req.Obj[0].Metadata[metadata.MessageID] == "" {
 			return false, nil
 		}
@@ -38,6 +35,9 @@ func (v *Verifier) Verify(req *message.DeleteI) (bool, error) {
 			return false, nil
 		}
 		if req.Obj[0].Metadata[metadata.UpdateID] == "" {
+			return false, nil
+		}
+		if req.Obj[0].Metadata[metadata.VentureID] == "" {
 			return false, nil
 		}
 	}

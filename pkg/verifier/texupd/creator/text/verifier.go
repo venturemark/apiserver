@@ -27,9 +27,6 @@ func (v *Verifier) Verify(req *texupd.CreateI) (bool, error) {
 	}
 
 	{
-		// Updating the text of text updates must not exceed the character limit
-		// of 280. Nobody should be able to create text updates with longer
-		// text.
 		if len(req.Obj[0].Property.Text) > 280 {
 			return false, nil
 		}
