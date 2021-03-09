@@ -28,13 +28,13 @@ func (v *Verifier) Verify(req *texupd.DeleteI) (bool, error) {
 	}
 
 	{
-		if req.Obj[0].Metadata[metadata.VentureID] == "" {
-			return false, nil
-		}
 		if req.Obj[0].Metadata[metadata.TimelineID] == "" {
 			return false, nil
 		}
 		if req.Obj[0].Metadata[metadata.UpdateID] == "" {
+			return false, nil
+		}
+		if req.Obj[0].Metadata[metadata.VentureID] == "" {
 			return false, nil
 		}
 	}

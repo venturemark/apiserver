@@ -31,9 +31,6 @@ func (v *Verifier) Verify(req *audience.DeleteI) (bool, error) {
 		if req.Obj[0].Metadata[metadata.AudienceID] == "" {
 			return false, nil
 		}
-		if req.Obj[0].Metadata[metadata.UserID] == "" {
-			return false, nil
-		}
 		if req.Obj[0].Metadata[metadata.VentureID] == "" {
 			return false, nil
 		}
