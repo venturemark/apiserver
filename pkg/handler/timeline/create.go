@@ -5,7 +5,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/venturemark/apicommon/pkg/hash"
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/role"
 	"github.com/venturemark/apigengo/pkg/pbf/timeline"
@@ -37,7 +36,6 @@ func (h *Handler) Create(ctx context.Context, req *timeline.CreateI) (*timeline.
 			Obj: []*role.CreateI_Obj{
 				{
 					Metadata: map[string]string{
-						metadata.ResourceID:   hash.Timeline(req.Obj[0].Metadata),
 						metadata.ResourceKind: "timeline",
 						metadata.RoleID:       strconv.FormatInt(time.Now().UTC().UnixNano(), 10),
 						metadata.RoleKind:     "owner",

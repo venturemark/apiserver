@@ -2,8 +2,6 @@ package creator
 
 import (
 	"encoding/json"
-	"fmt"
-	"strconv"
 
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
@@ -15,17 +13,9 @@ import (
 func (c *Creator) Create(req *role.CreateI) (*role.CreateO, error) {
 	var err error
 
-	var rei string
+	var rok *key.Key
 	{
-		rei = req.Obj[0].Metadata[metadata.ResourceID]
-	}
-
-	var roi float64
-	{
-		roi, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.RoleID], 64)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
+		rok = key.Role(req.Obj[0].Metadata)
 	}
 
 	var sui string
@@ -50,9 +40,9 @@ func (c *Creator) Create(req *role.CreateI) (*role.CreateO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Role, rei)
+		k := rok.List()
 		v := val
-		s := roi
+		s := rok.ID().F()
 		i := sui
 
 		err = c.redigo.Sorted().Create().Element(k, v, s, i)
@@ -67,7 +57,7 @@ func (c *Creator) Create(req *role.CreateI) (*role.CreateO, error) {
 			Obj: []*role.CreateO_Obj{
 				{
 					Metadata: map[string]string{
-						metadata.RoleID: req.Obj[0].Metadata[metadata.RoleID],
+						metadata.RoleID: rok.ID().S(),
 					},
 				},
 			},

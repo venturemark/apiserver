@@ -2,8 +2,6 @@ package deleter
 
 import (
 	"encoding/json"
-	"fmt"
-	"strconv"
 
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
@@ -18,28 +16,15 @@ import (
 func (d *Deleter) Delete(req *texupd.DeleteI) (*texupd.DeleteO, error) {
 	var err error
 
-	var tii string
+	var upk *key.Key
 	{
-		tii = req.Obj[0].Metadata[metadata.TimelineID]
-	}
-
-	var upi float64
-	{
-		upi, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.UpdateID], 64)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
-	var vei string
-	{
-		vei = req.Obj[0].Metadata[metadata.VentureID]
+		upk = key.Update(req.Obj[0].Metadata)
 	}
 
 	var upd *schema.Update
 	{
-		k := fmt.Sprintf(key.Update, vei, tii)
-		s, err := d.redigo.Sorted().Search().Score(k, upi, upi)
+		k := upk.List()
+		s, err := d.redigo.Sorted().Search().Score(k, upk.ID().F(), upk.ID().F())
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -68,8 +53,8 @@ func (d *Deleter) Delete(req *texupd.DeleteI) (*texupd.DeleteO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Update, vei, tii)
-		s := upi
+		k := upk.List()
+		s := upk.ID().F()
 
 		err = d.redigo.Sorted().Delete().Score(k, s)
 		if err != nil {

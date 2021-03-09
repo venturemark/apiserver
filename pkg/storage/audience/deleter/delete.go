@@ -2,8 +2,6 @@ package deleter
 
 import (
 	"encoding/json"
-	"fmt"
-	"strconv"
 
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
@@ -16,18 +14,15 @@ import (
 func (d *Deleter) Delete(req *audience.DeleteI) (*audience.DeleteO, error) {
 	var err error
 
-	var aid float64
+	var auk *key.Key
 	{
-		aid, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.AudienceID], 64)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
+		auk = key.Audience(req.Obj[0].Metadata)
 	}
 
 	var aud *schema.Audience
 	{
-		k := fmt.Sprintf(key.Audience)
-		s, err := d.redigo.Sorted().Search().Score(k, aid, aid)
+		k := auk.List()
+		s, err := d.redigo.Sorted().Search().Score(k, auk.ID().F(), auk.ID().F())
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -56,8 +51,8 @@ func (d *Deleter) Delete(req *audience.DeleteI) (*audience.DeleteO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Audience)
-		s := aid
+		k := auk.List()
+		s := auk.ID().F()
 
 		err = d.redigo.Sorted().Delete().Score(k, s)
 		if err != nil {

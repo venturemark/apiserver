@@ -2,8 +2,6 @@ package updater
 
 import (
 	"encoding/json"
-	"fmt"
-	"strconv"
 
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/venturemark/apicommon/pkg/key"
@@ -16,23 +14,15 @@ import (
 func (u *Updater) Update(req *role.UpdateI) (*role.UpdateO, error) {
 	var err error
 
-	var rei string
+	var rok *key.Key
 	{
-		rei = req.Obj[0].Metadata[metadata.ResourceID]
-	}
-
-	var roi float64
-	{
-		roi, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.RoleID], 64)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
+		rok = key.Role(req.Obj[0].Metadata)
 	}
 
 	var cur []byte
 	{
-		k := fmt.Sprintf(key.Role, rei)
-		s, err := u.redigo.Sorted().Search().Score(k, roi, roi)
+		k := rok.List()
+		s, err := u.redigo.Sorted().Search().Score(k, rok.ID().F(), rok.ID().F())
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -86,9 +76,9 @@ func (u *Updater) Update(req *role.UpdateI) (*role.UpdateO, error) {
 
 	var upd bool
 	{
-		k := fmt.Sprintf(key.Role, rei)
+		k := rok.List()
 		v := val
-		s := roi
+		s := rok.ID().F()
 
 		upd, err = u.redigo.Sorted().Update().Value(k, v, s)
 		if err != nil {

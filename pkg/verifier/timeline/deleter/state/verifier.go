@@ -2,11 +2,8 @@ package state
 
 import (
 	"encoding/json"
-	"fmt"
-	"strconv"
 
 	"github.com/venturemark/apicommon/pkg/key"
-	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apicommon/pkg/schema"
 	"github.com/venturemark/apigengo/pkg/pbf/timeline"
 	"github.com/xh3b4sd/redigo"
@@ -43,34 +40,14 @@ func (v *Verifier) Verify(req *timeline.DeleteI) (bool, error) {
 		}
 	}
 
-	var tii float64
+	var tik *key.Key
 	{
-		s := req.Obj[0].Metadata[metadata.TimelineID]
-		if s == "" {
-			return false, nil
-		}
-
-		f, err := strconv.ParseFloat(s, 64)
-		if err != nil {
-			return false, tracer.Mask(err)
-		}
-
-		tii = f
-	}
-
-	var vei string
-	{
-		vei = req.Obj[0].Metadata[metadata.VentureID]
-
-		if vei == "" {
-			return false, nil
-		}
+		tik = key.Timeline(req.Obj[0].Metadata)
 	}
 
 	{
-		k := fmt.Sprintf(key.Timeline, vei)
-
-		s, err := v.redigo.Sorted().Search().Score(k, tii, tii)
+		k := tik.List()
+		s, err := v.redigo.Sorted().Search().Score(k, tik.ID().F(), tik.ID().F())
 		if err != nil {
 			return false, tracer.Mask(err)
 		}

@@ -2,7 +2,6 @@ package searcher
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 
 	"github.com/venturemark/apicommon/pkg/key"
@@ -73,16 +72,16 @@ func (s *Searcher) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 func (s *Searcher) searchAll(req *timeline.SearchI) ([]string, error) {
 	var err error
 
-	var vei string
+	var tik *key.Key
 	{
-		vei = req.Obj[0].Metadata[metadata.VentureID]
+		tik = key.Timeline(req.Obj[0].Metadata)
 	}
 
 	// With redis we use ZREVRANGE which allows us to search for objects while
 	// having support for chunking.
 	var str []string
 	{
-		k := fmt.Sprintf(key.Timeline, vei)
+		k := tik.List()
 		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
@@ -103,20 +102,20 @@ func (s *Searcher) searchUsr(req *timeline.SearchI) ([]string, error) {
 		}
 	}
 
-	var uid string
+	var tik *key.Key
 	{
-		uid = req.Obj[0].Metadata[metadata.UserID]
+		tik = key.Timeline(req.Obj[0].Metadata)
 	}
 
-	var vei string
+	var usi string
 	{
-		vei = req.Obj[0].Metadata[metadata.VentureID]
+		usi = req.Obj[0].Metadata[metadata.UserID]
 	}
 
 	var tim []string
 	{
 		for _, o := range aud.Obj {
-			if !contains(o.Property.User, uid) {
+			if !contains(o.Property.User, usi) {
 				continue
 			}
 
@@ -135,7 +134,7 @@ func (s *Searcher) searchUsr(req *timeline.SearchI) ([]string, error) {
 				}
 			}
 
-			k := fmt.Sprintf(key.Timeline, vei)
+			k := tik.List()
 			str, err := s.redigo.Sorted().Search().Score(k, tii, tii)
 			if err != nil {
 				return nil, tracer.Mask(err)

@@ -5,7 +5,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/venturemark/apicommon/pkg/hash"
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/audience"
 	"github.com/venturemark/apigengo/pkg/pbf/role"
@@ -38,7 +37,6 @@ func (h *Handler) Create(ctx context.Context, req *audience.CreateI) (*audience.
 				{
 					Metadata: map[string]string{
 						metadata.AudienceID:   req.Obj[0].Metadata[metadata.AudienceID],
-						metadata.ResourceID:   hash.Audience(req.Obj[0].Metadata),
 						metadata.ResourceKind: "audience",
 						metadata.RoleID:       strconv.FormatInt(time.Now().UTC().UnixNano(), 10),
 						metadata.RoleKind:     "owner",

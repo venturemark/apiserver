@@ -2,7 +2,6 @@ package searcher
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/schema"
@@ -13,11 +12,16 @@ import (
 func (s *Searcher) Search(req *audience.SearchI) (*audience.SearchO, error) {
 	var err error
 
+	var auk *key.Key
+	{
+		auk = key.Audience(req.Obj[0].Metadata)
+	}
+
 	// With redis we use ZREVRANGE which allows us to search for objects while
 	// having support for chunking.
 	var str []string
 	{
-		k := fmt.Sprintf(key.Audience)
+		k := auk.List()
 		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)

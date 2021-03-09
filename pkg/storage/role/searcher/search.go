@@ -2,10 +2,8 @@ package searcher
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/venturemark/apicommon/pkg/key"
-	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apicommon/pkg/schema"
 	"github.com/venturemark/apigengo/pkg/pbf/role"
 	"github.com/xh3b4sd/tracer"
@@ -14,16 +12,16 @@ import (
 func (s *Searcher) Search(req *role.SearchI) (*role.SearchO, error) {
 	var err error
 
-	var rei string
+	var rok *key.Key
 	{
-		rei = req.Obj[0].Metadata[metadata.ResourceID]
+		rok = key.Role(req.Obj[0].Metadata)
 	}
 
 	// With redis we use ZREVRANGE which allows us to search for objects while
 	// having support for chunking.
 	var str []string
 	{
-		k := fmt.Sprintf(key.Role, rei)
+		k := rok.List()
 		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)

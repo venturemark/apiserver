@@ -17,7 +17,6 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-// Verify checks if there is any information given for creating text updates.
 func (v *Verifier) Verify(req *texupd.CreateI) (bool, error) {
 	{
 		if len(req.Obj) != 1 {

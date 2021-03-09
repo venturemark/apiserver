@@ -1,11 +1,7 @@
 package exist
 
 import (
-	"fmt"
-	"strconv"
-
 	"github.com/venturemark/apicommon/pkg/key"
-	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/texupd"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
@@ -32,8 +28,6 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 }
 
 func (v *Verifier) Verify(req *texupd.DeleteI) (bool, error) {
-	var err error
-
 	{
 		if len(req.Obj) != 1 {
 			return false, nil
@@ -43,27 +37,14 @@ func (v *Verifier) Verify(req *texupd.DeleteI) (bool, error) {
 		}
 	}
 
-	var upi float64
+	var upk *key.Key
 	{
-		upi, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.UpdateID], 64)
-		if err != nil {
-			return false, tracer.Mask(err)
-		}
-	}
-
-	var tii string
-	{
-		tii = req.Obj[0].Metadata[metadata.TimelineID]
-	}
-
-	var vei string
-	{
-		vei = req.Obj[0].Metadata[metadata.VentureID]
+		upk = key.Update(req.Obj[0].Metadata)
 	}
 
 	{
-		k := fmt.Sprintf(key.Update, vei, tii)
-		s := upi
+		k := upk.List()
+		s := upk.ID().F()
 
 		exi, err := v.redigo.Sorted().Exists().Score(k, s)
 		if err != nil {

@@ -2,8 +2,6 @@ package creator
 
 import (
 	"encoding/json"
-	"fmt"
-	"strconv"
 
 	"github.com/venturemark/apicommon/pkg/index"
 	"github.com/venturemark/apicommon/pkg/key"
@@ -16,12 +14,9 @@ import (
 func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 	var err error
 
-	var aui float64
+	var auk *key.Key
 	{
-		aui, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.AudienceID], 64)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
+		auk = key.Audience(req.Obj[0].Metadata)
 	}
 
 	var val string
@@ -46,9 +41,9 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 	}
 
 	{
-		k := fmt.Sprintf(key.Audience)
+		k := auk.List()
 		v := val
-		s := aui
+		s := auk.ID().F()
 		i := index.New(index.Name, req.Obj[0].Property.Name)
 
 		err = c.redigo.Sorted().Create().Element(k, v, s, i)
@@ -63,7 +58,7 @@ func (c *Creator) Create(req *audience.CreateI) (*audience.CreateO, error) {
 			Obj: []*audience.CreateO_Obj{
 				{
 					Metadata: map[string]string{
-						metadata.AudienceID: req.Obj[0].Metadata[metadata.AudienceID],
+						metadata.AudienceID: auk.ID().S(),
 					},
 				},
 			},

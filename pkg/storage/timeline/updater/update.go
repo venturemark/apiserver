@@ -2,8 +2,6 @@ package updater
 
 import (
 	"encoding/json"
-	"fmt"
-	"strconv"
 
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/venturemark/apicommon/pkg/index"
@@ -19,23 +17,15 @@ import (
 func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 	var err error
 
-	var tii float64
+	var tik *key.Key
 	{
-		tii, err = strconv.ParseFloat(req.Obj[0].Metadata[metadata.TimelineID], 64)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
-	var vei string
-	{
-		vei = req.Obj[0].Metadata[metadata.VentureID]
+		tik = key.Timeline(req.Obj[0].Metadata)
 	}
 
 	var cur []byte
 	{
-		k := fmt.Sprintf(key.Timeline, vei)
-		s, err := u.redigo.Sorted().Search().Score(k, tii, tii)
+		k := tik.List()
+		s, err := u.redigo.Sorted().Search().Score(k, tik.ID().F(), tik.ID().F())
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -97,9 +87,9 @@ func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 
 	var upd bool
 	{
-		k := fmt.Sprintf(key.Timeline, vei)
+		k := tik.List()
 		v := val
-		s := tii
+		s := tik.ID().F()
 		i := index.New(index.Name, tim.Obj.Property.Name)
 
 		upd, err = u.redigo.Sorted().Update().Value(k, v, s, i)
