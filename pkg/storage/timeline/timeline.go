@@ -1,6 +1,7 @@
 package timeline
 
 import (
+	"github.com/venturemark/permission"
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/rescue"
@@ -13,9 +14,10 @@ import (
 )
 
 type Config struct {
-	Logger logger.Interface
-	Redigo redigo.Interface
-	Rescue rescue.Interface
+	Logger     logger.Interface
+	Permission permission.Gateway
+	Redigo     redigo.Interface
+	Rescue     rescue.Interface
 }
 
 type Timeline struct {
@@ -31,9 +33,10 @@ func New(config Config) (*Timeline, error) {
 	var cre *creator.Creator
 	{
 		c := creator.Config{
-			Logger: config.Logger,
-			Redigo: config.Redigo,
-			Rescue: config.Rescue,
+			Logger:     config.Logger,
+			Permission: config.Permission,
+			Redigo:     config.Redigo,
+			Rescue:     config.Rescue,
 		}
 
 		cre, err = creator.New(c)
@@ -45,9 +48,10 @@ func New(config Config) (*Timeline, error) {
 	var del *deleter.Deleter
 	{
 		c := deleter.Config{
-			Logger: config.Logger,
-			Redigo: config.Redigo,
-			Rescue: config.Rescue,
+			Logger:     config.Logger,
+			Permission: config.Permission,
+			Redigo:     config.Redigo,
+			Rescue:     config.Rescue,
 		}
 
 		del, err = deleter.New(c)
@@ -59,9 +63,10 @@ func New(config Config) (*Timeline, error) {
 	var sea *searcher.Searcher
 	{
 		c := searcher.Config{
-			Logger: config.Logger,
-			Redigo: config.Redigo,
-			Rescue: config.Rescue,
+			Logger:     config.Logger,
+			Permission: config.Permission,
+			Redigo:     config.Redigo,
+			Rescue:     config.Rescue,
 		}
 
 		sea, err = searcher.New(c)
@@ -73,9 +78,10 @@ func New(config Config) (*Timeline, error) {
 	var upd *updater.Updater
 	{
 		c := updater.Config{
-			Logger: config.Logger,
-			Redigo: config.Redigo,
-			Rescue: config.Rescue,
+			Logger:     config.Logger,
+			Permission: config.Permission,
+			Redigo:     config.Redigo,
+			Rescue:     config.Rescue,
 		}
 
 		upd, err = updater.New(c)

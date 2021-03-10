@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"github.com/venturemark/permission"
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/rescue"
@@ -15,9 +16,10 @@ import (
 )
 
 type Config struct {
-	Logger logger.Interface
-	Redigo redigo.Interface
-	Rescue rescue.Interface
+	Logger     logger.Interface
+	Permission permission.Gateway
+	Redigo     redigo.Interface
+	Rescue     rescue.Interface
 }
 
 type Storage struct {
@@ -35,9 +37,10 @@ func New(config Config) (*Storage, error) {
 	var audienceStorage *audience.Audience
 	{
 		c := audience.Config{
-			Logger: config.Logger,
-			Redigo: config.Redigo,
-			Rescue: config.Rescue,
+			Logger:     config.Logger,
+			Permission: config.Permission,
+			Redigo:     config.Redigo,
+			Rescue:     config.Rescue,
 		}
 
 		audienceStorage, err = audience.New(c)
@@ -49,9 +52,10 @@ func New(config Config) (*Storage, error) {
 	var messageStorage *message.Message
 	{
 		c := message.Config{
-			Logger: config.Logger,
-			Redigo: config.Redigo,
-			Rescue: config.Rescue,
+			Logger:     config.Logger,
+			Permission: config.Permission,
+			Redigo:     config.Redigo,
+			Rescue:     config.Rescue,
 		}
 
 		messageStorage, err = message.New(c)
@@ -63,9 +67,10 @@ func New(config Config) (*Storage, error) {
 	var roleStorage *role.Role
 	{
 		c := role.Config{
-			Logger: config.Logger,
-			Redigo: config.Redigo,
-			Rescue: config.Rescue,
+			Logger:     config.Logger,
+			Permission: config.Permission,
+			Redigo:     config.Redigo,
+			Rescue:     config.Rescue,
 		}
 
 		roleStorage, err = role.New(c)
@@ -77,9 +82,10 @@ func New(config Config) (*Storage, error) {
 	var texupdStorage *texupd.TexUpd
 	{
 		c := texupd.Config{
-			Logger: config.Logger,
-			Redigo: config.Redigo,
-			Rescue: config.Rescue,
+			Logger:     config.Logger,
+			Permission: config.Permission,
+			Redigo:     config.Redigo,
+			Rescue:     config.Rescue,
 		}
 
 		texupdStorage, err = texupd.New(c)
@@ -91,9 +97,10 @@ func New(config Config) (*Storage, error) {
 	var timelineStorage *timeline.Timeline
 	{
 		c := timeline.Config{
-			Logger: config.Logger,
-			Redigo: config.Redigo,
-			Rescue: config.Rescue,
+			Logger:     config.Logger,
+			Permission: config.Permission,
+			Redigo:     config.Redigo,
+			Rescue:     config.Rescue,
 		}
 
 		timelineStorage, err = timeline.New(c)
@@ -105,9 +112,10 @@ func New(config Config) (*Storage, error) {
 	var updateStorage *update.Update
 	{
 		c := update.Config{
-			Logger: config.Logger,
-			Redigo: config.Redigo,
-			Rescue: config.Rescue,
+			Logger:     config.Logger,
+			Permission: config.Permission,
+			Redigo:     config.Redigo,
+			Rescue:     config.Rescue,
 		}
 
 		updateStorage, err = update.New(c)

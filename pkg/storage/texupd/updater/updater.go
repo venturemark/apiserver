@@ -1,6 +1,7 @@
 package updater
 
 import (
+	"github.com/venturemark/permission"
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/rescue"
@@ -12,9 +13,10 @@ import (
 )
 
 type Config struct {
-	Logger logger.Interface
-	Redigo redigo.Interface
-	Rescue rescue.Interface
+	Logger     logger.Interface
+	Permission permission.Gateway
+	Redigo     redigo.Interface
+	Rescue     rescue.Interface
 }
 
 type Updater struct {
@@ -28,6 +30,9 @@ type Updater struct {
 func New(config Config) (*Updater, error) {
 	if config.Logger == nil {
 		return nil, tracer.Maskf(invalidConfigError, "%T.Logger must not be empty", config)
+	}
+	if config.Permission == nil {
+		return nil, tracer.Maskf(invalidConfigError, "%T.Permission must not be empty", config)
 	}
 	if config.Redigo == nil {
 		return nil, tracer.Maskf(invalidConfigError, "%T.Redigo must not be empty", config)

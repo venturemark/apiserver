@@ -5,6 +5,9 @@ import (
 	"net"
 
 	"github.com/spf13/cobra"
+	"github.com/venturemark/permission"
+	"github.com/venturemark/permission/pkg/gateway"
+	"github.com/venturemark/permission/pkg/ingress"
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/redigo/pkg/client"
@@ -73,12 +76,39 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 		}
 	}
 
+	//************************************************************************//
+
+	var ingressGateway permission.Ingress
+	{
+		c := ingress.Config{}
+
+		ingressGateway, err = ingress.New(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
+
+	var permissionGateway permission.Gateway
+	{
+		c := gateway.Config{
+			Ingress: ingressGateway,
+		}
+
+		permissionGateway, err = gateway.New(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
+
+	//************************************************************************//
+
 	var redisStorage *storage.Storage
 	{
 		c := storage.Config{
-			Logger: r.logger,
-			Redigo: redigoClient,
-			Rescue: rescueEngine,
+			Logger:     r.logger,
+			Permission: permissionGateway,
+			Redigo:     redigoClient,
+			Rescue:     rescueEngine,
 		}
 
 		redisStorage, err = storage.New(c)
@@ -86,6 +116,8 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 			return tracer.Mask(err)
 		}
 	}
+
+	//************************************************************************//
 
 	var audienceHandler *audience.Handler
 	{
@@ -164,6 +196,8 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 			return tracer.Mask(err)
 		}
 	}
+
+	//************************************************************************//
 
 	var g *grpc.Server
 	{
