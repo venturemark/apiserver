@@ -16,8 +16,8 @@ import (
 )
 
 type Config struct {
-	Permission permission.Gateway
 	Logger     logger.Interface
+	Permission permission.Gateway
 	Redigo     redigo.Interface
 	Rescue     rescue.Interface
 }
@@ -37,8 +37,8 @@ func New(config Config) (*Storage, error) {
 	var audienceStorage *audience.Audience
 	{
 		c := audience.Config{
-			Permission: config.Permission,
 			Logger:     config.Logger,
+			Permission: config.Permission,
 			Redigo:     config.Redigo,
 			Rescue:     config.Rescue,
 		}
@@ -52,8 +52,8 @@ func New(config Config) (*Storage, error) {
 	var messageStorage *message.Message
 	{
 		c := message.Config{
-			Permission: config.Permission,
 			Logger:     config.Logger,
+			Permission: config.Permission,
 			Redigo:     config.Redigo,
 			Rescue:     config.Rescue,
 		}
@@ -67,8 +67,8 @@ func New(config Config) (*Storage, error) {
 	var roleStorage *role.Role
 	{
 		c := role.Config{
-			Permission: config.Permission,
 			Logger:     config.Logger,
+			Permission: config.Permission,
 			Redigo:     config.Redigo,
 			Rescue:     config.Rescue,
 		}
@@ -82,8 +82,8 @@ func New(config Config) (*Storage, error) {
 	var texupdStorage *texupd.TexUpd
 	{
 		c := texupd.Config{
-			Permission: config.Permission,
 			Logger:     config.Logger,
+			Permission: config.Permission,
 			Redigo:     config.Redigo,
 			Rescue:     config.Rescue,
 		}
@@ -97,8 +97,8 @@ func New(config Config) (*Storage, error) {
 	var timelineStorage *timeline.Timeline
 	{
 		c := timeline.Config{
-			Permission: config.Permission,
 			Logger:     config.Logger,
+			Permission: config.Permission,
 			Redigo:     config.Redigo,
 			Rescue:     config.Rescue,
 		}
@@ -112,8 +112,8 @@ func New(config Config) (*Storage, error) {
 	var updateStorage *update.Update
 	{
 		c := update.Config{
-			Permission: config.Permission,
 			Logger:     config.Logger,
+			Permission: config.Permission,
 			Redigo:     config.Redigo,
 			Rescue:     config.Rescue,
 		}

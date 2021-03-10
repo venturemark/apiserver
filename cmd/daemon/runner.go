@@ -105,8 +105,8 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 	var redisStorage *storage.Storage
 	{
 		c := storage.Config{
-			Permission: permissionGateway,
 			Logger:     r.logger,
+			Permission: permissionGateway,
 			Redigo:     redigoClient,
 			Rescue:     rescueEngine,
 		}

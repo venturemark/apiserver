@@ -11,8 +11,8 @@ import (
 )
 
 type Config struct {
-	Permission permission.Gateway
 	Logger     logger.Interface
+	Permission permission.Gateway
 	Redigo     redigo.Interface
 	Rescue     rescue.Interface
 }
@@ -27,8 +27,8 @@ func New(config Config) (*Update, error) {
 	var s *searcher.Searcher
 	{
 		c := searcher.Config{
-			Permission: config.Permission,
 			Logger:     config.Logger,
+			Permission: config.Permission,
 			Redigo:     config.Redigo,
 			Rescue:     config.Rescue,
 		}

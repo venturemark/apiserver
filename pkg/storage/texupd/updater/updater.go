@@ -13,8 +13,8 @@ import (
 )
 
 type Config struct {
-	Permission permission.Gateway
 	Logger     logger.Interface
+	Permission permission.Gateway
 	Redigo     redigo.Interface
 	Rescue     rescue.Interface
 }
@@ -28,11 +28,11 @@ type Updater struct {
 }
 
 func New(config Config) (*Updater, error) {
-	if config.Permission == nil {
-		return nil, tracer.Maskf(invalidConfigError, "%T.Permission must not be empty", config)
-	}
 	if config.Logger == nil {
 		return nil, tracer.Maskf(invalidConfigError, "%T.Logger must not be empty", config)
+	}
+	if config.Permission == nil {
+		return nil, tracer.Maskf(invalidConfigError, "%T.Permission must not be empty", config)
 	}
 	if config.Redigo == nil {
 		return nil, tracer.Maskf(invalidConfigError, "%T.Redigo must not be empty", config)

@@ -14,8 +14,8 @@ import (
 )
 
 type Config struct {
-	Permission permission.Gateway
 	Logger     logger.Interface
+	Permission permission.Gateway
 	Redigo     redigo.Interface
 	Rescue     rescue.Interface
 }
@@ -33,8 +33,8 @@ func New(config Config) (*Audience, error) {
 	var cre *creator.Creator
 	{
 		c := creator.Config{
-			Permission: config.Permission,
 			Logger:     config.Logger,
+			Permission: config.Permission,
 			Redigo:     config.Redigo,
 			Rescue:     config.Rescue,
 		}
@@ -48,8 +48,8 @@ func New(config Config) (*Audience, error) {
 	var del *deleter.Deleter
 	{
 		c := deleter.Config{
-			Permission: config.Permission,
 			Logger:     config.Logger,
+			Permission: config.Permission,
 			Redigo:     config.Redigo,
 			Rescue:     config.Rescue,
 		}
@@ -63,8 +63,8 @@ func New(config Config) (*Audience, error) {
 	var sea *searcher.Searcher
 	{
 		c := searcher.Config{
-			Permission: config.Permission,
 			Logger:     config.Logger,
+			Permission: config.Permission,
 			Redigo:     config.Redigo,
 			Rescue:     config.Rescue,
 		}
@@ -78,8 +78,8 @@ func New(config Config) (*Audience, error) {
 	var upd *updater.Updater
 	{
 		c := updater.Config{
-			Permission: config.Permission,
 			Logger:     config.Logger,
+			Permission: config.Permission,
 			Redigo:     config.Redigo,
 			Rescue:     config.Rescue,
 		}
