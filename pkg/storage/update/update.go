@@ -1,6 +1,7 @@
 package update
 
 import (
+	"github.com/venturemark/permission"
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/rescue"
@@ -10,9 +11,10 @@ import (
 )
 
 type Config struct {
-	Logger logger.Interface
-	Redigo redigo.Interface
-	Rescue rescue.Interface
+	Permission permission.Gateway
+	Logger     logger.Interface
+	Redigo     redigo.Interface
+	Rescue     rescue.Interface
 }
 
 type Update struct {
@@ -25,9 +27,10 @@ func New(config Config) (*Update, error) {
 	var s *searcher.Searcher
 	{
 		c := searcher.Config{
-			Logger: config.Logger,
-			Redigo: config.Redigo,
-			Rescue: config.Rescue,
+			Permission: config.Permission,
+			Logger:     config.Logger,
+			Redigo:     config.Redigo,
+			Rescue:     config.Rescue,
 		}
 
 		s, err = searcher.New(c)

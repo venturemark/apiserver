@@ -1,6 +1,7 @@
 package message
 
 import (
+	"github.com/venturemark/permission"
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/rescue"
@@ -12,9 +13,10 @@ import (
 )
 
 type Config struct {
-	Logger logger.Interface
-	Redigo redigo.Interface
-	Rescue rescue.Interface
+	Permission permission.Gateway
+	Logger     logger.Interface
+	Redigo     redigo.Interface
+	Rescue     rescue.Interface
 }
 
 type Message struct {
@@ -29,9 +31,10 @@ func New(config Config) (*Message, error) {
 	var cre *creator.Creator
 	{
 		c := creator.Config{
-			Logger: config.Logger,
-			Redigo: config.Redigo,
-			Rescue: config.Rescue,
+			Permission: config.Permission,
+			Logger:     config.Logger,
+			Redigo:     config.Redigo,
+			Rescue:     config.Rescue,
 		}
 
 		cre, err = creator.New(c)
@@ -43,9 +46,10 @@ func New(config Config) (*Message, error) {
 	var del *deleter.Deleter
 	{
 		c := deleter.Config{
-			Logger: config.Logger,
-			Redigo: config.Redigo,
-			Rescue: config.Rescue,
+			Permission: config.Permission,
+			Logger:     config.Logger,
+			Redigo:     config.Redigo,
+			Rescue:     config.Rescue,
 		}
 
 		del, err = deleter.New(c)
@@ -57,9 +61,10 @@ func New(config Config) (*Message, error) {
 	var sea *searcher.Searcher
 	{
 		c := searcher.Config{
-			Logger: config.Logger,
-			Redigo: config.Redigo,
-			Rescue: config.Rescue,
+			Permission: config.Permission,
+			Logger:     config.Logger,
+			Redigo:     config.Redigo,
+			Rescue:     config.Rescue,
 		}
 
 		sea, err = searcher.New(c)
