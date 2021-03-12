@@ -18,7 +18,9 @@ func (h *Handler) Update(ctx context.Context, req *texupd.UpdateI) (*texupd.Upda
 		}
 
 		for i := range req.Obj {
-			req.Obj[i].Metadata[metadata.UserID] = u
+			{
+				req.Obj[i].Metadata[metadata.UserID] = u
+			}
 		}
 	}
 

@@ -21,13 +21,20 @@ func (h *Handler) Create(ctx context.Context, req *message.CreateI) (*message.Cr
 		}
 
 		for i := range req.Obj {
-			req.Obj[i].Metadata[metadata.UserID] = u
-		}
-	}
+			{
+				req.Obj[i].Metadata[metadata.SubjectID] = u
+				req.Obj[i].Metadata[metadata.UserID] = u
+			}
 
-	{
-		for i := range req.Obj {
-			req.Obj[i].Metadata[metadata.MessageID] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
+			{
+				req.Obj[i].Metadata[metadata.ResourceKind] = "message"
+				req.Obj[i].Metadata[metadata.RoleKind] = "owner"
+			}
+
+			{
+				req.Obj[i].Metadata[metadata.MessageID] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
+				req.Obj[i].Metadata[metadata.RoleID] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
+			}
 		}
 	}
 
@@ -35,16 +42,7 @@ func (h *Handler) Create(ctx context.Context, req *message.CreateI) (*message.Cr
 		rol := &role.CreateI{
 			Obj: []*role.CreateI_Obj{
 				{
-					Metadata: map[string]string{
-						metadata.MessageID:    req.Obj[0].Metadata[metadata.MessageID],
-						metadata.ResourceKind: "message",
-						metadata.RoleID:       strconv.FormatInt(time.Now().UTC().UnixNano(), 10),
-						metadata.RoleKind:     "owner",
-						metadata.SubjectID:    req.Obj[0].Metadata[metadata.UserID],
-						metadata.TimelineID:   req.Obj[0].Metadata[metadata.TimelineID],
-						metadata.UpdateID:     req.Obj[0].Metadata[metadata.UpdateID],
-						metadata.VentureID:    req.Obj[0].Metadata[metadata.VentureID],
-					},
+					Metadata: req.Obj[0].Metadata,
 				},
 			},
 		}
