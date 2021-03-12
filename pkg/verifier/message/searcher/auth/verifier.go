@@ -1,8 +1,6 @@
 package auth
 
 import (
-	"fmt"
-
 	"github.com/venturemark/apigengo/pkg/pbf/message"
 	"github.com/venturemark/permission"
 	"github.com/venturemark/permission/pkg/label"
@@ -65,11 +63,6 @@ func (v *Verifier) Verify(req *message.SearchI) (bool, error) {
 			return false, tracer.Mask(err)
 		}
 	}
-
-	fmt.Printf("%#v\n", act)
-	fmt.Printf("%#v\n", res)
-	fmt.Printf("%#v\n", rol)
-	fmt.Printf("%#v\n", vis)
 
 	{
 		ok := v.permission.Ingress().Match(act, res, rol, vis)
