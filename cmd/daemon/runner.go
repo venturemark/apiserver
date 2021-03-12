@@ -8,6 +8,7 @@ import (
 	"github.com/venturemark/permission"
 	"github.com/venturemark/permission/pkg/gateway"
 	"github.com/venturemark/permission/pkg/ingress"
+	"github.com/venturemark/permission/pkg/resolver"
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/redigo/pkg/client"
@@ -88,10 +89,24 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 		}
 	}
 
+	var resourceResolver permission.Resource
+	{
+		c := resolver.Config{
+			Logger: r.logger,
+			Redigo: redigoClient,
+		}
+
+		resourceResolver, err = resolver.New(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
+
 	var permissionGateway permission.Gateway
 	{
 		c := gateway.Config{
-			Ingress: ingressGateway,
+			Ingress:  ingressGateway,
+			Resource: resourceResolver,
 		}
 
 		permissionGateway, err = gateway.New(c)

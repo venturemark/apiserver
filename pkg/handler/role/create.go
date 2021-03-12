@@ -20,13 +20,13 @@ func (h *Handler) Create(ctx context.Context, req *role.CreateI) (*role.CreateO,
 		}
 
 		for i := range req.Obj {
-			req.Obj[i].Metadata[metadata.UserID] = u
-		}
-	}
+			{
+				req.Obj[i].Metadata[metadata.UserID] = u
+			}
 
-	{
-		for i := range req.Obj {
-			req.Obj[i].Metadata[metadata.RoleID] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
+			{
+				req.Obj[i].Metadata[metadata.RoleID] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
+			}
 		}
 	}
 

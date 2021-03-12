@@ -18,7 +18,9 @@ func (h *Handler) Search(ctx context.Context, req *timeline.SearchI) (*timeline.
 		}
 
 		for i := range req.Obj {
-			req.Obj[i].Metadata[metadata.UserID] = u
+			{
+				req.Obj[i].Metadata[metadata.UserID] = u
+			}
 		}
 	}
 
