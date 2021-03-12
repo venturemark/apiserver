@@ -8,6 +8,7 @@ import (
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/verifier/texupd/updater"
+	"github.com/venturemark/apiserver/pkg/verifier/texupd/updater/auth"
 	"github.com/venturemark/apiserver/pkg/verifier/texupd/updater/patch"
 	"github.com/venturemark/apiserver/pkg/verifier/texupd/updater/time"
 )
@@ -43,6 +44,19 @@ func New(config Config) (*Updater, error) {
 
 	var err error
 
+	var authVerifier *auth.Verifier
+	{
+		c := auth.VerifierConfig{
+			Permission: config.Permission,
+			Redigo:     config.Redigo,
+		}
+
+		authVerifier, err = auth.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	var patchVerifier *patch.Verifier
 	{
 		c := patch.VerifierConfig{}
@@ -71,6 +85,7 @@ func New(config Config) (*Updater, error) {
 		rescue: config.Rescue,
 
 		verify: []updater.Interface{
+			authVerifier,
 			patchVerifier,
 			timeVerifier,
 		},
