@@ -8,6 +8,7 @@ import (
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/verifier/update/searcher"
+	"github.com/venturemark/apiserver/pkg/verifier/update/searcher/auth"
 	"github.com/venturemark/apiserver/pkg/verifier/update/searcher/empty"
 )
 
@@ -42,6 +43,19 @@ func New(config Config) (*Searcher, error) {
 
 	var err error
 
+	var authVerifier *auth.Verifier
+	{
+		c := auth.VerifierConfig{
+			Permission: config.Permission,
+			Redigo:     config.Redigo,
+		}
+
+		authVerifier, err = auth.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	var emptyVerifier *empty.Verifier
 	{
 		c := empty.VerifierConfig{}
@@ -58,7 +72,10 @@ func New(config Config) (*Searcher, error) {
 		rescue: config.Rescue,
 
 		verify: []searcher.Interface{
+			// The empty verifier must be run first so that following verifiers
+			// do not have to check for prerequisites over and over again.
 			emptyVerifier,
+			authVerifier,
 		},
 	}
 
