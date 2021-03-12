@@ -8,6 +8,7 @@ import (
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/creator"
+	"github.com/venturemark/apiserver/pkg/verifier/timeline/creator/auth"
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/creator/empty"
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/creator/length"
 )
@@ -43,6 +44,19 @@ func New(config Config) (*Creator, error) {
 
 	var err error
 
+	var authVerifier *auth.Verifier
+	{
+		c := auth.VerifierConfig{
+			Permission: config.Permission,
+			Redigo:     config.Redigo,
+		}
+
+		authVerifier, err = auth.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	var emptyVerifier *empty.Verifier
 	{
 		c := empty.VerifierConfig{}
@@ -69,7 +83,10 @@ func New(config Config) (*Creator, error) {
 		rescue: config.Rescue,
 
 		verify: []creator.Interface{
+			// The empty verifier must be run first so that following verifiers
+			// do not have to check for prerequisites over and over again.
 			emptyVerifier,
+			authVerifier,
 			lengthVerifier,
 		},
 	}

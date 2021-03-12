@@ -8,6 +8,7 @@ import (
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/updater"
+	"github.com/venturemark/apiserver/pkg/verifier/timeline/updater/auth"
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/updater/patch"
 )
 
@@ -42,6 +43,19 @@ func New(config Config) (*Updater, error) {
 
 	var err error
 
+	var authVerifier *auth.Verifier
+	{
+		c := auth.VerifierConfig{
+			Permission: config.Permission,
+			Redigo:     config.Redigo,
+		}
+
+		authVerifier, err = auth.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	var patchVerifier *patch.Verifier
 	{
 		c := patch.VerifierConfig{}
@@ -58,6 +72,7 @@ func New(config Config) (*Updater, error) {
 		rescue: config.Rescue,
 
 		verify: []updater.Interface{
+			authVerifier,
 			patchVerifier,
 		},
 	}
