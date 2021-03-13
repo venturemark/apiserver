@@ -11,9 +11,6 @@ import (
 	"github.com/xh3b4sd/tracer"
 )
 
-// Update provides a storage primitive to modify text updates associated with a
-// timeline. A timeline refers to many updates. For more information about
-// technical details see the inline documentation.
 func (u *Updater) Update(req *texupd.UpdateI) (*texupd.UpdateO, error) {
 	var err error
 

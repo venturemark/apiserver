@@ -11,8 +11,6 @@ import (
 	"github.com/xh3b4sd/tracer"
 )
 
-// Delete provides a storage primitive to remove timelines associated with an
-// audience.
 func (d *Deleter) Delete(req *venture.DeleteI) (*venture.DeleteO, error) {
 	var err error
 

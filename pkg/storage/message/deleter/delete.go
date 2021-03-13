@@ -7,8 +7,6 @@ import (
 	"github.com/xh3b4sd/tracer"
 )
 
-// Delete provides a storage primitive to remove messages associated with an
-// update.
 func (c *Deleter) Delete(req *message.DeleteI) (*message.DeleteO, error) {
 	var err error
 

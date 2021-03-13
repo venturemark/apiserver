@@ -10,10 +10,6 @@ import (
 	"github.com/xh3b4sd/tracer"
 )
 
-// Create provides a storage primitive to persist text updates associated with a
-// timeline. A timeline refers to many updates. Updates can be found considering
-// their metadata and time of creation. For more information about technical
-// details see the inline documentation.
 func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 	var err error
 

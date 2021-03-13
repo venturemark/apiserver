@@ -10,8 +10,6 @@ import (
 	"github.com/xh3b4sd/tracer"
 )
 
-// Create provides a storage primitive to persist messages associated with an
-// update.
 func (c *Creator) Create(req *message.CreateI) (*message.CreateO, error) {
 	var err error
 
