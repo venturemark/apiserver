@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"github.com/venturemark/apigengo/pkg/pbf/texupd"
+	"github.com/venturemark/apigengo/pkg/pbf/venture"
 	"github.com/venturemark/permission"
 	"github.com/venturemark/permission/pkg/label"
 	"github.com/venturemark/permission/pkg/label/action"
@@ -38,7 +38,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-func (v *Verifier) Verify(req *texupd.DeleteI) (bool, error) {
+func (v *Verifier) Verify(req *venture.UpdateI) (bool, error) {
 	var err error
 
 	var act label.Label
@@ -75,27 +75,19 @@ func (v *Verifier) Verify(req *texupd.DeleteI) (bool, error) {
 }
 
 func (v *Verifier) act(met map[string]string) (label.Label, error) {
-	return action.Delete, nil
+	return action.Update, nil
 }
 
 func (v *Verifier) res(met map[string]string) (label.Label, error) {
-	return resource.Update, nil
+	return resource.Venture, nil
 }
 
 func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 	var err error
 
-	var upd string
+	var ven string
 	{
-		upd, err = v.permission.Resource().Update().Role(met)
-		if err != nil {
-			return "", tracer.Mask(err)
-		}
-	}
-
-	var tim string
-	{
-		tim, err = v.permission.Resource().Timeline().Role(met)
+		ven, err = v.permission.Resource().Venture().Role(met)
 		if err != nil {
 			return "", tracer.Mask(err)
 		}
@@ -103,10 +95,7 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 
 	var rol label.Label
 	{
-		if upd == role.Owner.Label() {
-			rol = role.Owner
-		}
-		if tim == role.Owner.Label() {
+		if ven == role.Owner.Label() {
 			rol = role.Owner
 		}
 	}
@@ -117,9 +106,9 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 func (v *Verifier) vis(met map[string]string) (label.Label, error) {
 	var err error
 
-	var upd string
+	var ven string
 	{
-		upd, err = v.permission.Resource().Update().Visibility(met)
+		ven, err = v.permission.Resource().Venture().Visibility(met)
 		if err != nil {
 			return "", tracer.Mask(err)
 		}
@@ -127,16 +116,16 @@ func (v *Verifier) vis(met map[string]string) (label.Label, error) {
 
 	var vis label.Label
 	{
-		if upd == "" {
+		if ven == "" {
 			vis = visibility.Any
 		}
-		if upd == visibility.Any.Label() {
+		if ven == visibility.Any.Label() {
 			vis = visibility.Any
 		}
-		if upd == visibility.Private.Label() {
+		if ven == visibility.Private.Label() {
 			vis = visibility.Private
 		}
-		if upd == visibility.Public.Label() {
+		if ven == visibility.Public.Label() {
 			vis = visibility.Public
 		}
 	}
