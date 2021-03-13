@@ -12,8 +12,6 @@ import (
 	"github.com/xh3b4sd/tracer"
 )
 
-// Search provides a filter primitive to lookup timelines associated with a
-// user.
 func (s *Searcher) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 	var err error
 

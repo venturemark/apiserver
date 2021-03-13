@@ -12,8 +12,6 @@ import (
 	"github.com/xh3b4sd/tracer"
 )
 
-// Update provides a storage primitive to modify timelines associated with a
-// user.
 func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 	var err error
 

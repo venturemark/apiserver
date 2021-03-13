@@ -10,8 +10,6 @@ import (
 	"github.com/xh3b4sd/tracer"
 )
 
-// Create provides a storage primitive to persist timelines associated with a
-// user.
 func (c *Creator) Create(req *venture.CreateI) (*venture.CreateO, error) {
 	var err error
 

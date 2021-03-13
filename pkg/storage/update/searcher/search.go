@@ -9,10 +9,6 @@ import (
 	"github.com/xh3b4sd/tracer"
 )
 
-// Search provides a filter primitive to lookup updates associated with a
-// timeline. A timeline refers to many updates. Updates can be found considering
-// their scope and time of creation. For more information about technical
-// details see the inline documentation.
 func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 	var err error
 
