@@ -16,6 +16,8 @@ import (
 )
 
 type ServerConfig struct {
+	DonCha   <-chan struct{}
+	ErrCha   chan<- error
 	Logger   logger.Interface
 	Handlers []handler.Interface
 
@@ -24,6 +26,8 @@ type ServerConfig struct {
 }
 
 type Server struct {
+	donCha   <-chan struct{}
+	errCha   chan<- error
 	logger   logger.Interface
 	handlers []handler.Interface
 
@@ -34,6 +38,12 @@ type Server struct {
 }
 
 func NewServer(config ServerConfig) (*Server, error) {
+	if config.DonCha == nil {
+		return nil, tracer.Maskf(invalidConfigError, "%T.DonCha must not be empty", config)
+	}
+	if config.ErrCha == nil {
+		return nil, tracer.Maskf(invalidConfigError, "%T.ErrCha must not be empty", config)
+	}
 	if config.Logger == nil {
 		return nil, tracer.Maskf(invalidConfigError, "%T.Logger must not be empty", config)
 	}
@@ -81,6 +91,8 @@ func NewServer(config ServerConfig) (*Server, error) {
 	}
 
 	s := &Server{
+		donCha:   config.DonCha,
+		errCha:   config.ErrCha,
 		logger:   config.Logger,
 		handlers: config.Handlers,
 
@@ -105,23 +117,23 @@ func (s *Server) Attach() error {
 	return nil
 }
 
-func (s *Server) Listen() error {
+func (s *Server) Listen() {
 	var err error
 
 	var l net.Listener
 	{
 		l, err = net.Listen("tcp", net.JoinHostPort(s.host, s.port))
 		if err != nil {
-			return tracer.Mask(err)
+			s.errCha <- tracer.Mask(err)
 		}
 	}
 
 	s.logger.Log(context.Background(), "level", "info", "message", fmt.Sprintf("server running at %s", l.Addr().String()))
 
-	err = s.server.Serve(l)
-	if err != nil {
-		return tracer.Mask(err)
+	{
+		err = s.server.Serve(l)
+		if err != nil {
+			s.errCha <- tracer.Mask(err)
+		}
 	}
-
-	return nil
 }

@@ -3,6 +3,10 @@ package daemon
 import (
 	"context"
 	"net"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/spf13/cobra"
 	"github.com/venturemark/permission"
@@ -228,9 +232,24 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 
 	//************************************************************************//
 
+	var donCha chan struct{}
+	var errCha chan error
+	var sigCha chan os.Signal
+	{
+		donCha = make(chan struct{})
+		errCha = make(chan error, 1)
+		sigCha = make(chan os.Signal, 2)
+
+		defer close(donCha)
+		defer close(errCha)
+		defer close(sigCha)
+	}
+
 	var g *grpc.Server
 	{
 		c := grpc.ServerConfig{
+			DonCha: donCha,
+			ErrCha: errCha,
 			Logger: r.logger,
 			Handlers: []handler.Interface{
 				audienceHandler,
@@ -258,11 +277,23 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 			return tracer.Mask(err)
 		}
 
-		err = g.Listen()
-		if err != nil {
-			return tracer.Mask(err)
-		}
+		go g.Listen()
 	}
 
-	return nil
+	{
+		signal.Notify(sigCha, os.Interrupt, syscall.SIGTERM)
+
+		select {
+		case err := <-errCha:
+			return tracer.Mask(err)
+
+		case <-sigCha:
+			select {
+			case <-time.After(r.flag.ApiServer.TerminationGracePeriod):
+			case <-sigCha:
+			}
+
+			return nil
+		}
+	}
 }
