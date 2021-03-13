@@ -23,6 +23,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/handler/texupd"
 	"github.com/venturemark/apiserver/pkg/handler/timeline"
 	"github.com/venturemark/apiserver/pkg/handler/update"
+	"github.com/venturemark/apiserver/pkg/handler/venture"
 	"github.com/venturemark/apiserver/pkg/server/grpc"
 	"github.com/venturemark/apiserver/pkg/storage"
 )
@@ -212,6 +213,19 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 		}
 	}
 
+	var ventureHandler *venture.Handler
+	{
+		c := venture.HandlerConfig{
+			Logger:  r.logger,
+			Storage: redisStorage,
+		}
+
+		ventureHandler, err = venture.NewHandler(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
+
 	//************************************************************************//
 
 	var g *grpc.Server
@@ -225,6 +239,7 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 				texupdHandler,
 				timelineHandler,
 				updateHandler,
+				ventureHandler,
 			},
 
 			Host: r.flag.ApiServer.Host,

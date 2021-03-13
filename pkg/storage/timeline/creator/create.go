@@ -60,7 +60,7 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 			Obj: []*timeline.CreateO_Obj{
 				{
 					Metadata: map[string]string{
-						metadata.TimelineID: req.Obj[0].Metadata[metadata.TimelineID],
+						metadata.TimelineID: tik.ID().S(),
 					},
 				},
 			},

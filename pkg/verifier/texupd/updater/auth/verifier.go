@@ -85,14 +85,6 @@ func (v *Verifier) res(met map[string]string) (label.Label, error) {
 func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 	var err error
 
-	var mes string
-	{
-		mes, err = v.permission.Resource().Update().Role(met)
-		if err != nil {
-			return "", tracer.Mask(err)
-		}
-	}
-
 	var tim string
 	{
 		tim, err = v.permission.Resource().Timeline().Role(met)
@@ -101,12 +93,20 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 		}
 	}
 
+	var upd string
+	{
+		upd, err = v.permission.Resource().Update().Role(met)
+		if err != nil {
+			return "", tracer.Mask(err)
+		}
+	}
+
 	var rol label.Label
 	{
-		if mes == role.Owner.Label() {
+		if tim == role.Owner.Label() {
 			rol = role.Owner
 		}
-		if tim == role.Owner.Label() {
+		if upd == role.Owner.Label() {
 			rol = role.Owner
 		}
 	}
@@ -117,9 +117,9 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 func (v *Verifier) vis(met map[string]string) (label.Label, error) {
 	var err error
 
-	var mes string
+	var upd string
 	{
-		mes, err = v.permission.Resource().Update().Visibility(met)
+		upd, err = v.permission.Resource().Update().Visibility(met)
 		if err != nil {
 			return "", tracer.Mask(err)
 		}
@@ -127,16 +127,16 @@ func (v *Verifier) vis(met map[string]string) (label.Label, error) {
 
 	var vis label.Label
 	{
-		if mes == "" {
+		if upd == "" {
 			vis = visibility.Any
 		}
-		if mes == visibility.Any.Label() {
+		if upd == visibility.Any.Label() {
 			vis = visibility.Any
 		}
-		if mes == visibility.Private.Label() {
+		if upd == visibility.Private.Label() {
 			vis = visibility.Private
 		}
-		if mes == visibility.Public.Label() {
+		if upd == visibility.Public.Label() {
 			vis = visibility.Public
 		}
 	}
