@@ -8,6 +8,7 @@ import (
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/deleter"
+	"github.com/venturemark/apiserver/pkg/verifier/timeline/deleter/auth"
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/deleter/empty"
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/deleter/exist"
 	"github.com/venturemark/apiserver/pkg/verifier/timeline/deleter/state"
@@ -43,6 +44,19 @@ func New(config Config) (*Deleter, error) {
 	}
 
 	var err error
+
+	var authVerifier *auth.Verifier
+	{
+		c := auth.VerifierConfig{
+			Permission: config.Permission,
+			Redigo:     config.Redigo,
+		}
+
+		authVerifier, err = auth.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
 
 	var emptyVerifier *empty.Verifier
 	{
@@ -84,7 +98,10 @@ func New(config Config) (*Deleter, error) {
 		rescue: config.Rescue,
 
 		verify: []deleter.Interface{
+			// The empty verifier must be run first so that following verifiers
+			// do not have to check for prerequisites over and over again.
 			emptyVerifier,
+			authVerifier,
 			existVerifier,
 			stateVerifier,
 		},

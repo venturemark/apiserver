@@ -12,6 +12,14 @@ import (
 
 func (h *Handler) Search(ctx context.Context, req *update.SearchI) (*update.SearchO, error) {
 	{
+		for i := range req.Obj {
+			if req.Obj[i].Metadata == nil {
+				req.Obj[i].Metadata = map[string]string{}
+			}
+		}
+	}
+
+	{
 		u, ok := user.FromContext(ctx)
 		if !ok {
 			return nil, tracer.Mask(invalidUserError)

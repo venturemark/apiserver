@@ -1,8 +1,7 @@
 package auth
 
 import (
-	"github.com/venturemark/apicommon/pkg/metadata"
-	"github.com/venturemark/apigengo/pkg/pbf/message"
+	"github.com/venturemark/apigengo/pkg/pbf/timeline"
 	"github.com/venturemark/permission"
 	"github.com/venturemark/permission/pkg/label"
 	"github.com/venturemark/permission/pkg/label/action"
@@ -39,7 +38,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-func (v *Verifier) Verify(req *message.SearchI) (bool, error) {
+func (v *Verifier) Verify(req *timeline.UpdateI) (bool, error) {
 	var err error
 
 	var act label.Label
@@ -76,37 +75,15 @@ func (v *Verifier) Verify(req *message.SearchI) (bool, error) {
 }
 
 func (v *Verifier) act(met map[string]string) (label.Label, error) {
-	{
-		mei := met[metadata.MessageID]
-		if mei == "" {
-			return action.Filter, nil
-		}
-	}
-
-	return action.Search, nil
+	return action.Update, nil
 }
 
 func (v *Verifier) res(met map[string]string) (label.Label, error) {
-	return resource.Message, nil
+	return resource.Timeline, nil
 }
 
 func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 	var err error
-
-	{
-		mei := met[metadata.MessageID]
-		if mei == "" {
-			return role.Subject, nil
-		}
-	}
-
-	var mes string
-	{
-		mes, err = v.permission.Resource().Message().Role(met)
-		if err != nil {
-			return "", tracer.Mask(err)
-		}
-	}
 
 	var tim string
 	{
@@ -116,18 +93,20 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 		}
 	}
 
+	var ven string
+	{
+		ven, err = v.permission.Resource().Venture().Role(met)
+		if err != nil {
+			return "", tracer.Mask(err)
+		}
+	}
+
 	var rol label.Label
 	{
-		if mes == role.Member.Label() {
-			rol = role.Member
-		}
-		if mes == role.Owner.Label() {
+		if tim == role.Owner.Label() {
 			rol = role.Owner
 		}
-		if tim == role.Member.Label() {
-			rol = role.Member
-		}
-		if tim == role.Owner.Label() {
+		if ven == role.Owner.Label() {
 			rol = role.Owner
 		}
 	}
@@ -149,7 +128,10 @@ func (v *Verifier) vis(met map[string]string) (label.Label, error) {
 	var vis label.Label
 	{
 		if tim == "" {
-			vis = visibility.Private
+			vis = visibility.Any
+		}
+		if tim == visibility.Any.Label() {
+			vis = visibility.Any
 		}
 		if tim == visibility.Private.Label() {
 			vis = visibility.Private
