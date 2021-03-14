@@ -17,11 +17,10 @@ func (s *Searcher) Search(req *role.SearchI) (*role.SearchO, error) {
 		rok = key.Role(req.Obj[0].Metadata)
 	}
 
-	// With redis we use ZREVRANGE which allows us to search for objects while
-	// having support for chunking.
 	var str []string
 	{
 		k := rok.List()
+
 		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
