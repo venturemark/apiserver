@@ -21,9 +21,6 @@ func (v *Verifier) Verify(req *venture.CreateI) (bool, error) {
 		if len(req.Obj) != 1 {
 			return false, nil
 		}
-		if req.Obj[0].Metadata != nil {
-			return false, nil
-		}
 		if req.Obj[0].Property == nil {
 			return false, nil
 		}

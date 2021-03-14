@@ -12,6 +12,14 @@ import (
 
 func (h *Handler) Update(ctx context.Context, req *venture.UpdateI) (*venture.UpdateO, error) {
 	{
+		for i := range req.Obj {
+			if req.Obj[i].Metadata == nil {
+				req.Obj[i].Metadata = map[string]string{}
+			}
+		}
+	}
+
+	{
 		u, ok := user.FromContext(ctx)
 		if !ok {
 			return nil, tracer.Mask(invalidUserError)

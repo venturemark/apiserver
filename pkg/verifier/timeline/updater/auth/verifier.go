@@ -117,9 +117,9 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 func (v *Verifier) vis(met map[string]string) (label.Label, error) {
 	var err error
 
-	var mes string
+	var tim string
 	{
-		mes, err = v.permission.Resource().Timeline().Visibility(met)
+		tim, err = v.permission.Resource().Timeline().Visibility(met)
 		if err != nil {
 			return "", tracer.Mask(err)
 		}
@@ -127,16 +127,16 @@ func (v *Verifier) vis(met map[string]string) (label.Label, error) {
 
 	var vis label.Label
 	{
-		if mes == "" {
+		if tim == "" {
 			vis = visibility.Any
 		}
-		if mes == visibility.Any.Label() {
+		if tim == visibility.Any.Label() {
 			vis = visibility.Any
 		}
-		if mes == visibility.Private.Label() {
+		if tim == visibility.Private.Label() {
 			vis = visibility.Private
 		}
-		if mes == visibility.Public.Label() {
+		if tim == visibility.Public.Label() {
 			vis = visibility.Public
 		}
 	}

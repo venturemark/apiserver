@@ -9,6 +9,7 @@ import (
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apicommon/pkg/schema"
 	"github.com/venturemark/apigengo/pkg/pbf/venture"
+	"github.com/xh3b4sd/redigo/pkg/simple"
 	"github.com/xh3b4sd/tracer"
 )
 
@@ -17,18 +18,17 @@ func (s *Searcher) Search(req *venture.SearchI) (*venture.SearchO, error) {
 
 	var str []string
 	{
-		_, sub := req.Obj[0].Metadata[metadata.SubjectID]
+		sub := req.Obj[0].Metadata[metadata.SubjectID] != ""
+		ven := req.Obj[0].Metadata[metadata.VentureID] != ""
 
-		if sub {
+		if sub && !ven {
 			str, err = s.searchSub(req)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
 		}
 
-		_, ven := req.Obj[0].Metadata[metadata.VentureID]
-
-		if ven {
+		if !sub && ven {
 			str, err = s.searchVen(req)
 			if err != nil {
 				return nil, tracer.Mask(err)
@@ -153,11 +153,13 @@ func (s *Searcher) searchVen(req *venture.SearchI) ([]string, error) {
 		k := vek.Elem()
 
 		s, err := s.redigo.Simple().Search().Value(k)
-		if err != nil {
+		if simple.IsNotFound(err) {
+			// fall through
+		} else if err != nil {
 			return nil, tracer.Mask(err)
+		} else {
+			str = append(str, s)
 		}
-
-		str = append(str, s)
 	}
 
 	return str, nil

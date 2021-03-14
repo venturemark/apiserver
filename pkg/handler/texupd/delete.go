@@ -12,6 +12,14 @@ import (
 
 func (h *Handler) Delete(ctx context.Context, req *texupd.DeleteI) (*texupd.DeleteO, error) {
 	{
+		for i := range req.Obj {
+			if req.Obj[i].Metadata == nil {
+				req.Obj[i].Metadata = map[string]string{}
+			}
+		}
+	}
+
+	{
 		u, ok := user.FromContext(ctx)
 		if !ok {
 			return nil, tracer.Mask(invalidUserError)

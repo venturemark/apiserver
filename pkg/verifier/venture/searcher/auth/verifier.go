@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/venture"
 	"github.com/venturemark/permission"
 	"github.com/venturemark/permission/pkg/label"
@@ -75,6 +76,11 @@ func (v *Verifier) Verify(req *venture.SearchI) (bool, error) {
 }
 
 func (v *Verifier) act(met map[string]string) (label.Label, error) {
+	ven := met[metadata.VentureID]
+	if ven == "" {
+		return action.Filter, nil
+	}
+
 	return action.Search, nil
 }
 
@@ -84,6 +90,13 @@ func (v *Verifier) res(met map[string]string) (label.Label, error) {
 
 func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 	var err error
+
+	{
+		ven := met[metadata.VentureID]
+		if ven == "" {
+			return role.Subject, nil
+		}
+	}
 
 	var ven string
 	{
