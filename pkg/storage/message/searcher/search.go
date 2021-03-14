@@ -9,8 +9,6 @@ import (
 	"github.com/xh3b4sd/tracer"
 )
 
-// Search provides a filter primitive to lookup messages associated with an
-// update.
 func (s *Searcher) Search(req *message.SearchI) (*message.SearchO, error) {
 	var err error
 

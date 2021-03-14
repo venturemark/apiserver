@@ -110,18 +110,18 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 func (v *Verifier) vis(met map[string]string) (label.Label, error) {
 	var vis label.Label
 	{
-		mes := met[metadata.ResourceVisibility]
+		upd := met[metadata.ResourceVisibility]
 
-		if mes == "" {
+		if upd == "" {
 			vis = visibility.Any
 		}
-		if mes == visibility.Any.Label() {
+		if upd == visibility.Any.Label() {
 			vis = visibility.Any
 		}
-		if mes == visibility.Private.Label() {
+		if upd == visibility.Private.Label() {
 			vis = visibility.Private
 		}
-		if mes == visibility.Public.Label() {
+		if upd == visibility.Public.Label() {
 			vis = visibility.Public
 		}
 	}

@@ -13,6 +13,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/storage/texupd"
 	"github.com/venturemark/apiserver/pkg/storage/timeline"
 	"github.com/venturemark/apiserver/pkg/storage/update"
+	"github.com/venturemark/apiserver/pkg/storage/venture"
 )
 
 type Config struct {
@@ -29,6 +30,7 @@ type Storage struct {
 	TexUpd   *texupd.TexUpd
 	Timeline *timeline.Timeline
 	Update   *update.Update
+	Venture  *venture.Venture
 }
 
 func New(config Config) (*Storage, error) {
@@ -124,6 +126,21 @@ func New(config Config) (*Storage, error) {
 		}
 	}
 
+	var ventureStorage *venture.Venture
+	{
+		c := venture.Config{
+			Logger:     config.Logger,
+			Permission: config.Permission,
+			Redigo:     config.Redigo,
+			Rescue:     config.Rescue,
+		}
+
+		ventureStorage, err = venture.New(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	s := &Storage{
 		Audience: audienceStorage,
 		Message:  messageStorage,
@@ -131,6 +148,7 @@ func New(config Config) (*Storage, error) {
 		TexUpd:   texupdStorage,
 		Timeline: timelineStorage,
 		Update:   updateStorage,
+		Venture:  ventureStorage,
 	}
 
 	return s, nil

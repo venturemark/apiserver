@@ -12,8 +12,6 @@ import (
 	"github.com/xh3b4sd/tracer"
 )
 
-// Search provides a filter primitive to lookup timelines associated with a
-// user.
 func (s *Searcher) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 	var err error
 
@@ -39,9 +37,6 @@ func (s *Searcher) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 		}
 	}
 
-	// We store timelines in a sorted set. The elements of the sorted set are
-	// concatenated strings of the unix timestamp of timeline creation and the
-	// timeline name.
 	var res *timeline.SearchO
 	{
 		res = &timeline.SearchO{}
@@ -77,11 +72,10 @@ func (s *Searcher) searchAll(req *timeline.SearchI) ([]string, error) {
 		tik = key.Timeline(req.Obj[0].Metadata)
 	}
 
-	// With redis we use ZREVRANGE which allows us to search for objects while
-	// having support for chunking.
 	var str []string
 	{
 		k := tik.List()
+
 		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)

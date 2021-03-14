@@ -11,8 +11,6 @@ import (
 	"github.com/xh3b4sd/tracer"
 )
 
-// Create provides a storage primitive to persist timelines associated with a
-// user.
 func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 	var err error
 
@@ -60,7 +58,7 @@ func (c *Creator) Create(req *timeline.CreateI) (*timeline.CreateO, error) {
 			Obj: []*timeline.CreateO_Obj{
 				{
 					Metadata: map[string]string{
-						metadata.TimelineID: req.Obj[0].Metadata[metadata.TimelineID],
+						metadata.TimelineID: tik.ID().S(),
 					},
 				},
 			},
