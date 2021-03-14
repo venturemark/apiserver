@@ -76,9 +76,11 @@ func (v *Verifier) Verify(req *venture.SearchI) (bool, error) {
 }
 
 func (v *Verifier) act(met map[string]string) (label.Label, error) {
-	ven := met[metadata.VentureID]
-	if ven == "" {
-		return action.Filter, nil
+	{
+		vei := met[metadata.VentureID]
+		if vei == "" {
+			return action.Filter, nil
+		}
 	}
 
 	return action.Search, nil
@@ -92,8 +94,8 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 	var err error
 
 	{
-		ven := met[metadata.VentureID]
-		if ven == "" {
+		vei := met[metadata.VentureID]
+		if vei == "" {
 			return role.Subject, nil
 		}
 	}
