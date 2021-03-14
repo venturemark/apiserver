@@ -9,7 +9,7 @@ require (
 	github.com/spf13/cobra v1.1.3
 	github.com/venturemark/apicommon v0.3.1-0.20210314130526-b315bf3563eb
 	github.com/venturemark/apigengo v0.0.0-20210312162951-8faf5ff74554
-	github.com/venturemark/permission v0.3.1-0.20210314184544-5d75a495d8d4
+	github.com/venturemark/permission v0.3.1-0.20210314193233-6af0dfe84785
 	github.com/xh3b4sd/logger v0.1.2
 	github.com/xh3b4sd/redigo v0.16.0
 	github.com/xh3b4sd/rescue v0.2.1
