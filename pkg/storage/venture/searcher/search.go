@@ -63,6 +63,51 @@ func (s *Searcher) Search(req *venture.SearchI) (*venture.SearchO, error) {
 	return res, nil
 }
 
+func (s *Searcher) searchRol(req *venture.SearchI) ([]*schema.Role, error) {
+	var err error
+
+	{
+		req.Obj[0].Metadata[metadata.ResourceKind] = "venture"
+	}
+
+	var suk *key.Key
+	{
+		suk = key.Subject(req.Obj[0].Metadata)
+	}
+
+	var str []string
+	{
+		k := suk.Elem()
+
+		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	var rol []*schema.Role
+	{
+		for _, k := range str {
+			rei, roi := split(k)
+
+			val, err := s.redigo.Sorted().Search().Score(rei, roi, roi)
+			if err != nil {
+				return nil, tracer.Mask(err)
+			}
+
+			r := &schema.Role{}
+			err = json.Unmarshal([]byte(val[0]), r)
+			if err != nil {
+				return nil, tracer.Mask(err)
+			}
+
+			rol = append(rol, r)
+		}
+	}
+
+	return rol, nil
+}
+
 func (s *Searcher) searchSub(req *venture.SearchI) ([]string, error) {
 	var err error
 
@@ -95,51 +140,6 @@ func (s *Searcher) searchSub(req *venture.SearchI) ([]string, error) {
 	}
 
 	return str, nil
-}
-
-func (s *Searcher) searchRol(req *venture.SearchI) ([]*schema.Role, error) {
-	var err error
-
-	{
-		req.Obj[0].Metadata[metadata.ResourceKind] = "venture"
-	}
-
-	var usk *key.Key
-	{
-		usk = key.User(req.Obj[0].Metadata)
-	}
-
-	var str []string
-	{
-		k := usk.Elem()
-
-		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
-	var rol []*schema.Role
-	{
-		for _, k := range str {
-			rei, roi := split(k)
-
-			val, err := s.redigo.Sorted().Search().Score(rei, roi, roi)
-			if err != nil {
-				return nil, tracer.Mask(err)
-			}
-
-			r := &schema.Role{}
-			err = json.Unmarshal([]byte(val[0]), r)
-			if err != nil {
-				return nil, tracer.Mask(err)
-			}
-
-			rol = append(rol, r)
-		}
-	}
-
-	return rol, nil
 }
 
 func (s *Searcher) searchVen(req *venture.SearchI) ([]string, error) {
