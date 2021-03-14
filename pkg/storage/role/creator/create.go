@@ -23,6 +23,11 @@ func (c *Creator) Create(req *role.CreateI) (*role.CreateO, error) {
 		sui = req.Obj[0].Metadata[metadata.SubjectID]
 	}
 
+	var usk *key.Key
+	{
+		usk = key.User(req.Obj[0].Metadata)
+	}
+
 	var val string
 	{
 		rol := schema.Role{
@@ -46,6 +51,17 @@ func (c *Creator) Create(req *role.CreateI) (*role.CreateO, error) {
 		i := sui
 
 		err = c.redigo.Sorted().Create().Element(k, v, s, i)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	{
+		k := usk.Elem()
+		v := rok.Elem()
+		s := rok.ID().F()
+
+		err = c.redigo.Sorted().Create().Element(k, v, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

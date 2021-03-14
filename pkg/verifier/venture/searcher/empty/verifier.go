@@ -1,6 +1,7 @@
 package empty
 
 import (
+	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/venture"
 )
 
@@ -24,8 +25,19 @@ func (v *Verifier) Verify(req *venture.SearchI) (bool, error) {
 	}
 
 	{
-		if len(req.Obj) != 0 {
+		if len(req.Obj) > 1 {
 			return false, nil
+		}
+	}
+
+	{
+		if len(req.Obj) == 1 {
+			sub := req.Obj[0].Metadata[metadata.SubjectID]
+			ven := req.Obj[0].Metadata[metadata.VentureID]
+
+			if sub == "" && ven == "" {
+				return false, nil
+			}
 		}
 	}
 
