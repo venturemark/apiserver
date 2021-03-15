@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/venturemark/apiserver/pkg/context/user"
+	user "github.com/venturemark/apiserver/pkg/context/userid"
 )
 
 var (

@@ -7,7 +7,7 @@ import (
 	"github.com/venturemark/apigengo/pkg/pbf/update"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/context/user"
+	"github.com/venturemark/apiserver/pkg/context/userid"
 )
 
 func (h *Handler) Search(ctx context.Context, req *update.SearchI) (*update.SearchO, error) {
@@ -20,7 +20,7 @@ func (h *Handler) Search(ctx context.Context, req *update.SearchI) (*update.Sear
 	}
 
 	{
-		u, ok := user.FromContext(ctx)
+		u, ok := userid.FromContext(ctx)
 		if !ok {
 			return nil, tracer.Mask(invalidUserError)
 		}

@@ -7,9 +7,9 @@ require (
 	github.com/google/go-cmp v0.5.5
 	github.com/lestrrat-go/jwx v1.1.5
 	github.com/spf13/cobra v1.1.3
-	github.com/venturemark/apicommon v0.3.1-0.20210314130526-b315bf3563eb
-	github.com/venturemark/apigengo v0.0.0-20210312162951-8faf5ff74554
-	github.com/venturemark/permission v0.3.1-0.20210314193233-6af0dfe84785
+	github.com/venturemark/apicommon v0.3.1-0.20210315214145-36d3facf4d14
+	github.com/venturemark/apigengo v0.0.0-20210315175651-c2da84faf402
+	github.com/venturemark/permission v0.3.1-0.20210315220032-5f825a38f42e
 	github.com/xh3b4sd/logger v0.1.2
 	github.com/xh3b4sd/redigo v0.16.0
 	github.com/xh3b4sd/rescue v0.2.1

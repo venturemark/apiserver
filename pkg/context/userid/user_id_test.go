@@ -1,11 +1,11 @@
-package user
+package userid
 
 import (
 	"context"
 	"testing"
 )
 
-func Test_Context_User(t *testing.T) {
+func Test_Context_User_ID(t *testing.T) {
 	{
 		s, ok := FromContext(context.Background())
 		if ok {

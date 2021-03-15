@@ -7,7 +7,7 @@ import (
 	"github.com/venturemark/apigengo/pkg/pbf/texupd"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/context/user"
+	"github.com/venturemark/apiserver/pkg/context/userid"
 )
 
 func (h *Handler) Delete(ctx context.Context, req *texupd.DeleteI) (*texupd.DeleteO, error) {
@@ -20,7 +20,7 @@ func (h *Handler) Delete(ctx context.Context, req *texupd.DeleteI) (*texupd.Dele
 	}
 
 	{
-		u, ok := user.FromContext(ctx)
+		u, ok := userid.FromContext(ctx)
 		if !ok {
 			return nil, tracer.Mask(invalidUserError)
 		}

@@ -20,6 +20,7 @@ func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 	var str []string
 	{
 		k := upk.List()
+
 		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
 		if err != nil {
 			return nil, tracer.Mask(err)
