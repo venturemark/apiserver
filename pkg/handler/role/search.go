@@ -5,8 +5,9 @@ import (
 
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/role"
-	"github.com/venturemark/apiserver/pkg/context/userid"
 	"github.com/xh3b4sd/tracer"
+
+	"github.com/venturemark/apiserver/pkg/context/userid"
 )
 
 func (h *Handler) Search(ctx context.Context, req *role.SearchI) (*role.SearchO, error) {
