@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/venturemark/apiserver/pkg/context/user"
+	"github.com/venturemark/apiserver/pkg/context/userid"
 )
 
 var (
@@ -87,7 +87,7 @@ func (e *Interceptor) Interceptor() grpc.UnaryServerInterceptor {
 		}
 
 		{
-			ctx = user.NewContext(ctx, u)
+			ctx = userid.NewContext(ctx, u)
 		}
 
 		return han(ctx, req)

@@ -7,7 +7,7 @@ import (
 	"github.com/venturemark/apigengo/pkg/pbf/texupd"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/context/user"
+	"github.com/venturemark/apiserver/pkg/context/userid"
 )
 
 func (h *Handler) Update(ctx context.Context, req *texupd.UpdateI) (*texupd.UpdateO, error) {
@@ -20,7 +20,7 @@ func (h *Handler) Update(ctx context.Context, req *texupd.UpdateI) (*texupd.Upda
 	}
 
 	{
-		u, ok := user.FromContext(ctx)
+		u, ok := userid.FromContext(ctx)
 		if !ok {
 			return nil, tracer.Mask(invalidUserError)
 		}

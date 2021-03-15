@@ -9,7 +9,7 @@ import (
 	"github.com/venturemark/apigengo/pkg/pbf/role"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/context/user"
+	"github.com/venturemark/apiserver/pkg/context/userid"
 )
 
 func (h *Handler) Create(ctx context.Context, req *role.CreateI) (*role.CreateO, error) {
@@ -22,7 +22,7 @@ func (h *Handler) Create(ctx context.Context, req *role.CreateI) (*role.CreateO,
 	}
 
 	{
-		u, ok := user.FromContext(ctx)
+		u, ok := userid.FromContext(ctx)
 		if !ok {
 			return nil, tracer.Mask(invalidUserError)
 		}
