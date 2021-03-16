@@ -18,16 +18,6 @@ func (c *Creator) Create(req *user.CreateI) (*user.CreateO, error) {
 		suc = req.Obj[0].Metadata[metadata.SubjectClaim]
 	}
 
-	var usi string
-	{
-		usi = req.Obj[0].Metadata[metadata.UserID]
-	}
-
-	var usk *key.Key
-	{
-		usk = key.User(req.Obj[0].Metadata)
-	}
-
 	var suk *key.Key
 	{
 		met := map[string]string{
@@ -36,6 +26,16 @@ func (c *Creator) Create(req *user.CreateI) (*user.CreateO, error) {
 		}
 
 		suk = key.Subject(met)
+	}
+
+	var usi string
+	{
+		usi = req.Obj[0].Metadata[metadata.UserID]
+	}
+
+	var usk *key.Key
+	{
+		usk = key.User(req.Obj[0].Metadata)
 	}
 
 	var val string
