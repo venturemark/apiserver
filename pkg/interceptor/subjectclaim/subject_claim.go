@@ -71,7 +71,7 @@ func (e *Interceptor) Interceptor() grpc.UnaryServerInterceptor {
 			a = a[7:]
 		}
 
-		var sui string
+		var suc string
 		{
 			t, err := jwt.ParseString(a)
 			if err != nil {
@@ -83,11 +83,11 @@ func (e *Interceptor) Interceptor() grpc.UnaryServerInterceptor {
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
-			sui = fmt.Sprintf("%x", h.Sum(nil))
+			suc = fmt.Sprintf("%x", h.Sum(nil))
 		}
 
 		{
-			ctx = subjectclaim.NewContext(ctx, sui)
+			ctx = subjectclaim.NewContext(ctx, suc)
 		}
 
 		return han(ctx, req)
