@@ -7,6 +7,7 @@ import (
 	"github.com/xh3b4sd/rescue"
 	"github.com/xh3b4sd/tracer"
 
+	"github.com/venturemark/apiserver/pkg/association"
 	"github.com/venturemark/apiserver/pkg/storage/audience"
 	"github.com/venturemark/apiserver/pkg/storage/message"
 	"github.com/venturemark/apiserver/pkg/storage/role"
@@ -18,10 +19,11 @@ import (
 )
 
 type Config struct {
-	Logger     logger.Interface
-	Permission permission.Gateway
-	Redigo     redigo.Interface
-	Rescue     rescue.Interface
+	Association *association.Association
+	Logger      logger.Interface
+	Permission  permission.Gateway
+	Redigo      redigo.Interface
+	Rescue      rescue.Interface
 }
 
 type Storage struct {
@@ -131,10 +133,11 @@ func New(config Config) (*Storage, error) {
 	var userStorage *user.User
 	{
 		c := user.Config{
-			Logger:     config.Logger,
-			Permission: config.Permission,
-			Redigo:     config.Redigo,
-			Rescue:     config.Rescue,
+			Association: config.Association,
+			Logger:      config.Logger,
+			Permission:  config.Permission,
+			Redigo:      config.Redigo,
+			Rescue:      config.Rescue,
 		}
 
 		userStorage, err = user.New(c)

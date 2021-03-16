@@ -9,7 +9,6 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/verifier/user/searcher"
 	"github.com/venturemark/apiserver/pkg/verifier/user/searcher/auth"
-	"github.com/venturemark/apiserver/pkg/verifier/user/searcher/empty"
 )
 
 type Config struct {
@@ -56,25 +55,12 @@ func New(config Config) (*Searcher, error) {
 		}
 	}
 
-	var emptyVerifier *empty.Verifier
-	{
-		c := empty.VerifierConfig{}
-
-		emptyVerifier, err = empty.NewVerifier(c)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
 	s := &Searcher{
 		logger: config.Logger,
 		redigo: config.Redigo,
 		rescue: config.Rescue,
 
 		verify: []searcher.Interface{
-			// The empty verifier must be run first so that following verifiers
-			// do not have to check for prerequisites over and over again.
-			emptyVerifier,
 			authVerifier,
 		},
 	}

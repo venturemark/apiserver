@@ -1,4 +1,4 @@
-package oauth
+package subjectclaim
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/venturemark/apiserver/pkg/context/userid"
+	"github.com/venturemark/apiserver/pkg/context/subjectclaim"
 )
 
 var (
@@ -71,7 +71,7 @@ func (e *Interceptor) Interceptor() grpc.UnaryServerInterceptor {
 			a = a[7:]
 		}
 
-		var u string
+		var sui string
 		{
 			t, err := jwt.ParseString(a)
 			if err != nil {
@@ -83,11 +83,11 @@ func (e *Interceptor) Interceptor() grpc.UnaryServerInterceptor {
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
-			u = fmt.Sprintf("%x", h.Sum(nil))
+			sui = fmt.Sprintf("%x", h.Sum(nil))
 		}
 
 		{
-			ctx = userid.NewContext(ctx, u)
+			ctx = subjectclaim.NewContext(ctx, sui)
 		}
 
 		return han(ctx, req)

@@ -12,6 +12,10 @@ import (
 
 func (h *Handler) Update(ctx context.Context, req *user.UpdateI) (*user.UpdateO, error) {
 	{
+		if len(req.Obj) == 0 {
+			req.Obj = append(req.Obj, &user.UpdateI_Obj{})
+		}
+
 		for i := range req.Obj {
 			if req.Obj[i].Metadata == nil {
 				req.Obj[i].Metadata = map[string]string{}
@@ -20,14 +24,16 @@ func (h *Handler) Update(ctx context.Context, req *user.UpdateI) (*user.UpdateO,
 	}
 
 	{
-		u, ok := userid.FromContext(ctx)
+		usi, ok := userid.FromContext(ctx)
 		if !ok {
 			return nil, tracer.Mask(invalidUserError)
 		}
 
 		for i := range req.Obj {
-			{
-				req.Obj[i].Metadata[metadata.UserID] = u
+			if req.Obj[i].Metadata[metadata.UserID] == "" {
+				req.Obj[i].Metadata[metadata.UserID] = usi
+			} else if req.Obj[i].Metadata[metadata.UserID] != usi {
+				return nil, tracer.Mask(invalidInputError)
 			}
 		}
 	}

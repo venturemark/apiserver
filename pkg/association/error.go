@@ -1,4 +1,4 @@
-package empty
+package association
 
 import (
 	"errors"
@@ -12,4 +12,12 @@ var invalidConfigError = &tracer.Error{
 
 func IsInvalidConfig(err error) bool {
 	return errors.Is(err, invalidConfigError)
+}
+
+var invalidMetadataError = &tracer.Error{
+	Kind: "invalidMetadataError",
+}
+
+func IsInvalidMetadata(err error) bool {
+	return errors.Is(err, invalidMetadataError)
 }

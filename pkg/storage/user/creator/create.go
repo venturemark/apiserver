@@ -13,9 +13,29 @@ import (
 func (c *Creator) Create(req *user.CreateI) (*user.CreateO, error) {
 	var err error
 
+	var suc string
+	{
+		suc = req.Obj[0].Metadata[metadata.SubjectClaim]
+	}
+
+	var usi string
+	{
+		usi = req.Obj[0].Metadata[metadata.UserID]
+	}
+
 	var usk *key.Key
 	{
 		usk = key.User(req.Obj[0].Metadata)
+	}
+
+	var suk *key.Key
+	{
+		met := map[string]string{
+			metadata.ResourceKind: "subject",
+			metadata.SubjectID:    suc,
+		}
+
+		suk = key.Subject(met)
 	}
 
 	var val string
@@ -44,6 +64,13 @@ func (c *Creator) Create(req *user.CreateI) (*user.CreateO, error) {
 		v := val
 
 		err = c.redigo.Simple().Create().Element(k, v)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	{
+		err := c.association.Create(suk, usi)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

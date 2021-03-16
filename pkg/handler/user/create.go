@@ -10,7 +10,7 @@ import (
 	"github.com/venturemark/apigengo/pkg/pbf/user"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/context/userid"
+	"github.com/venturemark/apiserver/pkg/context/subjectclaim"
 )
 
 func (h *Handler) Create(ctx context.Context, req *user.CreateI) (*user.CreateO, error) {
@@ -23,17 +23,12 @@ func (h *Handler) Create(ctx context.Context, req *user.CreateI) (*user.CreateO,
 	}
 
 	{
-		u, ok := userid.FromContext(ctx)
+		suc, ok := subjectclaim.FromContext(ctx)
 		if !ok {
 			return nil, tracer.Mask(invalidUserError)
 		}
 
 		for i := range req.Obj {
-			{
-				req.Obj[i].Metadata[metadata.SubjectID] = u
-				req.Obj[i].Metadata[metadata.UserID] = u
-			}
-
 			{
 				req.Obj[i].Metadata[metadata.ResourceKind] = "user"
 				req.Obj[i].Metadata[metadata.RoleKind] = "owner"
@@ -42,6 +37,11 @@ func (h *Handler) Create(ctx context.Context, req *user.CreateI) (*user.CreateO,
 			{
 				req.Obj[i].Metadata[metadata.RoleID] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
 				req.Obj[i].Metadata[metadata.UserID] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
+			}
+
+			{
+				req.Obj[i].Metadata[metadata.SubjectClaim] = suc
+				req.Obj[i].Metadata[metadata.SubjectID] = req.Obj[i].Metadata[metadata.UserID]
 			}
 		}
 	}
