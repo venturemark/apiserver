@@ -17,12 +17,9 @@ func (s *Searcher) Search(req *user.SearchI) (*user.SearchO, error) {
 		sub := req.Obj[0].Metadata[metadata.SubjectID] != ""
 		use := req.Obj[0].Metadata[metadata.UserID] != ""
 
+		usk = key.User(req.Obj[0].Metadata)
 		if sub && !use {
 			usk = key.Subject(req.Obj[0].Metadata)
-		}
-
-		if !sub && use {
-			usk = key.User(req.Obj[0].Metadata)
 		}
 	}
 

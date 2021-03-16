@@ -7,10 +7,10 @@ import (
 
 var (
 	resources = []string{
-		"audience",
 		"message",
 		"timeline",
 		"update",
+		"user",
 		"venture",
 	}
 

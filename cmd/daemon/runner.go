@@ -19,7 +19,9 @@ import (
 	"github.com/xh3b4sd/rescue"
 	"github.com/xh3b4sd/rescue/pkg/engine"
 	"github.com/xh3b4sd/tracer"
+	"google.golang.org/grpc"
 
+	"github.com/venturemark/apiserver/pkg/association"
 	"github.com/venturemark/apiserver/pkg/handler"
 	"github.com/venturemark/apiserver/pkg/handler/audience"
 	"github.com/venturemark/apiserver/pkg/handler/message"
@@ -29,7 +31,10 @@ import (
 	"github.com/venturemark/apiserver/pkg/handler/update"
 	"github.com/venturemark/apiserver/pkg/handler/user"
 	"github.com/venturemark/apiserver/pkg/handler/venture"
-	"github.com/venturemark/apiserver/pkg/server/grpc"
+	"github.com/venturemark/apiserver/pkg/interceptor/stack"
+	"github.com/venturemark/apiserver/pkg/interceptor/subjectclaim"
+	"github.com/venturemark/apiserver/pkg/interceptor/userid"
+	"github.com/venturemark/apiserver/pkg/server"
 	"github.com/venturemark/apiserver/pkg/storage"
 )
 
@@ -123,13 +128,29 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 
 	//************************************************************************//
 
+	var associationMapper *association.Association
+	{
+		c := association.Config{
+			Logger: r.logger,
+			Redigo: redigoClient,
+		}
+
+		associationMapper, err = association.New(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
+
+	//************************************************************************//
+
 	var redisStorage *storage.Storage
 	{
 		c := storage.Config{
-			Logger:     r.logger,
-			Permission: permissionGateway,
-			Redigo:     redigoClient,
-			Rescue:     rescueEngine,
+			Association: associationMapper,
+			Logger:      r.logger,
+			Permission:  permissionGateway,
+			Redigo:      redigoClient,
+			Rescue:      rescueEngine,
 		}
 
 		redisStorage, err = storage.New(c)
@@ -246,6 +267,45 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 
 	//************************************************************************//
 
+	var sta *stack.Interceptor
+	{
+		c := stack.InterceptorConfig{
+			Logger: r.logger,
+		}
+
+		sta, err = stack.NewInterceptor(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
+
+	var sub *subjectclaim.Interceptor
+	{
+		c := subjectclaim.InterceptorConfig{
+			Logger: r.logger,
+		}
+
+		sub, err = subjectclaim.NewInterceptor(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
+
+	var use *userid.Interceptor
+	{
+		c := userid.InterceptorConfig{
+			Association: associationMapper,
+			Logger:      r.logger,
+		}
+
+		use, err = userid.NewInterceptor(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
+
+	//************************************************************************//
+
 	var donCha chan struct{}
 	var errCha chan error
 	var sigCha chan os.Signal
@@ -259,13 +319,16 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 		defer close(sigCha)
 	}
 
-	var g *grpc.Server
+	var g *server.Server
 	{
-		c := grpc.ServerConfig{
-			DonCha: donCha,
-			ErrCha: errCha,
+		c := server.Config{
+			Interceptor: []grpc.UnaryServerInterceptor{
+				sta.Interceptor(), // stack interceptor first for error logging
+				sub.Interceptor(),
+				use.Interceptor(), // user ID interceptor after subject claim interceptor for identity mapping
+			},
 			Logger: r.logger,
-			Handlers: []handler.Interface{
+			Handler: []handler.Interface{
 				audienceHandler,
 				messageHandler,
 				roleHandler,
@@ -276,22 +339,19 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 				ventureHandler,
 			},
 
-			Host: r.flag.ApiServer.Host,
-			Port: r.flag.ApiServer.Port,
+			DonCha: donCha,
+			ErrCha: errCha,
+			Host:   r.flag.ApiServer.Host,
+			Port:   r.flag.ApiServer.Port,
 		}
 
-		g, err = grpc.NewServer(c)
+		g, err = server.New(c)
 		if err != nil {
 			return tracer.Mask(err)
 		}
 	}
 
 	{
-		err = g.Attach()
-		if err != nil {
-			return tracer.Mask(err)
-		}
-
 		go g.Listen()
 	}
 

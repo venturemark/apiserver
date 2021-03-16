@@ -23,15 +23,15 @@ func (h *Handler) Create(ctx context.Context, req *texupd.CreateI) (*texupd.Crea
 	}
 
 	{
-		u, ok := userid.FromContext(ctx)
+		usi, ok := userid.FromContext(ctx)
 		if !ok {
 			return nil, tracer.Mask(invalidUserError)
 		}
 
 		for i := range req.Obj {
 			{
-				req.Obj[i].Metadata[metadata.SubjectID] = u
-				req.Obj[i].Metadata[metadata.UserID] = u
+				req.Obj[i].Metadata[metadata.SubjectID] = usi
+				req.Obj[i].Metadata[metadata.UserID] = usi
 			}
 
 			{

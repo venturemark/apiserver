@@ -7,6 +7,7 @@ import (
 	"github.com/xh3b4sd/rescue"
 	"github.com/xh3b4sd/tracer"
 
+	"github.com/venturemark/apiserver/pkg/association"
 	"github.com/venturemark/apiserver/pkg/verifier/user/creator"
 	"github.com/venturemark/apiserver/pkg/verifier/user/creator/auth"
 	"github.com/venturemark/apiserver/pkg/verifier/user/creator/empty"
@@ -14,21 +15,26 @@ import (
 )
 
 type Config struct {
-	Logger     logger.Interface
-	Permission permission.Gateway
-	Redigo     redigo.Interface
-	Rescue     rescue.Interface
+	Association *association.Association
+	Logger      logger.Interface
+	Permission  permission.Gateway
+	Redigo      redigo.Interface
+	Rescue      rescue.Interface
 }
 
 type Creator struct {
-	logger logger.Interface
-	redigo redigo.Interface
-	rescue rescue.Interface
+	association *association.Association
+	logger      logger.Interface
+	redigo      redigo.Interface
+	rescue      rescue.Interface
 
 	verify []creator.Interface
 }
 
 func New(config Config) (*Creator, error) {
+	if config.Association == nil {
+		return nil, tracer.Maskf(invalidConfigError, "%T.Association must not be empty", config)
+	}
 	if config.Logger == nil {
 		return nil, tracer.Maskf(invalidConfigError, "%T.Logger must not be empty", config)
 	}
@@ -78,9 +84,10 @@ func New(config Config) (*Creator, error) {
 	}
 
 	c := &Creator{
-		logger: config.Logger,
-		redigo: config.Redigo,
-		rescue: config.Rescue,
+		association: config.Association,
+		logger:      config.Logger,
+		redigo:      config.Redigo,
+		rescue:      config.Rescue,
 
 		verify: []creator.Interface{
 			// The empty verifier must be run first so that following verifiers

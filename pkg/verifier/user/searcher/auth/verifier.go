@@ -77,8 +77,8 @@ func (v *Verifier) Verify(req *user.SearchI) (bool, error) {
 
 func (v *Verifier) act(met map[string]string) (label.Label, error) {
 	{
-		usi := met[metadata.UserID]
-		if usi == "" {
+		sui := met[metadata.SubjectID]
+		if sui != "" {
 			return action.Filter, nil
 		}
 	}
@@ -94,8 +94,8 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 	var err error
 
 	{
-		usi := met[metadata.UserID]
-		if usi == "" {
+		sui := met[metadata.SubjectID]
+		if sui != "" {
 			return role.Subject, nil
 		}
 	}
