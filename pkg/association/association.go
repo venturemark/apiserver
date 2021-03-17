@@ -36,11 +36,13 @@ func New(config Config) (*Association, error) {
 }
 
 func (a *Association) Create(suk *key.Key, usi string) error {
+	var err error
+
 	{
 		k := suk.Elem()
 		v := usi
 
-		err := a.redigo.Simple().Create().Element(k, v)
+		err = a.redigo.Simple().Create().Element(k, v)
 		if err != nil {
 			return tracer.Mask(err)
 		}
