@@ -1,6 +1,6 @@
 module github.com/venturemark/apiserver
 
-go 1.15
+go 1.16
 
 require (
 	github.com/evanphx/json-patch v0.5.2
