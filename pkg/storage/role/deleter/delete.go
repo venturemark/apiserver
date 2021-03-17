@@ -22,13 +22,15 @@ func (d *Deleter) Delete(req *role.DeleteI) (*role.DeleteO, error) {
 	var rol *schema.Role
 	{
 		k := rok.List()
-		s, err := d.redigo.Sorted().Search().Score(k, rok.ID().F(), rok.ID().F())
+		s := rok.ID().F()
+
+		str, err := d.redigo.Sorted().Search().Score(k, s, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 
 		rol = &schema.Role{}
-		err = json.Unmarshal([]byte(s[0]), rol)
+		err = json.Unmarshal([]byte(str[0]), rol)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
