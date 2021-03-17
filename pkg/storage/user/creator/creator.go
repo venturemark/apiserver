@@ -11,6 +11,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/verifier/user/creator"
 	"github.com/venturemark/apiserver/pkg/verifier/user/creator/auth"
 	"github.com/venturemark/apiserver/pkg/verifier/user/creator/empty"
+	"github.com/venturemark/apiserver/pkg/verifier/user/creator/exist"
 	"github.com/venturemark/apiserver/pkg/verifier/user/creator/name"
 )
 
@@ -73,6 +74,18 @@ func New(config Config) (*Creator, error) {
 		}
 	}
 
+	var existsVerifier *exist.Verifier
+	{
+		c := exist.VerifierConfig{
+			Association: config.Association,
+		}
+
+		existsVerifier, err = exist.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	var nameVerifier *name.Verifier
 	{
 		c := name.VerifierConfig{}
@@ -94,6 +107,7 @@ func New(config Config) (*Creator, error) {
 			// do not have to check for prerequisites over and over again.
 			emptyVerifier,
 			authVerifier,
+			existsVerifier,
 			nameVerifier,
 		},
 	}

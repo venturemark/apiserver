@@ -49,6 +49,22 @@ func (a *Association) Create(suk *key.Key, usi string) error {
 	return nil
 }
 
+func (a *Association) Exists(suk *key.Key) (bool, error) {
+	var err error
+
+	var exi bool
+	{
+		k := suk.Elem()
+
+		exi, err = a.redigo.Simple().Exists().Element(k)
+		if err != nil {
+			return false, tracer.Mask(err)
+		}
+	}
+
+	return exi, nil
+}
+
 func (a *Association) Search(suk *key.Key) (string, error) {
 	var err error
 
