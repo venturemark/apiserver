@@ -8,7 +8,6 @@ import (
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/association"
-	"github.com/venturemark/apiserver/pkg/storage/audience"
 	"github.com/venturemark/apiserver/pkg/storage/message"
 	"github.com/venturemark/apiserver/pkg/storage/role"
 	"github.com/venturemark/apiserver/pkg/storage/texupd"
@@ -27,7 +26,6 @@ type Config struct {
 }
 
 type Storage struct {
-	Audience *audience.Audience
 	Message  *message.Message
 	Role     *role.Role
 	TexUpd   *texupd.TexUpd
@@ -39,21 +37,6 @@ type Storage struct {
 
 func New(config Config) (*Storage, error) {
 	var err error
-
-	var audienceStorage *audience.Audience
-	{
-		c := audience.Config{
-			Logger:     config.Logger,
-			Permission: config.Permission,
-			Redigo:     config.Redigo,
-			Rescue:     config.Rescue,
-		}
-
-		audienceStorage, err = audience.New(c)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
 
 	var messageStorage *message.Message
 	{
@@ -162,7 +145,6 @@ func New(config Config) (*Storage, error) {
 	}
 
 	s := &Storage{
-		Audience: audienceStorage,
 		Message:  messageStorage,
 		Role:     roleStorage,
 		TexUpd:   texupdStorage,
