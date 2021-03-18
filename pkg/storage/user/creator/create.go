@@ -13,19 +13,9 @@ import (
 func (c *Creator) Create(req *user.CreateI) (*user.CreateO, error) {
 	var err error
 
-	var suc string
+	var clk *key.Key
 	{
-		suc = req.Obj[0].Metadata[metadata.SubjectClaim]
-	}
-
-	var suk *key.Key
-	{
-		met := map[string]string{
-			metadata.ResourceKind: "subject",
-			metadata.SubjectID:    suc,
-		}
-
-		suk = key.Subject(met)
+		clk = key.Claim(req.Obj[0].Metadata)
 	}
 
 	var usi string
@@ -70,7 +60,7 @@ func (c *Creator) Create(req *user.CreateI) (*user.CreateO, error) {
 	}
 
 	{
-		err := c.association.Create(suk, usi)
+		err := c.association.Create(clk, usi)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

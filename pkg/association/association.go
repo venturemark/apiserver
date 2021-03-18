@@ -35,11 +35,11 @@ func New(config Config) (*Association, error) {
 	return a, nil
 }
 
-func (a *Association) Create(suk *key.Key, usi string) error {
+func (a *Association) Create(clk *key.Key, usi string) error {
 	var err error
 
 	{
-		k := suk.Elem()
+		k := clk.Elem()
 		v := usi
 
 		err = a.redigo.Simple().Create().Element(k, v)
@@ -51,12 +51,12 @@ func (a *Association) Create(suk *key.Key, usi string) error {
 	return nil
 }
 
-func (a *Association) Exists(suk *key.Key) (bool, error) {
+func (a *Association) Exists(clk *key.Key) (bool, error) {
 	var err error
 
 	var exi bool
 	{
-		k := suk.Elem()
+		k := clk.Elem()
 
 		exi, err = a.redigo.Simple().Exists().Element(k)
 		if err != nil {
@@ -67,12 +67,12 @@ func (a *Association) Exists(suk *key.Key) (bool, error) {
 	return exi, nil
 }
 
-func (a *Association) Search(suk *key.Key) (string, error) {
+func (a *Association) Search(clk *key.Key) (string, error) {
 	var err error
 
 	var usi string
 	{
-		k := suk.Elem()
+		k := clk.Elem()
 
 		usi, err = a.redigo.Simple().Search().Value(k)
 		if simple.IsNotFound(err) {

@@ -10,7 +10,7 @@ import (
 	"github.com/venturemark/apigengo/pkg/pbf/user"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apiserver/pkg/context/subjectclaim"
+	"github.com/venturemark/apiserver/pkg/context/claimid"
 )
 
 func (h *Handler) Create(ctx context.Context, req *user.CreateI) (*user.CreateO, error) {
@@ -23,7 +23,7 @@ func (h *Handler) Create(ctx context.Context, req *user.CreateI) (*user.CreateO,
 	}
 
 	{
-		suc, ok := subjectclaim.FromContext(ctx)
+		cli, ok := claimid.FromContext(ctx)
 		if !ok {
 			return nil, tracer.Mask(invalidUserError)
 		}
@@ -40,7 +40,7 @@ func (h *Handler) Create(ctx context.Context, req *user.CreateI) (*user.CreateO,
 			}
 
 			{
-				req.Obj[i].Metadata[metadata.SubjectClaim] = suc
+				req.Obj[i].Metadata[metadata.ClaimID] = cli
 				req.Obj[i].Metadata[metadata.SubjectID] = req.Obj[i].Metadata[metadata.UserID]
 			}
 		}
