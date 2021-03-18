@@ -1,11 +1,11 @@
-package subjectclaim
+package claimid
 
 import (
 	"context"
 	"testing"
 )
 
-func Test_Context_Subject_Claim(t *testing.T) {
+func Test_Context_Claim_ID(t *testing.T) {
 	{
 		s, ok := FromContext(context.Background())
 		if ok {

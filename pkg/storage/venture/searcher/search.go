@@ -95,6 +95,10 @@ func (s *Searcher) searchRol(req *venture.SearchI) ([]*schema.Role, error) {
 				return nil, tracer.Mask(err)
 			}
 
+			if len(val) == 0 {
+				continue
+			}
+
 			r := &schema.Role{}
 			err = json.Unmarshal([]byte(val[0]), r)
 			if err != nil {

@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/venturemark/apiserver/pkg/context/subjectclaim"
+	"github.com/venturemark/apiserver/pkg/context/claimid"
 )
 
 var (
@@ -71,7 +71,7 @@ func (e *Interceptor) Interceptor() grpc.UnaryServerInterceptor {
 			a = a[7:]
 		}
 
-		var suc string
+		var cli string
 		{
 			t, err := jwt.ParseString(a)
 			if err != nil {
@@ -83,11 +83,12 @@ func (e *Interceptor) Interceptor() grpc.UnaryServerInterceptor {
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
-			suc = fmt.Sprintf("%x", h.Sum(nil))
+
+			cli = fmt.Sprintf("%x", h.Sum(nil))
 		}
 
 		{
-			ctx = subjectclaim.NewContext(ctx, suc)
+			ctx = claimid.NewContext(ctx, cli)
 		}
 
 		return han(ctx, req)

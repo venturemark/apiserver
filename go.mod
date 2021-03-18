@@ -7,7 +7,7 @@ require (
 	github.com/google/go-cmp v0.5.5
 	github.com/lestrrat-go/jwx v1.1.5
 	github.com/spf13/cobra v1.1.3
-	github.com/venturemark/apicommon v0.4.2
+	github.com/venturemark/apicommon v0.4.3
 	github.com/venturemark/apigengo v0.2.0
 	github.com/venturemark/permission v0.4.1
 	github.com/xh3b4sd/logger v0.1.2

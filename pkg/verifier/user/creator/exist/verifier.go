@@ -2,7 +2,6 @@ package exist
 
 import (
 	"github.com/venturemark/apicommon/pkg/key"
-	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/user"
 	"github.com/xh3b4sd/tracer"
 
@@ -39,23 +38,13 @@ func (v *Verifier) Verify(req *user.CreateI) (bool, error) {
 		}
 	}
 
-	var suc string
+	var clk *key.Key
 	{
-		suc = req.Obj[0].Metadata[metadata.SubjectClaim]
-	}
-
-	var suk *key.Key
-	{
-		met := map[string]string{
-			metadata.ResourceKind: "subject",
-			metadata.SubjectID:    suc,
-		}
-
-		suk = key.Subject(met)
+		clk = key.Claim(req.Obj[0].Metadata)
 	}
 
 	{
-		exi, err := v.association.Exists(suk)
+		exi, err := v.association.Exists(clk)
 		if err != nil {
 			return false, tracer.Mask(err)
 		}

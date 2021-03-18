@@ -1,4 +1,4 @@
-package subjectclaim
+package claimid
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 
 type t string
 
-var k t = "subjectclaim"
+var k t = "claimid"
 
 func NewContext(ctx context.Context, v string) context.Context {
 	return context.WithValue(ctx, k, v)

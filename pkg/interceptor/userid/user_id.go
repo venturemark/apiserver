@@ -10,7 +10,7 @@ import (
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apiserver/pkg/association"
-	"github.com/venturemark/apiserver/pkg/context/subjectclaim"
+	"github.com/venturemark/apiserver/pkg/context/claimid"
 	"github.com/venturemark/apiserver/pkg/context/userid"
 )
 
@@ -42,23 +42,22 @@ func NewInterceptor(config InterceptorConfig) (*Interceptor, error) {
 
 func (e *Interceptor) Interceptor() grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, inf *grpc.UnaryServerInfo, han grpc.UnaryHandler) (interface{}, error) {
-		var suk *key.Key
+		var clk *key.Key
 		{
-			suc, ok := subjectclaim.FromContext(ctx)
+			cli, ok := claimid.FromContext(ctx)
 			if !ok {
 				return nil, tracer.Maskf(invalidMetadataError, "subject must not be empty")
 			}
 
 			met := map[string]string{
-				metadata.ResourceKind: "subject",
-				metadata.SubjectID:    suc,
+				metadata.ClaimID: cli,
 			}
 
-			suk = key.Subject(met)
+			clk = key.Claim(met)
 		}
 
 		{
-			usi, err := e.association.Search(suk)
+			usi, err := e.association.Search(clk)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
