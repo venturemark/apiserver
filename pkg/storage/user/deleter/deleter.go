@@ -9,7 +9,6 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/verifier/user/deleter"
 	"github.com/venturemark/apiserver/pkg/verifier/user/deleter/auth"
-	"github.com/venturemark/apiserver/pkg/verifier/user/deleter/empty"
 	"github.com/venturemark/apiserver/pkg/verifier/user/deleter/exist"
 )
 
@@ -57,16 +56,6 @@ func New(config Config) (*Deleter, error) {
 		}
 	}
 
-	var emptyVerifier *empty.Verifier
-	{
-		c := empty.VerifierConfig{}
-
-		emptyVerifier, err = empty.NewVerifier(c)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
 	var existVerifier *exist.Verifier
 	{
 		c := exist.VerifierConfig{
@@ -85,9 +74,6 @@ func New(config Config) (*Deleter, error) {
 		rescue: config.Rescue,
 
 		verify: []deleter.Interface{
-			// The empty verifier must be run first so that following verifiers
-			// do not have to check for prerequisites over and over again.
-			emptyVerifier,
 			authVerifier,
 			existVerifier,
 		},
