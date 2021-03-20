@@ -261,8 +261,9 @@ github.com/venturemark/permission v0.4.1 h1:8dFP/7gJye52tprbbBwMm5zmOHO9PM7waCvz
 github.com/venturemark/permission v0.4.1/go.mod h1:7/4bT5jQ524hSxs7ewEun2OF31YMjNgAs2BJFgVzAZ8=
 github.com/xh3b4sd/budget v0.2.0 h1:xqnGRFwrwXW/hJnf5SCatXIVp/iHfC4ZFVYGmYZmT2Q=
 github.com/xh3b4sd/budget v0.2.0/go.mod h1:u4Ci+UNDDCeDNjEOCPYQduvWg+T4G8frIYDxs/YG/ss=
-github.com/xh3b4sd/logger v0.1.2 h1:zEE3obzyrGofvTNbT+T2U654e9XwqmGbzyktdRB1BR8=
 github.com/xh3b4sd/logger v0.1.2/go.mod h1:/mTz2elyBeH3rPq5vEqAJRWYt/6huhY/b3Hrzych2GE=
+github.com/xh3b4sd/logger v0.2.0 h1:IAMhu5QB/HHucgX/tiNRl7/Of7Gq3bSZ4NBCtnFIh48=
+github.com/xh3b4sd/logger v0.2.0/go.mod h1:mVsr+vC1BnsU4v5ZjNYWfLM0SYVxNs9M9neRTOV9RJU=
 github.com/xh3b4sd/random v0.2.0 h1:LTLeb4xDI9Fl8uDZtbbitTKoXidxyrh364xS7O/MthU=
 github.com/xh3b4sd/random v0.2.0/go.mod h1:cFdYMMzamKvhxgbwynAYxvNKwbFqUPI+JGfFA/8DW+c=
 github.com/xh3b4sd/redigo v0.15.0/go.mod h1:gAWZu3I5D0jcIRLuv34Wtncy6LcSMiXcipdecPKZhNg=
