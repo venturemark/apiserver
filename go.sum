@@ -254,8 +254,8 @@ github.com/stvp/tempredis v0.0.0-20181119212430-b82af8480203/go.mod h1:oqN97ltKN
 github.com/subosito/gotenv v1.2.0/go.mod h1:N0PQaV/YGNqwC0u51sEeR/aUtSLEXKX9iv69rRypqCw=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
 github.com/venturemark/apicommon v0.5.0/go.mod h1:gzSSDL7OuV9rBfACv6QhW/1ahg+DPm64DurlG5HGsGY=
-github.com/venturemark/apicommon v0.5.1-0.20210321202300-eb7d8eb0c476 h1:kRdBhXPi0fUmZMvAZwlDQnp5x57cvxeDGu4zS+pPaHY=
-github.com/venturemark/apicommon v0.5.1-0.20210321202300-eb7d8eb0c476/go.mod h1:gzSSDL7OuV9rBfACv6QhW/1ahg+DPm64DurlG5HGsGY=
+github.com/venturemark/apicommon v0.6.0 h1:GGnNT/K/5cxJ8q0vNHhxHzcAKxoj8+/UeoZ2vCXrKp8=
+github.com/venturemark/apicommon v0.6.0/go.mod h1:gzSSDL7OuV9rBfACv6QhW/1ahg+DPm64DurlG5HGsGY=
 github.com/venturemark/apigengo v0.3.0 h1:msc+hWNUQnstWFFKtndkst3KCRDlhBhMeOT3FST8adI=
 github.com/venturemark/apigengo v0.3.0/go.mod h1:r5z0VPa/tqgsxVgnJdgNfTIeuwJzohcyLR57criXcIE=
 github.com/venturemark/permission v0.5.0 h1:GNmEPufO5KKu7nh7rPLhoPaYe7GorVuXpPtDIKjP0Gg=
