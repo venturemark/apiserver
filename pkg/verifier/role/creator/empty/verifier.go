@@ -7,6 +7,7 @@ import (
 
 var (
 	resources = []string{
+		"invite",
 		"message",
 		"timeline",
 		"update",
