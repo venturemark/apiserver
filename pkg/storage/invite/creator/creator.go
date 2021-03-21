@@ -9,6 +9,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/verifier/invite/creator"
 	"github.com/venturemark/apiserver/pkg/verifier/invite/creator/auth"
+	"github.com/venturemark/apiserver/pkg/verifier/invite/creator/email"
 	"github.com/venturemark/apiserver/pkg/verifier/invite/creator/empty"
 )
 
@@ -66,6 +67,16 @@ func New(config Config) (*Creator, error) {
 		}
 	}
 
+	var emailVerifier *email.Verifier
+	{
+		c := email.VerifierConfig{}
+
+		emailVerifier, err = email.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	c := &Creator{
 		logger: config.Logger,
 		redigo: config.Redigo,
@@ -75,6 +86,7 @@ func New(config Config) (*Creator, error) {
 			// The empty verifier must be run first so that following verifiers
 			// do not have to check for prerequisites over and over again.
 			emptyVerifier,
+			emailVerifier,
 			authVerifier,
 		},
 	}
