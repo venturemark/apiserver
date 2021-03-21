@@ -102,7 +102,7 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 
 	var use string
 	{
-		use, err = v.permission.Resource().User().Role(met)
+		use, err = v.permission.Resolver().User().Role(met)
 		if err != nil {
 			return "", tracer.Mask(err)
 		}
@@ -126,7 +126,7 @@ func (v *Verifier) vis(met map[string]string) (label.Label, error) {
 
 	var use string
 	{
-		use, err = v.permission.Resource().User().Visibility(met)
+		use, err = v.permission.Resolver().User().Visibility(met)
 		if err != nil {
 			return "", tracer.Mask(err)
 		}
