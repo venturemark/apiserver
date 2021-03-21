@@ -88,7 +88,7 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 
 	var ven string
 	{
-		ven, err = v.permission.Resource().Venture().Role(met)
+		ven, err = v.permission.Resolver().Venture().Role(met)
 		if err != nil {
 			return "", tracer.Mask(err)
 		}

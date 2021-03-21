@@ -23,6 +23,7 @@ import (
 
 	"github.com/venturemark/apiserver/pkg/association"
 	"github.com/venturemark/apiserver/pkg/handler"
+	"github.com/venturemark/apiserver/pkg/handler/invite"
 	"github.com/venturemark/apiserver/pkg/handler/message"
 	"github.com/venturemark/apiserver/pkg/handler/role"
 	"github.com/venturemark/apiserver/pkg/handler/texupd"
@@ -99,7 +100,7 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 		}
 	}
 
-	var resourceResolver permission.Resource
+	var resourceResolver permission.Resolver
 	{
 		c := resolver.Config{
 			Logger: r.logger,
@@ -116,7 +117,7 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 	{
 		c := gateway.Config{
 			Ingress:  ingressGateway,
-			Resource: resourceResolver,
+			Resolver: resourceResolver,
 		}
 
 		permissionGateway, err = gateway.New(c)
@@ -159,6 +160,19 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 	}
 
 	//************************************************************************//
+
+	var inviteHandler *invite.Handler
+	{
+		c := invite.HandlerConfig{
+			Logger:  r.logger,
+			Storage: redisStorage,
+		}
+
+		inviteHandler, err = invite.NewHandler(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
 
 	var messageHandler *message.Handler
 	{
@@ -315,6 +329,7 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 			},
 			Logger: r.logger,
 			Handler: []handler.Interface{
+				inviteHandler,
 				messageHandler,
 				roleHandler,
 				texupdHandler,

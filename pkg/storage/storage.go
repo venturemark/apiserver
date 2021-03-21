@@ -8,6 +8,7 @@ import (
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/association"
+	"github.com/venturemark/apiserver/pkg/storage/invite"
 	"github.com/venturemark/apiserver/pkg/storage/message"
 	"github.com/venturemark/apiserver/pkg/storage/role"
 	"github.com/venturemark/apiserver/pkg/storage/texupd"
@@ -26,6 +27,7 @@ type Config struct {
 }
 
 type Storage struct {
+	Invite   *invite.Invite
 	Message  *message.Message
 	Role     *role.Role
 	TexUpd   *texupd.TexUpd
@@ -37,6 +39,21 @@ type Storage struct {
 
 func New(config Config) (*Storage, error) {
 	var err error
+
+	var inviteStorage *invite.Invite
+	{
+		c := invite.Config{
+			Logger:     config.Logger,
+			Permission: config.Permission,
+			Redigo:     config.Redigo,
+			Rescue:     config.Rescue,
+		}
+
+		inviteStorage, err = invite.New(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
 
 	var messageStorage *message.Message
 	{
@@ -145,6 +162,7 @@ func New(config Config) (*Storage, error) {
 	}
 
 	s := &Storage{
+		Invite:   inviteStorage,
 		Message:  messageStorage,
 		Role:     roleStorage,
 		TexUpd:   texupdStorage,

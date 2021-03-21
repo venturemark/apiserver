@@ -87,7 +87,7 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 
 	var mes string
 	{
-		mes, err = v.permission.Resource().Message().Role(met)
+		mes, err = v.permission.Resolver().Message().Role(met)
 		if err != nil {
 			return "", tracer.Mask(err)
 		}
@@ -95,7 +95,7 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 
 	var tim string
 	{
-		tim, err = v.permission.Resource().Timeline().Role(met)
+		tim, err = v.permission.Resolver().Timeline().Role(met)
 		if err != nil {
 			return "", tracer.Mask(err)
 		}
@@ -119,7 +119,7 @@ func (v *Verifier) vis(met map[string]string) (label.Label, error) {
 
 	var mes string
 	{
-		mes, err = v.permission.Resource().Message().Visibility(met)
+		mes, err = v.permission.Resolver().Message().Visibility(met)
 		if err != nil {
 			return "", tracer.Mask(err)
 		}

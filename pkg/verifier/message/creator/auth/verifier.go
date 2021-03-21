@@ -88,7 +88,7 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 
 	var tim string
 	{
-		tim, err = v.permission.Resource().Timeline().Role(met)
+		tim, err = v.permission.Resolver().Timeline().Role(met)
 		if err != nil {
 			return "", tracer.Mask(err)
 		}
