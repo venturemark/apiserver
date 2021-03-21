@@ -1,7 +1,7 @@
-package empty
+package email
 
 import (
-	"github.com/venturemark/apicommon/pkg/metadata"
+	"github.com/badoux/checkmail"
 	"github.com/venturemark/apigengo/pkg/pbf/invite"
 )
 
@@ -31,7 +31,12 @@ func (v *Verifier) Verify(req *invite.CreateI) (bool, error) {
 	}
 
 	{
-		if req.Obj[0].Metadata[metadata.VentureID] == "" {
+		if req.Obj[0].Property.Mail == "" {
+			return false, nil
+		}
+
+		err := checkmail.ValidateFormat(req.Obj[0].Property.Mail)
+		if err != nil {
 			return false, nil
 		}
 	}

@@ -3,6 +3,7 @@ module github.com/venturemark/apiserver
 go 1.16
 
 require (
+	github.com/badoux/checkmail v1.2.1
 	github.com/evanphx/json-patch v0.5.2
 	github.com/google/go-cmp v0.5.5
 	github.com/lestrrat-go/jwx v1.1.5

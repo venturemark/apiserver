@@ -1,6 +1,7 @@
 package patch
 
 import (
+	"github.com/badoux/checkmail"
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/invite"
 )
@@ -67,9 +68,12 @@ func (v *Verifier) Verify(req *invite.UpdateI) (bool, error) {
 			}
 
 			valEmp := req.Obj[0].Jsnpatch[i].Val != nil && *req.Obj[0].Jsnpatch[i].Val == ""
-			valLen := req.Obj[0].Jsnpatch[i].Val != nil && len(*req.Obj[0].Jsnpatch[i].Val) <= 280
+			if !valEmp {
+				return false, nil
+			}
 
-			if !valEmp && !valLen {
+			err := checkmail.ValidateFormat(*req.Obj[0].Jsnpatch[i].Val)
+			if err != nil {
 				return false, nil
 			}
 		}
