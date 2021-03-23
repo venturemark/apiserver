@@ -1,6 +1,11 @@
 package auth
 
 import (
+	"encoding/json"
+
+	"github.com/venturemark/apicommon/pkg/key"
+	"github.com/venturemark/apicommon/pkg/metadata"
+	"github.com/venturemark/apicommon/pkg/schema"
 	"github.com/venturemark/apigengo/pkg/pbf/invite"
 	"github.com/venturemark/permission"
 	"github.com/venturemark/permission/pkg/label"
@@ -85,6 +90,17 @@ func (v *Verifier) res(met map[string]string) (label.Label, error) {
 func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 	var err error
 
+	var cur string
+	var des string
+	{
+		cur = met[metadata.InviteCode]
+
+		des, err = v.inviteCode(met)
+		if err != nil {
+			return "", tracer.Mask(err)
+		}
+	}
+
 	var inv string
 	{
 		inv, err = v.permission.Resolver().Invite().Role(met)
@@ -103,6 +119,9 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 
 	var rol label.Label
 	{
+		if cur == des {
+			rol = role.Owner
+		}
 		if inv == role.Owner.Label() {
 			rol = role.Owner
 		}
@@ -142,4 +161,36 @@ func (v *Verifier) vis(met map[string]string) (label.Label, error) {
 	}
 
 	return vis, nil
+}
+
+func (v *Verifier) inviteCode(met map[string]string) (string, error) {
+	var ink *key.Key
+	{
+		ink = key.Invite(met)
+	}
+
+	var inc string
+	{
+		k := ink.List()
+		s := ink.ID().F()
+
+		str, err := v.redigo.Sorted().Search().Score(k, s, s)
+		if err != nil {
+			return "", tracer.Mask(err)
+		}
+
+		if len(str) != 1 {
+			return "", nil
+		}
+
+		inv := &schema.Invite{}
+		err = json.Unmarshal([]byte(str[0]), inv)
+		if err != nil {
+			return "", tracer.Mask(err)
+		}
+
+		inc = inv.Obj.Metadata[metadata.InviteCode]
+	}
+
+	return inc, nil
 }

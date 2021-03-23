@@ -1,6 +1,8 @@
 package patch
 
 import (
+	"fmt"
+
 	"github.com/badoux/checkmail"
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/invite"
@@ -85,10 +87,32 @@ func (v *Verifier) Verify(req *invite.UpdateI) (bool, error) {
 				continue
 			}
 
+			incEmp := req.Obj[0].Metadata[metadata.InviteCode] == ""
+			subEmp := req.Obj[0].Metadata[metadata.SubjectID] == ""
 			valEmp := req.Obj[0].Jsnpatch[i].Val != nil && *req.Obj[0].Jsnpatch[i].Val == ""
 			valPen := req.Obj[0].Jsnpatch[i].Val != nil && *req.Obj[0].Jsnpatch[i].Val == "pending"
 			valAcc := req.Obj[0].Jsnpatch[i].Val != nil && *req.Obj[0].Jsnpatch[i].Val == "accepted"
 			valRej := req.Obj[0].Jsnpatch[i].Val != nil && *req.Obj[0].Jsnpatch[i].Val == "rejected"
+
+			fmt.Printf("\n")
+			fmt.Printf("%#v\n", req.Obj[0].Metadata)
+			fmt.Printf("incEmp: %#v\n", incEmp)
+			fmt.Printf("subEmp: %#v\n", subEmp)
+			fmt.Printf("valAcc: %#v\n", valAcc)
+			fmt.Printf("\n")
+
+			// We need the invite code in case the invite shall be accepted.
+			// This is to verify the request's authenticity.
+			if incEmp && valAcc {
+				return false, nil
+			}
+
+			// We need the subject ID in case the invite shall be accepted. This
+			// is to create a role making the associated user a member of the
+			// venture for which the invite got accepted.
+			if subEmp && valAcc {
+				return false, nil
+			}
 
 			if !valEmp && !valPen && !valAcc && !valRej {
 				return false, nil

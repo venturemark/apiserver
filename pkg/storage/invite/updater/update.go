@@ -21,15 +21,18 @@ func (u *Updater) Update(req *invite.UpdateI) (*invite.UpdateO, error) {
 	}
 
 	var cur []byte
+	var old string
 	{
 		k := ink.List()
-		s, err := u.redigo.Sorted().Search().Score(k, ink.ID().F(), ink.ID().F())
+		s := ink.ID().F()
+
+		str, err := u.redigo.Sorted().Search().Score(k, s, s)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
 
 		inv := &schema.Invite{}
-		err = json.Unmarshal([]byte(s[0]), inv)
+		err = json.Unmarshal([]byte(str[0]), inv)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -38,6 +41,8 @@ func (u *Updater) Update(req *invite.UpdateI) (*invite.UpdateO, error) {
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
+
+		old = inv.Obj.Property.Stat
 	}
 
 	var pat []byte
@@ -76,10 +81,20 @@ func (u *Updater) Update(req *invite.UpdateI) (*invite.UpdateO, error) {
 	}
 
 	var inv schema.Invite
+	var new string
 	{
 		err := json.Unmarshal([]byte(val), &inv)
 		if err != nil {
 			return nil, tracer.Mask(err)
+		}
+
+		new = inv.Obj.Property.Stat
+	}
+
+	var acc bool
+	{
+		if old == "pending" && new == "accepted" {
+			acc = true
 		}
 	}
 
@@ -104,6 +119,10 @@ func (u *Updater) Update(req *invite.UpdateI) (*invite.UpdateO, error) {
 					Metadata: map[string]string{},
 				},
 			},
+		}
+
+		if acc {
+			res.Obj[0].Metadata[metadata.RoleStatus] = "created"
 		}
 
 		if upd {
