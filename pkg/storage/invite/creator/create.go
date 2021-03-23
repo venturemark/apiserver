@@ -19,6 +19,11 @@ func (c *Creator) Create(req *invite.CreateI) (*invite.CreateO, error) {
 		ink = key.Invite(req.Obj[0].Metadata)
 	}
 
+	var inc string
+	{
+		inc = req.Obj[0].Metadata[metadata.InviteCode]
+	}
+
 	var val string
 	{
 		tim := schema.Invite{
@@ -57,7 +62,8 @@ func (c *Creator) Create(req *invite.CreateI) (*invite.CreateO, error) {
 			Obj: []*invite.CreateO_Obj{
 				{
 					Metadata: map[string]string{
-						metadata.InviteID: ink.ID().S(),
+						metadata.InviteCode: inc,
+						metadata.InviteID:   ink.ID().S(),
 					},
 				},
 			},

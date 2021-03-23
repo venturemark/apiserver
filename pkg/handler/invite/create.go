@@ -11,6 +11,7 @@ import (
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apiserver/pkg/context/userid"
+	"github.com/venturemark/apiserver/pkg/random"
 )
 
 func (h *Handler) Create(ctx context.Context, req *invite.CreateI) (*invite.CreateO, error) {
@@ -37,6 +38,10 @@ func (h *Handler) Create(ctx context.Context, req *invite.CreateI) (*invite.Crea
 			{
 				req.Obj[i].Metadata[metadata.ResourceKind] = "invite"
 				req.Obj[i].Metadata[metadata.RoleKind] = "owner"
+			}
+
+			{
+				req.Obj[i].Metadata[metadata.InviteCode] = random.MustNew()
 			}
 
 			{
