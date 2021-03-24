@@ -55,15 +55,13 @@ jobs:
         env:
           GO111MODULE: "on"
         run: |
-          go clean -modcache
-          go get github.com/venturemark/apiworker
+          go get -u github.com/venturemark/apiworker
 
       - name: "Install Test Dependency"
         env:
           GO111MODULE: "on"
         run: |
-          go clean -modcache
-          go get github.com/venturemark/cfm
+          go get -u github.com/venturemark/cfm
 
       - name: "Check Conformance Tests"
         env:
