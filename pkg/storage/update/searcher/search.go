@@ -41,6 +41,7 @@ func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 			o := &update.SearchO_Obj{
 				Metadata: upd.Obj.Metadata,
 				Property: &update.SearchO_Obj_Property{
+					Head: upd.Obj.Property.Head,
 					Text: upd.Obj.Property.Text,
 				},
 			}
