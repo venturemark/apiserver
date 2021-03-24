@@ -24,6 +24,7 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 			Obj: schema.UpdateObj{
 				Metadata: req.Obj[0].Metadata,
 				Property: schema.UpdateObjProperty{
+					Head: req.Obj[0].Property.Head,
 					Text: req.Obj[0].Property.Text,
 				},
 			},
