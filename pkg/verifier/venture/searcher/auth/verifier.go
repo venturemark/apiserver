@@ -1,7 +1,11 @@
 package auth
 
 import (
+	"encoding/json"
+
+	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
+	"github.com/venturemark/apicommon/pkg/schema"
 	"github.com/venturemark/apigengo/pkg/pbf/venture"
 	"github.com/venturemark/permission"
 	"github.com/venturemark/permission/pkg/label"
@@ -100,6 +104,14 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 		}
 	}
 
+	var tim string
+	{
+		tim, err = v.resolveTimeline(met)
+		if err != nil {
+			return "", tracer.Mask(err)
+		}
+	}
+
 	var ven string
 	{
 		ven, err = v.permission.Resolver().Venture().Role(met)
@@ -110,6 +122,12 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 
 	var rol label.Label
 	{
+		if tim == role.Member.Label() {
+			rol = role.Member
+		}
+		if tim == role.Owner.Label() {
+			rol = role.Owner
+		}
 		if ven == role.Member.Label() {
 			rol = role.Member
 		}
@@ -146,4 +164,58 @@ func (v *Verifier) vis(met map[string]string) (label.Label, error) {
 	}
 
 	return vis, nil
+}
+
+func (v *Verifier) resolveTimeline(met map[string]string) (string, error) {
+	var err error
+
+	var tik *key.Key
+	{
+		tik = key.Timeline(met)
+	}
+
+	var str []string
+	{
+		k := tik.List()
+
+		str, err = v.redigo.Sorted().Search().Order(k, 0, -1)
+		if err != nil {
+			return "", tracer.Mask(err)
+		}
+	}
+
+	var rol string
+	{
+		for _, s := range str {
+			tim := &schema.Timeline{}
+			err := json.Unmarshal([]byte(s), tim)
+			if err != nil {
+				return "", tracer.Mask(err)
+			}
+
+			rol, err = v.permission.Resolver().Timeline().Role(timeline(tim, met))
+			if err != nil {
+				return "", tracer.Mask(err)
+			}
+
+			if rol != "" {
+				break
+			}
+		}
+	}
+
+	return rol, nil
+}
+
+func timeline(tim *schema.Timeline, met map[string]string) map[string]string {
+	cop := map[string]string{}
+
+	for k, v := range met {
+		cop[k] = v
+	}
+
+	cop[metadata.ResourceKind] = "timeline"
+	cop[metadata.TimelineID] = tim.Obj.Metadata[metadata.TimelineID]
+
+	return cop
 }
