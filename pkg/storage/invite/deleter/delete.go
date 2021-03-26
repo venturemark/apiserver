@@ -66,6 +66,7 @@ func (d *Deleter) Delete(req *invite.DeleteI) (*invite.DeleteO, error) {
 			Obj: []*invite.DeleteO_Obj{
 				{
 					Metadata: map[string]string{
+						metadata.InviteID:     ink.ID().S(),
 						metadata.InviteStatus: "deleted",
 					},
 				},

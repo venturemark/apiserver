@@ -66,6 +66,7 @@ func (d *Deleter) Delete(req *venture.DeleteI) (*venture.DeleteO, error) {
 			Obj: []*venture.DeleteO_Obj{
 				{
 					Metadata: map[string]string{
+						metadata.VentureID:     vek.ID().S(),
 						metadata.VentureStatus: "deleted",
 					},
 				},

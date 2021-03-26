@@ -66,6 +66,7 @@ func (d *Deleter) Delete(req *texupd.DeleteI) (*texupd.DeleteO, error) {
 			Obj: []*texupd.DeleteO_Obj{
 				{
 					Metadata: map[string]string{
+						metadata.UpdateID:     upk.ID().S(),
 						metadata.UpdateStatus: "deleted",
 					},
 				},

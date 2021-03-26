@@ -66,6 +66,7 @@ func (d *Deleter) Delete(req *timeline.DeleteI) (*timeline.DeleteO, error) {
 			Obj: []*timeline.DeleteO_Obj{
 				{
 					Metadata: map[string]string{
+						metadata.TimelineID:     tik.ID().S(),
 						metadata.TimelineStatus: "deleted",
 					},
 				},

@@ -102,7 +102,9 @@ func (u *Updater) Update(req *user.UpdateI) (*user.UpdateO, error) {
 		res = &user.UpdateO{
 			Obj: []*user.UpdateO_Obj{
 				{
-					Metadata: map[string]string{},
+					Metadata: map[string]string{
+						metadata.UserID: usk.ID().S(),
+					},
 				},
 			},
 		}

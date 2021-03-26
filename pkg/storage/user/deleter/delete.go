@@ -66,6 +66,7 @@ func (d *Deleter) Delete(req *user.DeleteI) (*user.DeleteO, error) {
 			Obj: []*user.DeleteO_Obj{
 				{
 					Metadata: map[string]string{
+						metadata.UserID:     usk.ID().S(),
 						metadata.UserStatus: "deleted",
 					},
 				},

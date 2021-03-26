@@ -67,6 +67,10 @@ func (h *Handler) Update(ctx context.Context, req *invite.UpdateI) (*invite.Upda
 				}
 
 				{
+					res.Obj[i].Metadata[metadata.RoleID] = req.Obj[i].Metadata[metadata.RoleID]
+				}
+
+				{
 					rol := &role.CreateI{
 						Obj: []*role.CreateI_Obj{
 							{

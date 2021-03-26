@@ -116,7 +116,9 @@ func (u *Updater) Update(req *invite.UpdateI) (*invite.UpdateO, error) {
 		res = &invite.UpdateO{
 			Obj: []*invite.UpdateO_Obj{
 				{
-					Metadata: map[string]string{},
+					Metadata: map[string]string{
+						metadata.InviteID: ink.ID().S(),
+					},
 				},
 			},
 		}

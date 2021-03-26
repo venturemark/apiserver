@@ -91,7 +91,9 @@ func (u *Updater) Update(req *role.UpdateI) (*role.UpdateO, error) {
 		res = &role.UpdateO{
 			Obj: []*role.UpdateO_Obj{
 				{
-					Metadata: map[string]string{},
+					Metadata: map[string]string{
+						metadata.RoleID: rok.ID().S(),
+					},
 				},
 			},
 		}
