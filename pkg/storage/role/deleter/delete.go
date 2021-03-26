@@ -68,6 +68,7 @@ func (d *Deleter) Delete(req *role.DeleteI) (*role.DeleteO, error) {
 			Obj: []*role.DeleteO_Obj{
 				{
 					Metadata: map[string]string{
+						metadata.RoleID:     rok.ID().S(),
 						metadata.RoleStatus: "deleted",
 					},
 				},

@@ -102,7 +102,9 @@ func (u *Updater) Update(req *venture.UpdateI) (*venture.UpdateO, error) {
 		res = &venture.UpdateO{
 			Obj: []*venture.UpdateO_Obj{
 				{
-					Metadata: map[string]string{},
+					Metadata: map[string]string{
+						metadata.VentureID: vek.ID().S(),
+					},
 				},
 			},
 		}

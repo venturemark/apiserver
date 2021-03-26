@@ -91,7 +91,9 @@ func (u *Updater) Update(req *texupd.UpdateI) (*texupd.UpdateO, error) {
 		res = &texupd.UpdateO{
 			Obj: []*texupd.UpdateO_Obj{
 				{
-					Metadata: map[string]string{},
+					Metadata: map[string]string{
+						metadata.UpdateID: upk.ID().S(),
+					},
 				},
 			},
 		}

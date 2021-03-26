@@ -31,6 +31,7 @@ func (c *Deleter) Delete(req *message.DeleteI) (*message.DeleteO, error) {
 			Obj: []*message.DeleteO_Obj{
 				{
 					Metadata: map[string]string{
+						metadata.MessageID:     mek.ID().S(),
 						metadata.MessageStatus: "deleted",
 					},
 				},

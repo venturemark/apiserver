@@ -101,7 +101,9 @@ func (u *Updater) Update(req *timeline.UpdateI) (*timeline.UpdateO, error) {
 		res = &timeline.UpdateO{
 			Obj: []*timeline.UpdateO_Obj{
 				{
-					Metadata: map[string]string{},
+					Metadata: map[string]string{
+						metadata.TimelineID: tik.ID().S(),
+					},
 				},
 			},
 		}
