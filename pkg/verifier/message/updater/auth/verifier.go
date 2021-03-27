@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"github.com/venturemark/apigengo/pkg/pbf/texupd"
+	"github.com/venturemark/apigengo/pkg/pbf/message"
 	"github.com/venturemark/permission"
 	"github.com/venturemark/permission/pkg/label"
 	"github.com/venturemark/permission/pkg/label/action"
@@ -38,7 +38,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-func (v *Verifier) Verify(req *texupd.UpdateI) (bool, error) {
+func (v *Verifier) Verify(req *message.UpdateI) (bool, error) {
 	var err error
 
 	var act label.Label
@@ -79,23 +79,23 @@ func (v *Verifier) act(met map[string]string) (label.Label, error) {
 }
 
 func (v *Verifier) res(met map[string]string) (label.Label, error) {
-	return resource.Update, nil
+	return resource.Message, nil
 }
 
 func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 	var err error
 
-	var tim string
+	var mes string
 	{
-		tim, err = v.permission.Resolver().Timeline().Role(met)
+		mes, err = v.permission.Resolver().Message().Role(met)
 		if err != nil {
 			return "", tracer.Mask(err)
 		}
 	}
 
-	var upd string
+	var tim string
 	{
-		upd, err = v.permission.Resolver().Update().Role(met)
+		tim, err = v.permission.Resolver().Timeline().Role(met)
 		if err != nil {
 			return "", tracer.Mask(err)
 		}
@@ -111,10 +111,10 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 
 	var rol label.Label
 	{
-		if tim == role.Owner.Label() {
+		if mes == role.Owner.Label() {
 			rol = role.Owner
 		}
-		if upd == role.Owner.Label() {
+		if tim == role.Owner.Label() {
 			rol = role.Owner
 		}
 		if ven == role.Owner.Label() {
@@ -128,9 +128,9 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 func (v *Verifier) vis(met map[string]string) (label.Label, error) {
 	var err error
 
-	var upd string
+	var mes string
 	{
-		upd, err = v.permission.Resolver().Update().Visibility(met)
+		mes, err = v.permission.Resolver().Message().Visibility(met)
 		if err != nil {
 			return "", tracer.Mask(err)
 		}
@@ -138,16 +138,16 @@ func (v *Verifier) vis(met map[string]string) (label.Label, error) {
 
 	var vis label.Label
 	{
-		if upd == "" {
+		if mes == "" {
 			vis = visibility.Any
 		}
-		if upd == visibility.Any.Label() {
+		if mes == visibility.Any.Label() {
 			vis = visibility.Any
 		}
-		if upd == visibility.Private.Label() {
+		if mes == visibility.Private.Label() {
 			vis = visibility.Private
 		}
-		if upd == visibility.Public.Label() {
+		if mes == visibility.Public.Label() {
 			vis = visibility.Public
 		}
 	}
