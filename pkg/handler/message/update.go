@@ -5,8 +5,9 @@ import (
 
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/message"
-	"github.com/venturemark/apiserver/pkg/context/userid"
 	"github.com/xh3b4sd/tracer"
+
+	"github.com/venturemark/apiserver/pkg/context/userid"
 )
 
 func (h *Handler) Update(ctx context.Context, req *message.UpdateI) (*message.UpdateO, error) {
