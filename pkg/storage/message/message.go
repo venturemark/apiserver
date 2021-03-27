@@ -10,6 +10,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/storage/message/creator"
 	"github.com/venturemark/apiserver/pkg/storage/message/deleter"
 	"github.com/venturemark/apiserver/pkg/storage/message/searcher"
+	"github.com/venturemark/apiserver/pkg/storage/message/updater"
 )
 
 type Config struct {
@@ -23,6 +24,7 @@ type Message struct {
 	Creator  *creator.Creator
 	Deleter  *deleter.Deleter
 	Searcher *searcher.Searcher
+	Updater  *updater.Updater
 }
 
 func New(config Config) (*Message, error) {
@@ -73,10 +75,26 @@ func New(config Config) (*Message, error) {
 		}
 	}
 
+	var upd *updater.Updater
+	{
+		c := updater.Config{
+			Logger:     config.Logger,
+			Permission: config.Permission,
+			Redigo:     config.Redigo,
+			Rescue:     config.Rescue,
+		}
+
+		upd, err = updater.New(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	m := &Message{
 		Creator:  cre,
 		Deleter:  del,
 		Searcher: sea,
+		Updater:  upd,
 	}
 
 	return m, nil
