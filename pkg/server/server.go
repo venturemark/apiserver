@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"net"
+	"net/http"
 
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/tracer"
 	"google.golang.org/grpc"
@@ -18,10 +20,12 @@ type Config struct {
 	Logger      logger.Interface
 	Handler     []handler.Interface
 
-	DonCha <-chan struct{}
-	ErrCha chan<- error
-	Host   string
-	Port   string
+	DonCha   <-chan struct{}
+	ErrCha   chan<- error
+	GRPCHost string
+	GRPCPort string
+	HTTPHost string
+	HTTPPort string
 }
 
 type Server struct {
@@ -29,10 +33,12 @@ type Server struct {
 	logger      logger.Interface
 	handler     []handler.Interface
 
-	donCha <-chan struct{}
-	errCha chan<- error
-	host   string
-	port   string
+	donCha   <-chan struct{}
+	errCha   chan<- error
+	grpcHost string
+	grpcPort string
+	httpHost string
+	httpPort string
 }
 
 func New(config Config) (*Server, error) {
@@ -52,11 +58,17 @@ func New(config Config) (*Server, error) {
 	if config.ErrCha == nil {
 		return nil, tracer.Maskf(invalidConfigError, "%T.ErrCha must not be empty", config)
 	}
-	if config.Host == "" {
-		return nil, tracer.Maskf(invalidConfigError, "%T.Host must not be empty", config)
+	if config.GRPCHost == "" {
+		return nil, tracer.Maskf(invalidConfigError, "%T.GRPCHost must not be empty", config)
 	}
-	if config.Port == "" {
-		return nil, tracer.Maskf(invalidConfigError, "%T.Port must not be empty", config)
+	if config.GRPCPort == "" {
+		return nil, tracer.Maskf(invalidConfigError, "%T.GRPCPort must not be empty", config)
+	}
+	if config.HTTPHost == "" {
+		return nil, tracer.Maskf(invalidConfigError, "%T.HTTPHost must not be empty", config)
+	}
+	if config.HTTPPort == "" {
+		return nil, tracer.Maskf(invalidConfigError, "%T.HTTPPort must not be empty", config)
 	}
 
 	s := &Server{
@@ -64,16 +76,18 @@ func New(config Config) (*Server, error) {
 		logger:      config.Logger,
 		handler:     config.Handler,
 
-		donCha: config.DonCha,
-		errCha: config.ErrCha,
-		host:   config.Host,
-		port:   config.Port,
+		donCha:   config.DonCha,
+		errCha:   config.ErrCha,
+		grpcHost: config.GRPCHost,
+		grpcPort: config.GRPCPort,
+		httpHost: config.HTTPHost,
+		httpPort: config.HTTPPort,
 	}
 
 	return s, nil
 }
 
-func (s *Server) Listen() {
+func (s *Server) ListenGRPC() {
 	var err error
 
 	var ser *grpc.Server
@@ -89,16 +103,33 @@ func (s *Server) Listen() {
 
 	var l net.Listener
 	{
-		l, err = net.Listen("tcp", net.JoinHostPort(s.host, s.port))
+		l, err = net.Listen("tcp", net.JoinHostPort(s.grpcHost, s.grpcPort))
 		if err != nil {
 			s.errCha <- tracer.Mask(err)
 		}
 	}
 
-	s.logger.Log(context.Background(), "level", "info", "message", fmt.Sprintf("server running at %s", l.Addr().String()))
+	s.logger.Log(context.Background(), "level", "info", "message", fmt.Sprintf("grpc server running at %s", l.Addr().String()))
 
 	{
 		err = ser.Serve(l)
+		if err != nil {
+			s.errCha <- tracer.Mask(err)
+		}
+	}
+}
+
+func (s *Server) ListenHTTP() {
+	a := net.JoinHostPort(s.httpHost, s.httpPort)
+
+	{
+		http.Handle("/metrics", promhttp.Handler())
+	}
+
+	s.logger.Log(context.Background(), "level", "info", "message", fmt.Sprintf("http server running at %s", a))
+
+	{
+		err := http.ListenAndServe(a, nil)
 		if err != nil {
 			s.errCha <- tracer.Mask(err)
 		}

@@ -339,10 +339,12 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 				ventureHandler,
 			},
 
-			DonCha: donCha,
-			ErrCha: errCha,
-			Host:   r.flag.ApiServer.Host,
-			Port:   r.flag.ApiServer.Port,
+			DonCha:   donCha,
+			ErrCha:   errCha,
+			GRPCHost: r.flag.ApiServer.Host,
+			GRPCPort: r.flag.ApiServer.Port,
+			HTTPHost: r.flag.Metrics.Host,
+			HTTPPort: r.flag.Metrics.Port,
 		}
 
 		g, err = server.New(c)
@@ -352,7 +354,8 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 	}
 
 	{
-		go g.Listen()
+		go g.ListenGRPC()
+		go g.ListenHTTP()
 	}
 
 	{
