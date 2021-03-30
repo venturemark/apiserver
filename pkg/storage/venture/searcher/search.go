@@ -18,17 +18,17 @@ func (s *Searcher) Search(req *venture.SearchI) (*venture.SearchO, error) {
 
 	var str []string
 	{
-		sub := req.Obj[0].Metadata[metadata.SubjectID] != ""
-		ven := req.Obj[0].Metadata[metadata.VentureID] != ""
+		suiEmp := req.Obj[0].Metadata[metadata.SubjectID] == ""
+		veiEmp := req.Obj[0].Metadata[metadata.VentureID] == ""
 
-		if sub && !ven {
+		if !suiEmp && veiEmp {
 			str, err = s.searchSub(req)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
 		}
 
-		if !sub && ven {
+		if suiEmp && !veiEmp {
 			str, err = s.searchVen(req)
 			if err != nil {
 				return nil, tracer.Mask(err)
