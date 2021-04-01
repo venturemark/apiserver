@@ -28,7 +28,23 @@ func (v *Verifier) Verify(req *timeline.SearchI) (bool, error) {
 	}
 
 	{
-		if req.Obj[0].Metadata[metadata.VentureID] == "" {
+		suiEmp := req.Obj[0].Metadata[metadata.SubjectID] == ""
+		tiiEmp := req.Obj[0].Metadata[metadata.TimelineID] == ""
+		veiEmp := req.Obj[0].Metadata[metadata.VentureID] == ""
+
+		if suiEmp && tiiEmp && veiEmp {
+			return false, nil
+		}
+
+		if !suiEmp && (!tiiEmp || !veiEmp) {
+			return false, nil
+		}
+
+		if !tiiEmp && veiEmp {
+			return false, nil
+		}
+
+		if !tiiEmp && !suiEmp {
 			return false, nil
 		}
 	}

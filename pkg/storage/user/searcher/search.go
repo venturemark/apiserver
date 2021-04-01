@@ -12,28 +12,24 @@ import (
 )
 
 func (s *Searcher) Search(req *user.SearchI) (*user.SearchO, error) {
-	var usk *key.Key
-	{
-		sub := req.Obj[0].Metadata[metadata.SubjectID] != ""
-		use := req.Obj[0].Metadata[metadata.UserID] != ""
-
-		usk = key.User(req.Obj[0].Metadata)
-		if sub && !use {
-			usk = key.Subject(req.Obj[0].Metadata)
-		}
-	}
+	var err error
 
 	var str []string
 	{
-		k := usk.Elem()
+		resEmp := req.Obj[0].Metadata[metadata.ResourceKind] == ""
 
-		s, err := s.redigo.Simple().Search().Value(k)
-		if simple.IsNotFound(err) {
-			// fall through
-		} else if err != nil {
-			return nil, tracer.Mask(err)
-		} else {
-			str = append(str, s)
+		if !resEmp {
+			str, err = s.searchRes(req)
+			if err != nil {
+				return nil, tracer.Mask(err)
+			}
+		}
+
+		if resEmp {
+			str, err = s.searchSub(req)
+			if err != nil {
+				return nil, tracer.Mask(err)
+			}
 		}
 	}
 
@@ -62,6 +58,107 @@ func (s *Searcher) Search(req *user.SearchI) (*user.SearchO, error) {
 	}
 
 	return res, nil
+}
+
+func (s *Searcher) searchRes(req *user.SearchI) ([]string, error) {
+	var err error
+
+	var rol []*schema.Role
+	{
+		rol, err = s.searchRol(req)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	var str []string
+	{
+		for _, r := range rol {
+			{
+				r.Obj.Metadata[metadata.UserID] = r.Obj.Metadata[metadata.SubjectID]
+			}
+
+			req := &user.SearchI{
+				Obj: []*user.SearchI_Obj{
+					{
+						Metadata: r.Obj.Metadata,
+					},
+				},
+			}
+
+			lis, err := s.searchSub(req)
+			if err != nil {
+				return nil, tracer.Mask(err)
+			}
+
+			str = append(str, lis...)
+		}
+	}
+
+	return str, nil
+}
+
+func (s *Searcher) searchRol(req *user.SearchI) ([]*schema.Role, error) {
+	var err error
+
+	var rok *key.Key
+	{
+		rok = key.Role(req.Obj[0].Metadata)
+	}
+
+	var str []string
+	{
+		k := rok.List()
+
+		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
+	var rol []*schema.Role
+	{
+		for _, s := range str {
+			r := &schema.Role{}
+			err := json.Unmarshal([]byte(s), r)
+			if err != nil {
+				return nil, tracer.Mask(err)
+			}
+
+			rol = append(rol, r)
+		}
+	}
+
+	return rol, nil
+}
+
+func (s *Searcher) searchSub(req *user.SearchI) ([]string, error) {
+	var usk *key.Key
+	{
+		sub := req.Obj[0].Metadata[metadata.SubjectID] != ""
+		use := req.Obj[0].Metadata[metadata.UserID] != ""
+
+		usk = key.User(req.Obj[0].Metadata)
+		if sub && !use {
+			usk = key.Subject(req.Obj[0].Metadata)
+		}
+	}
+
+	var str []string
+	{
+		k := usk.Elem()
+
+		s, err := s.redigo.Simple().Search().Value(k)
+		if simple.IsNotFound(err) {
+			// fall through
+		} else if err != nil {
+			return nil, tracer.Mask(err)
+		} else {
+			str = append(str, s)
+		}
+	}
+
+	return str, nil
 }
 
 func prof(i []schema.UserObjPropertyProf) []*user.SearchO_Obj_Property_Prof {
