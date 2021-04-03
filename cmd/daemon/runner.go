@@ -8,6 +8,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/spf13/cobra"
 	"github.com/venturemark/permission"
 	"github.com/venturemark/permission/pkg/gateway"
@@ -17,7 +18,9 @@ import (
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/redigo/pkg/client"
 	"github.com/xh3b4sd/rescue"
+	"github.com/xh3b4sd/rescue/pkg/collector"
 	"github.com/xh3b4sd/rescue/pkg/engine"
+	"github.com/xh3b4sd/rescue/pkg/metric"
 	"github.com/xh3b4sd/tracer"
 	"google.golang.org/grpc"
 
@@ -75,10 +78,31 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 		}
 	}
 
+	//************************************************************************//
+
+	var rescueMetric *metric.Collection
+	{
+		rescueMetric = metric.New()
+	}
+
+	var rescueCollector *collector.Collector
+	{
+		c := collector.Config{
+			Logger: r.logger,
+			Metric: rescueMetric,
+		}
+
+		rescueCollector, err = collector.New(c)
+		if err != nil {
+			return tracer.Mask(err)
+		}
+	}
+
 	var rescueEngine rescue.Interface
 	{
 		c := engine.Config{
 			Logger: r.logger,
+			Metric: rescueMetric,
 			Redigo: redigoClient,
 		}
 
@@ -322,6 +346,11 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 	var g *server.Server
 	{
 		c := server.Config{
+			Collector: []prometheus.Collector{
+				prometheus.NewGoCollector(),
+				prometheus.NewProcessCollector(prometheus.ProcessCollectorOpts{}),
+				rescueCollector,
+			},
 			Interceptor: []grpc.UnaryServerInterceptor{
 				sta.Interceptor(), // stack interceptor first for error logging
 				sub.Interceptor(),

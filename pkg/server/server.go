@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/http"
 
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/xh3b4sd/logger"
 	"github.com/xh3b4sd/tracer"
@@ -16,6 +17,7 @@ import (
 )
 
 type Config struct {
+	Collector   []prometheus.Collector
 	Interceptor []grpc.UnaryServerInterceptor
 	Logger      logger.Interface
 	Handler     []handler.Interface
@@ -29,6 +31,7 @@ type Config struct {
 }
 
 type Server struct {
+	collector   []prometheus.Collector
 	interceptor []grpc.UnaryServerInterceptor
 	logger      logger.Interface
 	handler     []handler.Interface
@@ -42,6 +45,9 @@ type Server struct {
 }
 
 func New(config Config) (*Server, error) {
+	if len(config.Collector) == 0 {
+		return nil, tracer.Maskf(invalidConfigError, "%T.Collector must not be empty", config)
+	}
 	if len(config.Interceptor) == 0 {
 		return nil, tracer.Maskf(invalidConfigError, "%T.Interceptor must not be empty", config)
 	}
@@ -72,6 +78,7 @@ func New(config Config) (*Server, error) {
 	}
 
 	s := &Server{
+		collector:   config.Collector,
 		interceptor: config.Interceptor,
 		logger:      config.Logger,
 		handler:     config.Handler,
@@ -121,9 +128,16 @@ func (s *Server) ListenGRPC() {
 
 func (s *Server) ListenHTTP() {
 	a := net.JoinHostPort(s.httpHost, s.httpPort)
+	r := prometheus.NewPedanticRegistry()
 
 	{
-		http.Handle("/metrics", promhttp.Handler())
+		for _, c := range s.collector {
+			r.MustRegister(c)
+		}
+	}
+
+	{
+		http.Handle("/metrics", promhttp.HandlerFor(r, promhttp.HandlerOpts{}))
 	}
 
 	s.logger.Log(context.Background(), "level", "info", "message", fmt.Sprintf("http server running at %s", a))
