@@ -22,6 +22,6 @@ spec:
     app.kubernetes.io/name: "{{ .Release.Name }}"
   ports:
     - name: "grpc-web"
-      port: { { .Values.apiserver.port } }
+      port: "{{ .Values.apiserver.port }}"
     - name: "http-metrics"
-      port: { { .Values.metrics.port } }
+      port: "{{ .Values.metrics.port }}"
