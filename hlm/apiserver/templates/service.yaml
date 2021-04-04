@@ -5,6 +5,9 @@ metadata:
   namespace: "{{ .Release.Namespace }}"
   labels:
     app.kubernetes.io/name: "{{ .Release.Name }}"
+  annotations:
+    prometheus.io/port: "8000"
+    prometheus.io/scrape: "true"
 spec:
   # Defining a service type ClusterIP with an IP value of None creates a
   # headless service which does not load balance. Instead it just provides a
@@ -19,4 +22,6 @@ spec:
     app.kubernetes.io/name: "{{ .Release.Name }}"
   ports:
     - name: "grpc-web"
-      port: {{ .Values.apiserver.port }}
+      port: "{{ .Values.apiserver.port }}"
+    - name: "http-metrics"
+      port: "{{ .Values.metrics.port }}"
