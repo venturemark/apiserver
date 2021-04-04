@@ -9,3 +9,5 @@ image:
   organization: "venturemark"
   repository: "apiserver"
   tag: ""
+metrics:
+  port: 8000
