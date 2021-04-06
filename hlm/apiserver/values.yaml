@@ -10,4 +10,4 @@ image:
   repository: "apiserver"
   tag: ""
 metrics:
-  port: 8000
+  port: 15020

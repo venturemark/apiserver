@@ -3,10 +3,15 @@ kind: "AuthorizationPolicy"
 metadata:
   name: "{{ .Release.Name }}"
 spec:
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: "{{ .Release.Name }}"
+  action: "ALLOW"
   rules:
     - from:
-      - source:
-          requestPrincipals: ["*"]
+        - source:
+            requestPrincipals: ["*"]
+    - to:
+        - operation:
+            methods: ["GET"]
+            paths: ["/stats/prometheus"]
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: apiserver
