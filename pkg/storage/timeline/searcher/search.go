@@ -14,6 +14,11 @@ import (
 	"github.com/xh3b4sd/tracer"
 )
 
+const (
+	timPat = "ven:*:tim:sub:%s"
+	venPat = "ven:sub:%s"
+)
+
 func (s *Searcher) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 	var err error
 
@@ -92,7 +97,7 @@ func (s *Searcher) searchAll(req *timeline.SearchI) ([]string, error) {
 	return str, nil
 }
 
-func (s *Searcher) searchRol(req *timeline.SearchI) ([]*schema.Role, error) {
+func (s *Searcher) searchRolPat(pat string, req *timeline.SearchI) ([]*schema.Role, error) {
 	var err error
 
 	var sui string
@@ -145,7 +150,7 @@ func (s *Searcher) searchRol(req *timeline.SearchI) ([]*schema.Role, error) {
 	go func() {
 		defer close(res)
 
-		k := fmt.Sprintf("*tim:sub:%s*", sui)
+		k := fmt.Sprintf(pat, sui)
 
 		err = s.redigo.Walker().Simple(k, don, res)
 		if err != nil {
@@ -168,18 +173,14 @@ func (s *Searcher) searchRol(req *timeline.SearchI) ([]*schema.Role, error) {
 }
 
 func (s *Searcher) searchSub(req *timeline.SearchI) ([]string, error) {
-	var err error
+	var str []string
 
-	var rol []*schema.Role
 	{
-		rol, err = s.searchRol(req)
+		rol, err := s.searchRolPat(timPat, req)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
-	}
 
-	var str []string
-	{
 		for _, r := range rol {
 			req := &timeline.SearchI{
 				Obj: []*timeline.SearchI_Obj{
@@ -194,7 +195,39 @@ func (s *Searcher) searchSub(req *timeline.SearchI) ([]string, error) {
 				return nil, tracer.Mask(err)
 			}
 
-			str = append(str, lis...)
+			for _, l := range lis {
+				if !contains(str, l) {
+					str = append(str, l)
+				}
+			}
+		}
+	}
+
+	{
+		rol, err := s.searchRolPat(venPat, req)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+
+		for _, r := range rol {
+			req := &timeline.SearchI{
+				Obj: []*timeline.SearchI_Obj{
+					{
+						Metadata: r.Obj.Metadata,
+					},
+				},
+			}
+
+			lis, err := s.searchAll(req)
+			if err != nil {
+				return nil, tracer.Mask(err)
+			}
+
+			for _, l := range lis {
+				if !contains(str, l) {
+					str = append(str, l)
+				}
+			}
 		}
 	}
 
@@ -242,4 +275,14 @@ func split(s string) (string, float64) {
 	}
 
 	return rei, roi
+}
+
+func contains(l []string, s string) bool {
+	for _, x := range l {
+		if x == s {
+			return true
+		}
+	}
+
+	return false
 }
