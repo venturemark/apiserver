@@ -94,12 +94,26 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 		}
 	}
 
+	var ven string
+	{
+		ven, err = v.permission.Resolver().Venture().Role(met)
+		if err != nil {
+			return "", tracer.Mask(err)
+		}
+	}
+
 	var rol label.Label
 	{
 		if tim == role.Member.Label() {
 			rol = role.Member
 		}
 		if tim == role.Owner.Label() {
+			rol = role.Owner
+		}
+		if ven == role.Member.Label() {
+			rol = role.Member
+		}
+		if ven == role.Owner.Label() {
 			rol = role.Owner
 		}
 	}
