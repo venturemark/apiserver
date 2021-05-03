@@ -18,6 +18,7 @@ var (
 	roles = []string{
 		"member",
 		"owner",
+		"reader",
 	}
 )
 
