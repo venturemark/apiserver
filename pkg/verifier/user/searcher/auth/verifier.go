@@ -116,6 +116,9 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 		if use == role.Owner.Label() {
 			rol = role.Owner
 		}
+		if use == role.Reader.Label() {
+			rol = role.Reader
+		}
 	}
 
 	return rol, nil

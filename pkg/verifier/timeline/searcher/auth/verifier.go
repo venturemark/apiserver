@@ -124,11 +124,17 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 		if tim == role.Owner.Label() {
 			rol = role.Owner
 		}
+		if tim == role.Reader.Label() {
+			rol = role.Reader
+		}
 		if ven == role.Member.Label() {
 			rol = role.Member
 		}
 		if ven == role.Owner.Label() {
 			rol = role.Owner
+		}
+		if ven == role.Reader.Label() {
+			rol = role.Reader
 		}
 	}
 

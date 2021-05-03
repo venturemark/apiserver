@@ -398,8 +398,8 @@ github.com/venturemark/apicommon v0.7.0 h1:XgwokynD7Ri40YTd0h+9jYeUEA1xpCuGI7iGz
 github.com/venturemark/apicommon v0.7.0/go.mod h1:gzSSDL7OuV9rBfACv6QhW/1ahg+DPm64DurlG5HGsGY=
 github.com/venturemark/apigengo v0.4.0 h1:m6l0g4h0LktZHt5+IZecLwV40uwfzPunSDCe1fD2SFk=
 github.com/venturemark/apigengo v0.4.0/go.mod h1:mmgXDZHP/xWoX5DTDiCfchXOxvKB9W/zoKQsGW3Cj7U=
-github.com/venturemark/permission v0.6.0 h1:0J+9Xhu6trJ3gNBqyInzh0sQ6SdqYwyVibg2U7dUVX0=
-github.com/venturemark/permission v0.6.0/go.mod h1:AnVblAFJy06A9YWzippIwpwwCN/kAY18/1NUQYUcAOo=
+github.com/venturemark/permission v0.7.0 h1:L2KK6ajRFfR8WweF35Ltoh3RYj7WVok7cgwx0pXppEs=
+github.com/venturemark/permission v0.7.0/go.mod h1:AnVblAFJy06A9YWzippIwpwwCN/kAY18/1NUQYUcAOo=
 github.com/xh3b4sd/budget v0.2.1 h1:wn1s+MpnJPfusLN28jH7cH2v4SeP0ldmmwU6H6FRARI=
 github.com/xh3b4sd/budget v0.2.1/go.mod h1:Qq5YihqFy2k1Q3TX+QhlPQYlLtA98ZxNwkWiX72mlAU=
 github.com/xh3b4sd/logger v0.2.0 h1:IAMhu5QB/HHucgX/tiNRl7/Of7Gq3bSZ4NBCtnFIh48=
