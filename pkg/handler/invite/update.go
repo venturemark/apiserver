@@ -51,17 +51,11 @@ func (h *Handler) Update(ctx context.Context, req *invite.UpdateI) (*invite.Upda
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
-
 	}
 
 	{
 		for i := range res.Obj {
 			if res.Obj[i].Metadata[metadata.RoleStatus] == "created" {
-				{
-					req.Obj[i].Metadata[metadata.ResourceKind] = "venture"
-					req.Obj[i].Metadata[metadata.RoleKind] = "member"
-				}
-
 				{
 					req.Obj[i].Metadata[metadata.RoleID] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
 				}
