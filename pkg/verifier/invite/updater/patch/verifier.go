@@ -35,6 +35,12 @@ func (v *Verifier) Verify(req *invite.UpdateI) (bool, error) {
 		if req.Obj[0].Metadata[metadata.InviteID] == "" {
 			return false, nil
 		}
+		if req.Obj[0].Metadata[metadata.ResourceKind] == "" {
+			return false, nil
+		}
+		if req.Obj[0].Metadata[metadata.RoleKind] == "" {
+			return false, nil
+		}
 		if req.Obj[0].Metadata[metadata.VentureID] == "" {
 			return false, nil
 		}
