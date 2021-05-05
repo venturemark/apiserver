@@ -4,8 +4,6 @@ Daemon for serving the venturemark grpc api. After creating a kubernetes cluster
 using https://github.com/xh3b4sd/kia this api server app can be deployed and
 used.
 
-
-
 ### EKS
 
 ```
@@ -16,8 +14,6 @@ helm -n infra install apiserver ./hlm/apiserver --set cluster.name=kia02 --set c
 grpcurl apiserver.kia02.aws.venturemark.co:443 post.API/Search
 ```
 
-
-
 ### OSX
 
 ```
@@ -27,8 +23,6 @@ helm -n infra install apiserver ./hlm/apiserver --set "apiserver.replica=1" --se
 ```
 grpcurl -plaintext 127.0.0.1:7777 post.API/Search
 ```
-
-
 
 ### Usage
 
