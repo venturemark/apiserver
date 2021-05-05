@@ -41,7 +41,18 @@ func (v *Verifier) Verify(req *invite.UpdateI) (bool, error) {
 		if req.Obj[0].Metadata[metadata.RoleKind] == "" {
 			return false, nil
 		}
-		if req.Obj[0].Metadata[metadata.VentureID] == "" {
+	}
+
+	{
+		timEmp := req.Obj[0].Metadata[metadata.TimelineID] == ""
+		venEmp := req.Obj[0].Metadata[metadata.VentureID] == ""
+		timKin := req.Obj[0].Metadata[metadata.ResourceKind] == "timeline"
+		venKin := req.Obj[0].Metadata[metadata.ResourceKind] == "venture"
+
+		if timKin && timEmp && venEmp {
+			return false, nil
+		}
+		if venKin && venEmp {
 			return false, nil
 		}
 	}
