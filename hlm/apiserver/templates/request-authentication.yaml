@@ -18,3 +18,11 @@ spec:
           prefix: "Bearer"
         - name: "Authorization"
           prefix: "bearer"
+    - issuer: "public.venturemark.co"
+      jwksUri: "https://raw.githubusercontent.com/venturemark/jwks/main/.well-known/keys.json"
+      forwardOriginalToken: true
+      fromHeaders:
+        - name: "Authorization"
+          prefix: "Bearer"
+        - name: "Authorization"
+          prefix: "bearer"
