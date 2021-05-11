@@ -1,4 +1,4 @@
-package subjectclaim
+package claimid
 
 import (
 	"context"
