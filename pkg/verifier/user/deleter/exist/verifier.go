@@ -1,6 +1,8 @@
 package exist
 
 import (
+	"context"
+
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apigengo/pkg/pbf/user"
 	"github.com/xh3b4sd/redigo"
@@ -27,7 +29,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-func (v *Verifier) Verify(req *user.DeleteI) (bool, error) {
+func (v *Verifier) Verify(ctx context.Context, req *user.DeleteI) (bool, error) {
 	{
 		if len(req.Obj) != 1 {
 			return false, nil

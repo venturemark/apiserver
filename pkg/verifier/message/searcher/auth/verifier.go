@@ -1,6 +1,8 @@
 package auth
 
 import (
+	"context"
+
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/message"
 	"github.com/venturemark/permission"
@@ -11,6 +13,8 @@ import (
 	"github.com/venturemark/permission/pkg/label/visibility"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
+
+	"github.com/venturemark/apiserver/pkg/context/claimid"
 )
 
 type VerifierConfig struct {
@@ -39,7 +43,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-func (v *Verifier) Verify(req *message.SearchI) (bool, error) {
+func (v *Verifier) Verify(ctx context.Context, req *message.SearchI) (bool, error) {
 	var err error
 
 	var act label.Label
@@ -59,7 +63,7 @@ func (v *Verifier) Verify(req *message.SearchI) (bool, error) {
 		if err != nil {
 			return false, tracer.Mask(err)
 		}
-		vis, err = v.vis(req.Obj[0].Metadata)
+		vis, err = v.vis(ctx, req.Obj[0].Metadata)
 		if err != nil {
 			return false, tracer.Mask(err)
 		}
@@ -141,8 +145,16 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 	return rol, nil
 }
 
-func (v *Verifier) vis(met map[string]string) (label.Label, error) {
+func (v *Verifier) vis(ctx context.Context, met map[string]string) (label.Label, error) {
 	var err error
+
+	var isp bool
+	{
+		cli, _ := claimid.FromContext(ctx)
+		if cli == "webclient" {
+			isp = true
+		}
+	}
 
 	var tim string
 	{
@@ -160,7 +172,7 @@ func (v *Verifier) vis(met map[string]string) (label.Label, error) {
 		if tim == visibility.Private.Label() {
 			vis = visibility.Private
 		}
-		if tim == visibility.Public.Label() {
+		if tim == visibility.Public.Label() && isp {
 			vis = visibility.Public
 		}
 	}

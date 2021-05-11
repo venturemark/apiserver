@@ -33,7 +33,7 @@ func (h *Handler) Delete(ctx context.Context, req *message.DeleteI) (*message.De
 	}
 
 	{
-		ok, err := h.storage.Message.Deleter.Verify(req)
+		ok, err := h.storage.Message.Deleter.Verify(ctx, req)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

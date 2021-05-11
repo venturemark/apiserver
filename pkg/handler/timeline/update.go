@@ -33,7 +33,7 @@ func (h *Handler) Update(ctx context.Context, req *timeline.UpdateI) (*timeline.
 	}
 
 	{
-		ok, err := h.storage.Timeline.Updater.Verify(req)
+		ok, err := h.storage.Timeline.Updater.Verify(ctx, req)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

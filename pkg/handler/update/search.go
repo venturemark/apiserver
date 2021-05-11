@@ -33,7 +33,7 @@ func (h *Handler) Search(ctx context.Context, req *update.SearchI) (*update.Sear
 	}
 
 	{
-		ok, err := h.storage.Update.Searcher.Verify(req)
+		ok, err := h.storage.Update.Searcher.Verify(ctx, req)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

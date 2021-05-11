@@ -33,7 +33,7 @@ func (h *Handler) Delete(ctx context.Context, req *timeline.DeleteI) (*timeline.
 	}
 
 	{
-		ok, err := h.storage.Timeline.Deleter.Verify(req)
+		ok, err := h.storage.Timeline.Deleter.Verify(ctx, req)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

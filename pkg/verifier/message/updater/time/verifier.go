@@ -1,6 +1,7 @@
 package time
 
 import (
+	"context"
 	"strconv"
 	"time"
 
@@ -29,7 +30,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-func (v *Verifier) Verify(req *message.UpdateI) (bool, error) {
+func (v *Verifier) Verify(ctx context.Context, req *message.UpdateI) (bool, error) {
 	{
 		if len(req.Obj) != 1 {
 			return false, nil

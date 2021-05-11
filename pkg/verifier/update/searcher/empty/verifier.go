@@ -1,6 +1,8 @@
 package empty
 
 import (
+	"context"
+
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/update"
 )
@@ -17,7 +19,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-func (v *Verifier) Verify(req *update.SearchI) (bool, error) {
+func (v *Verifier) Verify(ctx context.Context, req *update.SearchI) (bool, error) {
 	{
 		if req.Api != nil {
 			return false, nil

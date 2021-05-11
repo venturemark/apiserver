@@ -33,7 +33,7 @@ func (h *Handler) Search(ctx context.Context, req *timeline.SearchI) (*timeline.
 	}
 
 	{
-		ok, err := h.storage.Timeline.Searcher.Verify(req)
+		ok, err := h.storage.Timeline.Searcher.Verify(ctx, req)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

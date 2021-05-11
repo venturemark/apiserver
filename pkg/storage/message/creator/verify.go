@@ -1,13 +1,15 @@
 package creator
 
 import (
+	"context"
+
 	"github.com/venturemark/apigengo/pkg/pbf/message"
 	"github.com/xh3b4sd/tracer"
 )
 
-func (c *Creator) Verify(req *message.CreateI) (bool, error) {
+func (c *Creator) Verify(ctx context.Context, req *message.CreateI) (bool, error) {
 	for _, v := range c.verify {
-		ok, err := v.Verify(req)
+		ok, err := v.Verify(ctx, req)
 		if err != nil {
 			return false, tracer.Mask(err)
 		}

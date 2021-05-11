@@ -33,7 +33,7 @@ func (h *Handler) Update(ctx context.Context, req *texupd.UpdateI) (*texupd.Upda
 	}
 
 	{
-		ok, err := h.storage.TexUpd.Updater.Verify(req)
+		ok, err := h.storage.TexUpd.Updater.Verify(ctx, req)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

@@ -1,6 +1,8 @@
 package patch
 
 import (
+	"context"
+
 	"github.com/badoux/checkmail"
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/invite"
@@ -18,7 +20,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-func (v *Verifier) Verify(req *invite.UpdateI) (bool, error) {
+func (v *Verifier) Verify(ctx context.Context, req *invite.UpdateI) (bool, error) {
 	{
 		if len(req.Obj) != 1 {
 			return false, nil

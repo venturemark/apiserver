@@ -38,7 +38,7 @@ func (h *Handler) Update(ctx context.Context, req *invite.UpdateI) (*invite.Upda
 
 	var res *invite.UpdateO
 	{
-		ok, err := h.storage.Invite.Updater.Verify(req)
+		ok, err := h.storage.Invite.Updater.Verify(ctx, req)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -73,7 +73,7 @@ func (h *Handler) Update(ctx context.Context, req *invite.UpdateI) (*invite.Upda
 						},
 					}
 
-					ok, err := h.storage.Role.Creator.Verify(rol)
+					ok, err := h.storage.Role.Creator.Verify(ctx, rol)
 					if err != nil {
 						return nil, tracer.Mask(err)
 					}

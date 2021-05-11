@@ -39,7 +39,7 @@ func (h *Handler) Delete(ctx context.Context, req *user.DeleteI) (*user.DeleteO,
 	}
 
 	{
-		ok, err := h.storage.User.Deleter.Verify(req)
+		ok, err := h.storage.User.Deleter.Verify(ctx, req)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

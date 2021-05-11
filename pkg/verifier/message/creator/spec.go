@@ -1,7 +1,11 @@
 package creator
 
-import "github.com/venturemark/apigengo/pkg/pbf/message"
+import (
+	"context"
+
+	"github.com/venturemark/apigengo/pkg/pbf/message"
+)
 
 type Interface interface {
-	Verify(req *message.CreateI) (bool, error)
+	Verify(ctx context.Context, req *message.CreateI) (bool, error)
 }
