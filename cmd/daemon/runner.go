@@ -34,8 +34,8 @@ import (
 	"github.com/venturemark/apiserver/pkg/handler/update"
 	"github.com/venturemark/apiserver/pkg/handler/user"
 	"github.com/venturemark/apiserver/pkg/handler/venture"
+	"github.com/venturemark/apiserver/pkg/interceptor/claimid"
 	"github.com/venturemark/apiserver/pkg/interceptor/stack"
-	"github.com/venturemark/apiserver/pkg/interceptor/subjectclaim"
 	"github.com/venturemark/apiserver/pkg/interceptor/userid"
 	"github.com/venturemark/apiserver/pkg/server"
 	"github.com/venturemark/apiserver/pkg/storage"
@@ -303,13 +303,13 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 		}
 	}
 
-	var sub *subjectclaim.Interceptor
+	var sub *claimid.Interceptor
 	{
-		c := subjectclaim.InterceptorConfig{
+		c := claimid.InterceptorConfig{
 			Logger: r.logger,
 		}
 
-		sub, err = subjectclaim.NewInterceptor(c)
+		sub, err = claimid.NewInterceptor(c)
 		if err != nil {
 			return tracer.Mask(err)
 		}
