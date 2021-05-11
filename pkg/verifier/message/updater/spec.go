@@ -1,7 +1,11 @@
 package updater
 
-import "github.com/venturemark/apigengo/pkg/pbf/message"
+import (
+	"context"
+
+	"github.com/venturemark/apigengo/pkg/pbf/message"
+)
 
 type Interface interface {
-	Verify(req *message.UpdateI) (bool, error)
+	Verify(ctx context.Context, req *message.UpdateI) (bool, error)
 }

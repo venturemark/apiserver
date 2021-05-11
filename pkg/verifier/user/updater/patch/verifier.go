@@ -1,6 +1,8 @@
 package patch
 
 import (
+	"context"
+
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/user"
 )
@@ -17,7 +19,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-func (v *Verifier) Verify(req *user.UpdateI) (bool, error) {
+func (v *Verifier) Verify(ctx context.Context, req *user.UpdateI) (bool, error) {
 	{
 		if len(req.Obj) != 1 {
 			return false, nil

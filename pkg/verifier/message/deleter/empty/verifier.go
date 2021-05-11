@@ -1,6 +1,8 @@
 package empty
 
 import (
+	"context"
+
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/message"
 )
@@ -17,7 +19,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-func (v *Verifier) Verify(req *message.DeleteI) (bool, error) {
+func (v *Verifier) Verify(ctx context.Context, req *message.DeleteI) (bool, error) {
 	{
 		if len(req.Obj) != 1 {
 			return false, nil

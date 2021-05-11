@@ -1,6 +1,8 @@
 package timeline
 
 import (
+	"context"
+
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apigengo/pkg/pbf/texupd"
 	"github.com/xh3b4sd/redigo"
@@ -27,7 +29,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-func (v *Verifier) Verify(req *texupd.CreateI) (bool, error) {
+func (v *Verifier) Verify(ctx context.Context, req *texupd.CreateI) (bool, error) {
 	{
 		if len(req.Obj) != 1 {
 			return false, nil

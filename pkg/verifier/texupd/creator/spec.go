@@ -1,7 +1,11 @@
 package creator
 
-import "github.com/venturemark/apigengo/pkg/pbf/texupd"
+import (
+	"context"
+
+	"github.com/venturemark/apigengo/pkg/pbf/texupd"
+)
 
 type Interface interface {
-	Verify(req *texupd.CreateI) (bool, error)
+	Verify(ctx context.Context, req *texupd.CreateI) (bool, error)
 }

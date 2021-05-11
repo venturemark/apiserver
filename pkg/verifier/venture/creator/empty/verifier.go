@@ -1,6 +1,8 @@
 package empty
 
 import (
+	"context"
+
 	"github.com/venturemark/apigengo/pkg/pbf/venture"
 )
 
@@ -16,7 +18,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-func (v *Verifier) Verify(req *venture.CreateI) (bool, error) {
+func (v *Verifier) Verify(ctx context.Context, req *venture.CreateI) (bool, error) {
 	{
 		if len(req.Obj) != 1 {
 			return false, nil

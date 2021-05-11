@@ -1,8 +1,11 @@
 package auth
 
 import (
+	"context"
+
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/user"
+	"github.com/venturemark/apiserver/pkg/context/claimid"
 	"github.com/venturemark/permission"
 	"github.com/venturemark/permission/pkg/label"
 	"github.com/venturemark/permission/pkg/label/action"
@@ -39,7 +42,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-func (v *Verifier) Verify(req *user.SearchI) (bool, error) {
+func (v *Verifier) Verify(ctx context.Context, req *user.SearchI) (bool, error) {
 	var err error
 
 	var act label.Label
@@ -59,7 +62,7 @@ func (v *Verifier) Verify(req *user.SearchI) (bool, error) {
 		if err != nil {
 			return false, tracer.Mask(err)
 		}
-		vis, err = v.vis(req.Obj[0].Metadata)
+		vis, err = v.vis(ctx, req.Obj[0].Metadata)
 		if err != nil {
 			return false, tracer.Mask(err)
 		}
@@ -124,8 +127,16 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 	return rol, nil
 }
 
-func (v *Verifier) vis(met map[string]string) (label.Label, error) {
+func (v *Verifier) vis(ctx context.Context, met map[string]string) (label.Label, error) {
 	var err error
+
+	var isp bool
+	{
+		cli, _ := claimid.FromContext(ctx)
+		if cli == "webclient" {
+			isp = true
+		}
+	}
 
 	var use string
 	{
@@ -143,7 +154,7 @@ func (v *Verifier) vis(met map[string]string) (label.Label, error) {
 		if use == visibility.Private.Label() {
 			vis = visibility.Private
 		}
-		if use == visibility.Public.Label() {
+		if use == visibility.Public.Label() && isp {
 			vis = visibility.Public
 		}
 	}

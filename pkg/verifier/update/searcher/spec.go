@@ -1,7 +1,11 @@
 package searcher
 
-import "github.com/venturemark/apigengo/pkg/pbf/update"
+import (
+	"context"
+
+	"github.com/venturemark/apigengo/pkg/pbf/update"
+)
 
 type Interface interface {
-	Verify(req *update.SearchI) (bool, error)
+	Verify(ctx context.Context, req *update.SearchI) (bool, error)
 }

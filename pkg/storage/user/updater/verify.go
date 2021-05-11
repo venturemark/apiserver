@@ -1,13 +1,15 @@
 package updater
 
 import (
+	"context"
+
 	"github.com/venturemark/apigengo/pkg/pbf/user"
 	"github.com/xh3b4sd/tracer"
 )
 
-func (u *Updater) Verify(req *user.UpdateI) (bool, error) {
+func (u *Updater) Verify(ctx context.Context, req *user.UpdateI) (bool, error) {
 	for _, v := range u.verify {
-		ok, err := v.Verify(req)
+		ok, err := v.Verify(ctx, req)
 		if err != nil {
 			return false, tracer.Mask(err)
 		}

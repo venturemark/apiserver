@@ -39,7 +39,7 @@ func (h *Handler) Create(ctx context.Context, req *role.CreateI) (*role.CreateO,
 	}
 
 	{
-		ok, err := h.storage.Role.Creator.Verify(req)
+		ok, err := h.storage.Role.Creator.Verify(ctx, req)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

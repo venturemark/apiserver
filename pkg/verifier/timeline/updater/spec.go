@@ -1,7 +1,11 @@
 package updater
 
-import "github.com/venturemark/apigengo/pkg/pbf/timeline"
+import (
+	"context"
+
+	"github.com/venturemark/apigengo/pkg/pbf/timeline"
+)
 
 type Interface interface {
-	Verify(req *timeline.UpdateI) (bool, error)
+	Verify(ctx context.Context, req *timeline.UpdateI) (bool, error)
 }

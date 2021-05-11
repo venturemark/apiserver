@@ -55,7 +55,7 @@ func (h *Handler) Create(ctx context.Context, req *timeline.CreateI) (*timeline.
 			},
 		}
 
-		ok, err := h.storage.Role.Creator.Verify(rol)
+		ok, err := h.storage.Role.Creator.Verify(ctx, rol)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -71,7 +71,7 @@ func (h *Handler) Create(ctx context.Context, req *timeline.CreateI) (*timeline.
 	}
 
 	{
-		ok, err := h.storage.Timeline.Creator.Verify(req)
+		ok, err := h.storage.Timeline.Creator.Verify(ctx, req)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

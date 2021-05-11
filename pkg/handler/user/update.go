@@ -39,7 +39,7 @@ func (h *Handler) Update(ctx context.Context, req *user.UpdateI) (*user.UpdateO,
 	}
 
 	{
-		ok, err := h.storage.User.Updater.Verify(req)
+		ok, err := h.storage.User.Updater.Verify(ctx, req)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

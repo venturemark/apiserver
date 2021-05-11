@@ -1,6 +1,8 @@
 package length
 
 import (
+	"context"
+
 	"github.com/venturemark/apigengo/pkg/pbf/timeline"
 )
 
@@ -16,7 +18,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-func (v *Verifier) Verify(req *timeline.CreateI) (bool, error) {
+func (v *Verifier) Verify(ctx context.Context, req *timeline.CreateI) (bool, error) {
 	{
 		if len(req.Obj) != 1 {
 			return true, nil

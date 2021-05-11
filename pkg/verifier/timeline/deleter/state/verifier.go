@@ -1,6 +1,7 @@
 package state
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/venturemark/apicommon/pkg/key"
@@ -30,7 +31,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-func (v *Verifier) Verify(req *timeline.DeleteI) (bool, error) {
+func (v *Verifier) Verify(ctx context.Context, req *timeline.DeleteI) (bool, error) {
 	{
 		if len(req.Obj) != 1 {
 			return false, nil

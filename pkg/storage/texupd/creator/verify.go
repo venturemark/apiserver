@@ -1,13 +1,15 @@
 package creator
 
 import (
+	"context"
+
 	"github.com/venturemark/apigengo/pkg/pbf/texupd"
 	"github.com/xh3b4sd/tracer"
 )
 
-func (c *Creator) Verify(req *texupd.CreateI) (bool, error) {
+func (c *Creator) Verify(ctx context.Context, req *texupd.CreateI) (bool, error) {
 	for _, v := range c.verify {
-		ok, err := v.Verify(req)
+		ok, err := v.Verify(ctx, req)
 		if err != nil {
 			return false, tracer.Mask(err)
 		}

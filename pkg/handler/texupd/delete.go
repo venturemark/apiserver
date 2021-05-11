@@ -33,7 +33,7 @@ func (h *Handler) Delete(ctx context.Context, req *texupd.DeleteI) (*texupd.Dele
 	}
 
 	{
-		ok, err := h.storage.TexUpd.Deleter.Verify(req)
+		ok, err := h.storage.TexUpd.Deleter.Verify(ctx, req)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}

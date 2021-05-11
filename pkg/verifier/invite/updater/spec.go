@@ -1,7 +1,11 @@
 package updater
 
-import "github.com/venturemark/apigengo/pkg/pbf/invite"
+import (
+	"context"
+
+	"github.com/venturemark/apigengo/pkg/pbf/invite"
+)
 
 type Interface interface {
-	Verify(req *invite.UpdateI) (bool, error)
+	Verify(ctx context.Context, req *invite.UpdateI) (bool, error)
 }

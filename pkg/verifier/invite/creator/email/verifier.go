@@ -1,6 +1,8 @@
 package email
 
 import (
+	"context"
+
 	"github.com/badoux/checkmail"
 	"github.com/venturemark/apigengo/pkg/pbf/invite"
 )
@@ -17,7 +19,7 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
-func (v *Verifier) Verify(req *invite.CreateI) (bool, error) {
+func (v *Verifier) Verify(ctx context.Context, req *invite.CreateI) (bool, error) {
 	{
 		if len(req.Obj) != 1 {
 			return true, nil

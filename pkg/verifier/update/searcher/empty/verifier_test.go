@@ -1,6 +1,7 @@
 package empty
 
 import (
+	"context"
 	"strconv"
 	"testing"
 
@@ -128,7 +129,7 @@ func Test_Empty_Verify_False(t *testing.T) {
 				}
 			}
 
-			ok, err := v.Verify(tc.req)
+			ok, err := v.Verify(context.Background(), tc.req)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -186,7 +187,7 @@ func Test_Empty_Verify_True(t *testing.T) {
 				}
 			}
 
-			ok, err := v.Verify(tc.req)
+			ok, err := v.Verify(context.Background(), tc.req)
 			if err != nil {
 				t.Fatal(err)
 			}

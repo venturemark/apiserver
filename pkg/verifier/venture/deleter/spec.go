@@ -1,7 +1,11 @@
 package deleter
 
-import "github.com/venturemark/apigengo/pkg/pbf/venture"
+import (
+	"context"
+
+	"github.com/venturemark/apigengo/pkg/pbf/venture"
+)
 
 type Interface interface {
-	Verify(req *venture.DeleteI) (bool, error)
+	Verify(ctx context.Context, req *venture.DeleteI) (bool, error)
 }

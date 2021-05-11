@@ -60,7 +60,7 @@ func (h *Handler) Create(ctx context.Context, req *invite.CreateI) (*invite.Crea
 			},
 		}
 
-		ok, err := h.storage.Role.Creator.Verify(rol)
+		ok, err := h.storage.Role.Creator.Verify(ctx, rol)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
@@ -76,7 +76,7 @@ func (h *Handler) Create(ctx context.Context, req *invite.CreateI) (*invite.Crea
 	}
 
 	{
-		ok, err := h.storage.Invite.Creator.Verify(req)
+		ok, err := h.storage.Invite.Creator.Verify(ctx, req)
 		if err != nil {
 			return nil, tracer.Mask(err)
 		}
