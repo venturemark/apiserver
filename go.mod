@@ -18,5 +18,5 @@ require (
 	github.com/xh3b4sd/redigo v0.17.1
 	github.com/xh3b4sd/rescue v0.4.2
 	github.com/xh3b4sd/tracer v0.4.0
-	google.golang.org/grpc v1.37.0
+	google.golang.org/grpc v1.37.1
 )
