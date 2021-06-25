@@ -35,6 +35,7 @@ func (c *Creator) Create(req *user.CreateI) (*user.CreateO, error) {
 				Metadata: req.Obj[0].Metadata,
 				Property: schema.UserObjProperty{
 					Desc: req.Obj[0].Property.Desc,
+					Mail: req.Obj[0].Property.Mail,
 					Prof: lin(req.Obj[0].Property.Prof),
 					Name: req.Obj[0].Property.Name,
 				},

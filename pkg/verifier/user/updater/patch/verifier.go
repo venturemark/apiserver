@@ -3,6 +3,7 @@ package patch
 import (
 	"context"
 
+	"github.com/badoux/checkmail"
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/user"
 )
@@ -84,6 +85,26 @@ func (v *Verifier) Verify(ctx context.Context, req *user.UpdateI) (bool, error) 
 			valLen := req.Obj[0].Jsnpatch[i].Val != nil && len(*req.Obj[0].Jsnpatch[i].Val) <= 32
 
 			if !valEmp && !valLen {
+				return false, nil
+			}
+		}
+	}
+
+	{
+		for i := range req.Obj[0].Jsnpatch {
+			if req.Obj[0].Jsnpatch[i].Pat != "/obj/property/mail" {
+				continue
+			}
+
+			valEmp := req.Obj[0].Jsnpatch[i].Val != nil && *req.Obj[0].Jsnpatch[i].Val == ""
+			valLen := req.Obj[0].Jsnpatch[i].Val != nil && len(*req.Obj[0].Jsnpatch[i].Val) <= 320
+
+			if !valEmp && !valLen {
+				return false, nil
+			}
+
+			err := checkmail.ValidateFormat(*req.Obj[0].Jsnpatch[i].Val)
+			if err != nil {
 				return false, nil
 			}
 		}
