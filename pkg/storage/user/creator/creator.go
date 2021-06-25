@@ -12,6 +12,7 @@ import (
 	"github.com/venturemark/apiserver/pkg/verifier/user/creator/auth"
 	"github.com/venturemark/apiserver/pkg/verifier/user/creator/empty"
 	"github.com/venturemark/apiserver/pkg/verifier/user/creator/exist"
+	"github.com/venturemark/apiserver/pkg/verifier/user/creator/format"
 	"github.com/venturemark/apiserver/pkg/verifier/user/creator/name"
 )
 
@@ -74,6 +75,16 @@ func New(config Config) (*Creator, error) {
 		}
 	}
 
+	var formatVerifier *format.Verifier
+	{
+		c := format.VerifierConfig{}
+
+		formatVerifier, err = format.NewVerifier(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
+
 	var existsVerifier *exist.Verifier
 	{
 		c := exist.VerifierConfig{
@@ -106,6 +117,7 @@ func New(config Config) (*Creator, error) {
 			// The empty verifier must be run first so that following verifiers
 			// do not have to check for prerequisites over and over again.
 			emptyVerifier,
+			formatVerifier,
 			authVerifier,
 			existsVerifier,
 			nameVerifier,
