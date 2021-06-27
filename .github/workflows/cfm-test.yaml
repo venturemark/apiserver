@@ -36,7 +36,6 @@ jobs:
         with:
           path: "venturemark/cfm"
           repository: "venturemark/cfm"
-          ref: add-user-mail
 
       - name: "Setup Go Env"
         uses: actions/setup-go@v2
