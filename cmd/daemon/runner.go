@@ -347,8 +347,8 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 	{
 		c := server.Config{
 			Collector: []prometheus.Collector{
-				prometheus.NewGoCollector(),
-				prometheus.NewProcessCollector(prometheus.ProcessCollectorOpts{}),
+				collectors.NewGoCollector(),
+				collectors.NewProcessCollector(prometheus.ProcessCollectorOpts{}),
 				rescueCollector,
 			},
 			Interceptor: []grpc.UnaryServerInterceptor{
