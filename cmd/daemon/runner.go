@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/collectors"
 	"github.com/spf13/cobra"
 	"github.com/venturemark/permission"
 	"github.com/venturemark/permission/pkg/gateway"
@@ -348,7 +349,7 @@ func (r *runner) run(ctx context.Context, cmd *cobra.Command, args []string) err
 		c := server.Config{
 			Collector: []prometheus.Collector{
 				collectors.NewGoCollector(),
-				collectors.NewProcessCollector(prometheus.ProcessCollectorOpts{}),
+				collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}),
 				rescueCollector,
 			},
 			Interceptor: []grpc.UnaryServerInterceptor{
