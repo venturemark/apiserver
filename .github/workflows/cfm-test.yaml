@@ -36,6 +36,7 @@ jobs:
         with:
           path: "venturemark/cfm"
           repository: "venturemark/cfm"
+          ref: add-user-mail
 
       - name: "Setup Go Env"
         uses: actions/setup-go@v2
@@ -57,7 +58,7 @@ jobs:
 
       - name: "Install Test Dependency"
         run: |
-          go get -u github.com/venturemark/cfm@$(git ls-remote git://github.com/venturemark/cfm.git add-user-mail | awk '{print $1;}')
+          go get -u github.com/venturemark/cfm@$(git ls-remote git://github.com/venturemark/cfm.git HEAD | awk '{print $1;}')
 
       - name: "Check Conformance Tests"
         env:
