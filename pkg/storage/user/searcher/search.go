@@ -49,6 +49,7 @@ func (s *Searcher) Search(req *user.SearchI) (*user.SearchO, error) {
 				Property: &user.SearchO_Obj_Property{
 					Desc: use.Obj.Property.Desc,
 					Name: use.Obj.Property.Name,
+					Mail: use.Obj.Property.Mail,
 					Prof: prof(use.Obj.Property.Prof),
 				},
 			}

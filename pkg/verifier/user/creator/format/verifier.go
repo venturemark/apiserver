@@ -1,8 +1,9 @@
-package empty
+package format
 
 import (
 	"context"
 
+	"github.com/badoux/checkmail"
 	"github.com/venturemark/apigengo/pkg/pbf/user"
 )
 
@@ -20,22 +21,8 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 
 func (v *Verifier) Verify(ctx context.Context, req *user.CreateI) (bool, error) {
 	{
-		if len(req.Obj) != 1 {
-			return false, nil
-		}
-		if req.Obj[0].Property == nil {
-			return false, nil
-		}
-	}
-
-	{
-		if req.Obj[0].Property.Name == "" {
-			return false, nil
-		}
-	}
-
-	{
-		if req.Obj[0].Property.Mail == "" {
+		err := checkmail.ValidateFormat(req.Obj[0].Property.Mail)
+		if err != nil {
 			return false, nil
 		}
 	}
