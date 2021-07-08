@@ -33,6 +33,8 @@ func (s *Searcher) Search(req *user.SearchI) (*user.SearchO, error) {
 		}
 	}
 
+	usi := req.Obj[0].Metadata[metadata.UserID]
+
 	var res *user.SearchO
 	{
 		res = &user.SearchO{}
@@ -42,6 +44,11 @@ func (s *Searcher) Search(req *user.SearchI) (*user.SearchO, error) {
 			err := json.Unmarshal([]byte(s), use)
 			if err != nil {
 				return nil, tracer.Mask(err)
+			}
+
+			// Don't leak private info about other users
+			if use.Obj.Metadata[metadata.UserID] != usi {
+				delete(use.Obj.Metadata, metadata.TimelineLastUpdate)
 			}
 
 			o := &user.SearchO_Obj{
