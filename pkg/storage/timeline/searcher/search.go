@@ -53,11 +53,29 @@ func (s *Searcher) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 	{
 		res = &timeline.SearchO{}
 
-		for _, s := range str {
+		for _, timelineString := range str {
 			tim := &schema.Timeline{}
-			err := json.Unmarshal([]byte(s), tim)
+			err := json.Unmarshal([]byte(timelineString), tim)
 			if err != nil {
 				return nil, tracer.Mask(err)
+			}
+
+			{
+				lastUpdate, err := s.searchLastUpdate(tim)
+				if err != nil {
+					return nil, tracer.Mask(err)
+				}
+
+				if lastUpdate != "" {
+					update := schema.Update{}
+					err := json.Unmarshal([]byte(lastUpdate), &update)
+					if err != nil {
+						return nil, tracer.Mask(err)
+					}
+
+					updateID := update.Obj.Metadata[metadata.UpdateID]
+					tim.Obj.Metadata[metadata.TimelineLastUpdate] = updateID
+				}
 			}
 
 			o := &timeline.SearchO_Obj{
@@ -254,6 +272,31 @@ func (s *Searcher) searchTim(req *timeline.SearchI) ([]string, error) {
 	}
 
 	return str, nil
+}
+
+func (s *Searcher) searchLastUpdate(tim *schema.Timeline) (string, error) {
+	var err error
+
+	var upk *key.Key
+	{
+		upk = key.Update(tim.Obj.Metadata)
+	}
+
+	var str []string
+	{
+		k := upk.List()
+
+		str, err = s.redigo.Sorted().Search().Order(k, 0, 1)
+		if err != nil {
+			return "", tracer.Mask(err)
+		}
+	}
+
+	if len(str) == 0 {
+		return "", nil
+	}
+
+	return str[0], nil
 }
 
 func split(s string) (string, float64) {
