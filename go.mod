@@ -9,7 +9,7 @@ require (
 	github.com/lestrrat-go/jwx v1.2.1
 	github.com/prometheus/client_golang v1.11.0
 	github.com/spf13/cobra v1.2.1
-	github.com/venturemark/apicommon v0.8.4
+	github.com/venturemark/apicommon v0.8.6
 	github.com/venturemark/apigengo v0.4.1
 	github.com/venturemark/permission v0.8.2
 	github.com/xh3b4sd/budget v0.2.1
