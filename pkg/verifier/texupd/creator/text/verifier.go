@@ -2,8 +2,13 @@ package text
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/venturemark/apigengo/pkg/pbf/texupd"
+	"github.com/xh3b4sd/tracer"
+
+	"github.com/venturemark/apicommon/pkg/metadata"
+	"github.com/venturemark/apiserver/pkg/slate"
 )
 
 type VerifierConfig struct {
@@ -29,7 +34,22 @@ func (v *Verifier) Verify(ctx context.Context, req *texupd.CreateI) (bool, error
 	}
 
 	{
-		if len(req.Obj[0].Property.Text) > 280 {
+		updateFormat := req.Obj[0].Metadata[metadata.UpdateFormat]
+		text := req.Obj[0].Property.Text
+		var length int
+		if updateFormat == "slate" {
+			var nodes slate.Nodes
+			err := json.Unmarshal([]byte(text), &nodes)
+			if err != nil {
+				return false, tracer.Mask(err)
+			}
+
+			length = slate.TextLength(nodes)
+		} else {
+			length = len(text)
+		}
+
+		if length > 280 {
 			return false, nil
 		}
 	}
