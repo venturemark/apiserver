@@ -4,11 +4,11 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/venturemark/apicommon/pkg/slate"
 	"github.com/venturemark/apigengo/pkg/pbf/texupd"
 	"github.com/xh3b4sd/tracer"
 
 	"github.com/venturemark/apicommon/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/slate"
 )
 
 type VerifierConfig struct {
@@ -44,7 +44,7 @@ func (v *Verifier) Verify(ctx context.Context, req *texupd.CreateI) (bool, error
 				return false, tracer.Mask(err)
 			}
 
-			length = slate.TextLength(nodes)
+			length = slate.Length(nodes)
 		} else {
 			length = len(text)
 		}
