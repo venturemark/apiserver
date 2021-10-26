@@ -3,8 +3,9 @@ package empty
 import (
 	"context"
 
-	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/texupd"
+
+	"github.com/venturemark/apicommon/pkg/metadata"
 )
 
 type VerifierConfig struct {
@@ -42,11 +43,31 @@ func (v *Verifier) Verify(ctx context.Context, req *texupd.CreateI) (bool, error
 	}
 
 	{
-		// Creating text updates requires text to be specified. It is not valid
+		if req.Obj[0].Property.Head == "" {
+			return false, nil
+		}
+	}
+
+	{
+		// Creating text updates requires text or an attachment to be specified. It is not valid
 		// to request the creation of text updates without providing any
 		// information.
-		if req.Obj[0].Property.Text == "" {
+		if len(req.Obj[0].Property.Attachments) == 0 && req.Obj[0].Property.Text == "" {
 			return false, nil
+		}
+	}
+
+	{
+		for _, attachment := range req.Obj[0].Property.Attachments {
+			if attachment == nil {
+				return false, nil
+			}
+			if attachment.Type == "" {
+				return false, nil
+			}
+			if attachment.Addr == "" {
+				return false, nil
+			}
 		}
 	}
 

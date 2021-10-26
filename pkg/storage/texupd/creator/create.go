@@ -3,11 +3,12 @@ package creator
 import (
 	"encoding/json"
 
+	"github.com/venturemark/apigengo/pkg/pbf/texupd"
+	"github.com/xh3b4sd/tracer"
+
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apicommon/pkg/schema"
-	"github.com/venturemark/apigengo/pkg/pbf/texupd"
-	"github.com/xh3b4sd/tracer"
 )
 
 func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
@@ -18,14 +19,23 @@ func (c *Creator) Create(req *texupd.CreateI) (*texupd.CreateO, error) {
 		upk = key.Update(req.Obj[0].Metadata)
 	}
 
+	var attachments []schema.UpdateObjPropertyAttachment
+	for _, attachment := range req.Obj[0].Property.Attachments {
+		attachments = append(attachments, schema.UpdateObjPropertyAttachment{
+			Addr: attachment.Addr,
+			Type: attachment.Type,
+		})
+	}
+
 	var val string
 	{
 		upd := schema.Update{
 			Obj: schema.UpdateObj{
 				Metadata: req.Obj[0].Metadata,
 				Property: schema.UpdateObjProperty{
-					Head: req.Obj[0].Property.Head,
-					Text: req.Obj[0].Property.Text,
+					Attachments: attachments,
+					Head:        req.Obj[0].Property.Head,
+					Text:        req.Obj[0].Property.Text,
 				},
 			},
 		}
