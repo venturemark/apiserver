@@ -450,8 +450,8 @@ github.com/urfave/cli v1.22.1/go.mod h1:Gos4lmkARVdJ6EkW0WaNv/tZAAMe9V7XWyB60NtX
 github.com/venturemark/apicommon v0.8.2/go.mod h1:gzSSDL7OuV9rBfACv6QhW/1ahg+DPm64DurlG5HGsGY=
 github.com/venturemark/apicommon v0.9.0 h1:Uwocyg5ePCoL7pTQmpL3157IMi2OcHuWEDq0rApecgM=
 github.com/venturemark/apicommon v0.9.0/go.mod h1:9vrrBHnGgzuIE8LYiqBYl+CD/ZR0VUJMWL9jA0QkHYM=
-github.com/venturemark/apigengo v0.4.1 h1:oS+6zuq5emdHhoYTQQkSjt/9SHG/RxBFBdtJV+V+1j4=
-github.com/venturemark/apigengo v0.4.1/go.mod h1:qw7R+0o0ooGlDEWdhoSAjVtUqzg8/KV0qI9aFeOpdJI=
+github.com/venturemark/apigengo v0.4.2 h1:+rQOie3RcL3sWWHX2dTi+i3qoloKS7f7r62vVGMh+Ew=
+github.com/venturemark/apigengo v0.4.2/go.mod h1:K2CTnU4S8YWtDVKDlwhBWbPJnI5A2svon4oNTCHYWBo=
 github.com/venturemark/permission v0.8.2 h1:gD6BU9r4+HQq8YPeVMKeaJSWpH28HUCXV3izf5iEfhc=
 github.com/venturemark/permission v0.8.2/go.mod h1:yjEK3s2Pa/xvR4XK0ixAQwvpVLAowVFWzyqsY1fueLE=
 github.com/xh3b4sd/budget v0.2.1 h1:wn1s+MpnJPfusLN28jH7cH2v4SeP0ldmmwU6H6FRARI=
@@ -847,7 +847,6 @@ google.golang.org/grpc v1.34.0/go.mod h1:WotjhfgOW/POjDeRt8vscBtXq+2VjORFy659qA5
 google.golang.org/grpc v1.35.0/go.mod h1:qjiiYl8FncCW8feJPdyg3v6XW24KsRHe+dy9BAGRRjU=
 google.golang.org/grpc v1.36.0/go.mod h1:qjiiYl8FncCW8feJPdyg3v6XW24KsRHe+dy9BAGRRjU=
 google.golang.org/grpc v1.36.1/go.mod h1:qjiiYl8FncCW8feJPdyg3v6XW24KsRHe+dy9BAGRRjU=
-google.golang.org/grpc v1.37.1/go.mod h1:NREThFqKR1f3iQ6oBuvc5LadQuXVGo9rkm5ZGrQdJfM=
 google.golang.org/grpc v1.38.0/go.mod h1:NREThFqKR1f3iQ6oBuvc5LadQuXVGo9rkm5ZGrQdJfM=
 google.golang.org/grpc v1.41.0 h1:f+PlOh7QV4iIJkPrx5NQ7qaNGFQ3OTse67yaDHfju4E=
 google.golang.org/grpc v1.41.0/go.mod h1:U3l9uK9J0sini8mHphKoXyaqDA/8VyGnDee1zzIUK6k=
