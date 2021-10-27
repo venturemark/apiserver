@@ -3,10 +3,11 @@ package searcher
 import (
 	"encoding/json"
 
-	"github.com/venturemark/apicommon/pkg/key"
-	"github.com/venturemark/apicommon/pkg/schema"
 	"github.com/venturemark/apigengo/pkg/pbf/update"
 	"github.com/xh3b4sd/tracer"
+
+	"github.com/venturemark/apicommon/pkg/key"
+	"github.com/venturemark/apicommon/pkg/schema"
 )
 
 func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
@@ -38,11 +39,20 @@ func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 				return nil, tracer.Mask(err)
 			}
 
+			var attachments []*update.SearchO_Obj_Property_Link
+			for _, attachment := range upd.Obj.Property.Attachments {
+				attachments = append(attachments, &update.SearchO_Obj_Property_Link{
+					Addr: attachment.Addr,
+					Type: attachment.Type,
+				})
+			}
+
 			o := &update.SearchO_Obj{
 				Metadata: upd.Obj.Metadata,
 				Property: &update.SearchO_Obj_Property{
-					Head: upd.Obj.Property.Head,
-					Text: upd.Obj.Property.Text,
+					Attachments: attachments,
+					Head:        upd.Obj.Property.Head,
+					Text:        upd.Obj.Property.Text,
 				},
 			}
 

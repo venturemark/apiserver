@@ -3,12 +3,12 @@ package text
 import (
 	"context"
 	"encoding/json"
+	"net/url"
 
-	"github.com/venturemark/apicommon/pkg/slate"
 	"github.com/venturemark/apigengo/pkg/pbf/texupd"
 	"github.com/xh3b4sd/tracer"
 
-	"github.com/venturemark/apicommon/pkg/metadata"
+	"github.com/venturemark/apicommon/pkg/slate"
 )
 
 type VerifierConfig struct {
@@ -34,23 +34,42 @@ func (v *Verifier) Verify(ctx context.Context, req *texupd.CreateI) (bool, error
 	}
 
 	{
-		updateFormat := req.Obj[0].Metadata[metadata.UpdateFormat]
-		text := req.Obj[0].Property.Text
-		var length int
-		if updateFormat == "slate" {
-			var nodes slate.Nodes
-			err := json.Unmarshal([]byte(text), &nodes)
-			if err != nil {
-				return false, tracer.Mask(err)
-			}
+		if len(req.Obj[0].Property.Head) > 280 {
+			return false, nil
+		}
+	}
 
-			length = slate.Length(nodes)
-		} else {
-			length = len(text)
+	if len(req.Obj[0].Property.Text) > 0 {
+		var nodes slate.Nodes
+		err := json.Unmarshal([]byte(req.Obj[0].Property.Text), &nodes)
+		if err != nil {
+			return false, tracer.Mask(err)
 		}
 
-		if length > 280 {
+		if slate.Length(nodes) > 600 {
 			return false, nil
+		}
+	}
+
+	{
+		if len(req.Obj[0].Property.Attachments) > 1 {
+			return false, nil
+		}
+
+		for _, attachment := range req.Obj[0].Property.Attachments {
+			if attachment.Type != "image" {
+				return false, nil
+			}
+			if len(attachment.Addr) > 200 {
+				return false, nil
+			}
+			address, err := url.Parse(attachment.Addr)
+			if err != nil {
+				return false, nil
+			}
+			if address.Host != "res.cloudinary.com" {
+				return false, nil
+			}
 		}
 	}
 
