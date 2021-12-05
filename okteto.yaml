@@ -1,0 +1,26 @@
+name: apiserver
+namespace: infra
+selector:
+  app.kubernetes.io/name: apiserver
+image: okteto/golang:1.17
+imagePullPolicy: IfNotPresent
+command:
+  - bash
+  - -c
+  - "dlv debug --headless --listen=:2345 --api-version=2 --accept-multiclient -- daemon --redis-host=rfs-redis-failover.infra.svc.cluster.local --redis-kind=sentinel --redis-port=26379"
+workdir: /okteto
+forward:
+  - 2345:2345
+persistentVolume:
+  enabled: false
+resources:
+  limits:
+    cpu: "2"
+    memory: 2Gi
+securityContext:
+  runAsUser: 0
+  runAsGroup: 1000
+  fsGroup: 1000
+  capabilities:
+    add:
+      - SYS_PTRACE
