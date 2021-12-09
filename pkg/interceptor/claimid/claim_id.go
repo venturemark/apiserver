@@ -64,6 +64,11 @@ func (e *Interceptor) Interceptor() grpc.UnaryServerInterceptor {
 
 			a = l[0]
 
+			if a == "" {
+				ctx = claimid.NewContext(ctx, "")
+				return han(ctx, req)
+			}
+
 			if !bearerScheme.MatchString(a) {
 				return nil, tracer.Maskf(invalidMetadataError, "authorization must be bearer scheme")
 			}
