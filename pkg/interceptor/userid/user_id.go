@@ -49,6 +49,11 @@ func (e *Interceptor) Interceptor() grpc.UnaryServerInterceptor {
 				return nil, tracer.Maskf(invalidMetadataError, "subject must not be empty")
 			}
 
+			if cli == "" {
+				ctx = userid.NewContext(ctx, "")
+				return han(ctx, req)
+			}
+
 			met := map[string]string{
 				metadata.ClaimID: cli,
 			}

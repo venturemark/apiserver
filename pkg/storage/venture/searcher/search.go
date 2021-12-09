@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"
@@ -20,6 +21,7 @@ func (s *Searcher) Search(req *venture.SearchI) (*venture.SearchO, error) {
 	{
 		suiEmp := req.Obj[0].Metadata[metadata.SubjectID] == ""
 		veiEmp := req.Obj[0].Metadata[metadata.VentureID] == ""
+		vesEmp := req.Obj[0].Metadata["venture.venturemark.co/slug"] == ""
 
 		if !suiEmp && veiEmp {
 			str, err = s.searchSub(req)
@@ -30,6 +32,13 @@ func (s *Searcher) Search(req *venture.SearchI) (*venture.SearchO, error) {
 
 		if suiEmp && !veiEmp {
 			str, err = s.searchVen(req)
+			if err != nil {
+				return nil, tracer.Mask(err)
+			}
+		}
+
+		if suiEmp && veiEmp && !vesEmp {
+			str, err = s.searchVenBySlug(req)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
@@ -167,6 +176,76 @@ func (s *Searcher) searchVen(req *venture.SearchI) ([]string, error) {
 	}
 
 	return str, nil
+}
+
+func (s *Searcher) searchVenBySlug(req *venture.SearchI) ([]string, error) {
+	var err error
+
+	var ves string
+	{
+		ves = req.Obj[0].Metadata["venture.venturemark.co/slug"]
+	}
+
+	var don chan struct{}
+	var erc chan error
+	var res chan string
+	{
+		don = make(chan struct{}, 1)
+		erc = make(chan error, 1)
+		res = make(chan string, 1)
+	}
+
+	var str []string
+	go func() {
+		defer close(don)
+
+		for key := range res {
+			splitKey := strings.Split(key, ":")
+			if len(splitKey) != 2 {
+				continue
+			}
+
+			ventureString, err := s.redigo.Simple().Search().Value(key)
+			if err != nil {
+				erc <- tracer.Mask(err)
+				continue
+			}
+
+			ven := schema.Venture{}
+			err = json.Unmarshal([]byte(ventureString), &ven)
+			if err != nil {
+				erc <- tracer.Mask(err)
+				continue
+			}
+
+			if ven.Obj.Property.Name == ves {
+				str = append(str, ventureString)
+				break
+			}
+		}
+	}()
+
+	go func() {
+		defer close(res)
+
+		err = s.redigo.Walker().Simple("ven:*", don, res)
+		if err != nil {
+			erc <- tracer.Mask(err)
+		}
+	}()
+
+	{
+		select {
+		case <-don:
+			return str, nil
+
+		case err := <-erc:
+			return nil, tracer.Mask(err)
+
+		case <-time.After(1 * time.Second):
+			return nil, tracer.Mask(timeoutError)
+		}
+	}
 }
 
 func lin(i []schema.VentureObjPropertyLink) []*venture.SearchO_Obj_Property_Link {
