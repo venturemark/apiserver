@@ -66,7 +66,7 @@ func (v *Verifier) Verify(ctx context.Context, req *venture.SearchI) (bool, erro
 		if err != nil {
 			return false, tracer.Mask(err)
 		}
-		vis, err = v.vis(ctx, req.Obj[0].Metadata)
+		vis, err = v.vis(ctx, req.Obj[0].Metadata) //nolint:ineffassign
 		if err != nil {
 			return false, tracer.Mask(err)
 		}
