@@ -66,10 +66,13 @@ func (v *Verifier) Verify(ctx context.Context, req *venture.SearchI) (bool, erro
 		if err != nil {
 			return false, tracer.Mask(err)
 		}
-		vis, err = v.vis(ctx, req.Obj[0].Metadata)
-		if err != nil {
-			return false, tracer.Mask(err)
-		}
+		vis = visibility.Public
+		/*
+			vis, err = v.vis(ctx, req.Obj[0].Metadata)
+			if err != nil {
+				return false, tracer.Mask(err)
+			}
+		*/
 	}
 
 	{

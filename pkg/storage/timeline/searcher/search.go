@@ -49,6 +49,8 @@ func (s *Searcher) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 		}
 	}
 
+	usi := req.Obj[0].Metadata[metadata.UserID]
+
 	var res *timeline.SearchO
 	{
 		res = &timeline.SearchO{}
@@ -58,6 +60,10 @@ func (s *Searcher) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 			err := json.Unmarshal([]byte(timelineString), tim)
 			if err != nil {
 				return nil, tracer.Mask(err)
+			}
+
+			if usi == "" && tim.Obj.Metadata[metadata.ResourceVisibility] != "public" {
+				continue
 			}
 
 			{
