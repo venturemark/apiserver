@@ -161,6 +161,9 @@ func (v *Verifier) vis(ctx context.Context, met map[string]string) (label.Label,
 		if tim == visibility.Private.Label() {
 			vis = visibility.Private
 		}
+		if tim == visibility.Member.Label() {
+			vis = visibility.Member
+		}
 		if tim == visibility.Public.Label() {
 			vis = visibility.Public
 		}
