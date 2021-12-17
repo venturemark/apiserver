@@ -2,8 +2,6 @@ package searcher
 
 import (
 	"encoding/json"
-	"github.com/venturemark/apicommon/pkg/metadata"
-
 	"github.com/venturemark/apigengo/pkg/pbf/update"
 	"github.com/xh3b4sd/tracer"
 
@@ -13,28 +11,6 @@ import (
 
 func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 	var err error
-
-	usi := req.Obj[0].Metadata[metadata.UserID]
-
-	{
-		str, err := s.searchTim(req)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-
-		for _, timelineString := range str {
-			tim := &schema.Timeline{}
-			err = json.Unmarshal([]byte(timelineString), tim)
-			if err != nil {
-				return nil, tracer.Mask(err)
-			}
-
-			if usi == "" && tim.Obj.Metadata[metadata.ResourceVisibility] != "public" {
-				continue
-			}
-		}
-	}
-
 	var upk *key.Key
 	{
 		upk = key.Update(req.Obj[0].Metadata)
@@ -83,26 +59,4 @@ func (s *Searcher) Search(req *update.SearchI) (*update.SearchO, error) {
 	}
 
 	return res, nil
-}
-
-func (s *Searcher) searchTim(req *update.SearchI) ([]string, error) {
-	var err error
-
-	var tik *key.Key
-	{
-		tik = key.Timeline(req.Obj[0].Metadata)
-	}
-
-	var str []string
-	{
-		k := tik.List()
-		c := tik.ID().F()
-
-		str, err = s.redigo.Sorted().Search().Score(k, c, c)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-	}
-
-	return str, nil
 }
