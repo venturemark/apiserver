@@ -2,7 +2,7 @@ name: apiserver
 namespace: infra
 selector:
   app.kubernetes.io/name: apiserver
-image: okteto/golang:1.17
+image: okteto/golang:1.17-arm
 imagePullPolicy: IfNotPresent
 command:
   - bash
