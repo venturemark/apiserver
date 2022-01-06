@@ -107,14 +107,14 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 
 	var tim string
 	{
-		tim, err = v.resolveTimeline(met)
+		tim, err = v.resolveTimelineRole(met)
 		if err != nil {
 			return "", tracer.Mask(err)
 		}
 	}
 
 	var ven string
-	{
+	if tim != role.Any.Label() {
 		ven, err = v.permission.Resolver().Venture().Role(met)
 		if err != nil {
 			return "", tracer.Mask(err)
@@ -123,6 +123,9 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 
 	var rol label.Label
 	{
+		if tim == role.Any.Label() {
+			rol = role.Any
+		}
 		if tim == role.Member.Label() {
 			rol = role.Member
 		}
@@ -156,18 +159,25 @@ func (v *Verifier) vis(ctx context.Context, met map[string]string) (label.Label,
 		}
 	}
 
+	var tim string
+	{
+		tim, err = v.resolveTimelineVisibility(met)
+		if err != nil {
+			return "", tracer.Mask(err)
+		}
+	}
+
 	var vis label.Label
 	{
-		if ven == "" {
+		if tim == visibility.Public.Label() {
+			vis = visibility.Public
+		} else if ven == "" {
 			vis = visibility.Private
-		}
-		if ven == visibility.Private.Label() {
+		} else if ven == visibility.Private.Label() {
 			vis = visibility.Private
-		}
-		if ven == visibility.Member.Label() {
+		} else if ven == visibility.Member.Label() {
 			vis = visibility.Member
-		}
-		if ven == visibility.Public.Label() {
+		} else if ven == visibility.Public.Label() {
 			vis = visibility.Public
 		}
 	}
@@ -175,7 +185,7 @@ func (v *Verifier) vis(ctx context.Context, met map[string]string) (label.Label,
 	return vis, nil
 }
 
-func (v *Verifier) resolveTimeline(met map[string]string) (string, error) {
+func (v *Verifier) resolveTimelineRole(met map[string]string) (string, error) {
 	var err error
 
 	var tik *key.Key
@@ -202,6 +212,11 @@ func (v *Verifier) resolveTimeline(met map[string]string) (string, error) {
 				return "", tracer.Mask(err)
 			}
 
+			if tim.Obj.Metadata[metadata.ResourceVisibility] == "public" {
+				rol = role.Any.Label()
+				break
+			}
+
 			rol, err = v.permission.Resolver().Timeline().Role(timeline(tim, met))
 			if err != nil {
 				return "", tracer.Mask(err)
@@ -214,6 +229,45 @@ func (v *Verifier) resolveTimeline(met map[string]string) (string, error) {
 	}
 
 	return rol, nil
+}
+
+func (v *Verifier) resolveTimelineVisibility(met map[string]string) (string, error) {
+	var err error
+
+	var tik *key.Key
+	{
+		tik = key.Timeline(met)
+	}
+
+	var str []string
+	{
+		k := tik.List()
+
+		str, err = v.redigo.Sorted().Search().Order(k, 0, -1)
+		if err != nil {
+			return "", tracer.Mask(err)
+		}
+	}
+
+	var vis string
+	{
+		for _, s := range str {
+			tim := &schema.Timeline{}
+			err := json.Unmarshal([]byte(s), tim)
+			if err != nil {
+				return "", tracer.Mask(err)
+			}
+
+			if tim.Obj.Metadata[metadata.ResourceVisibility] == "public" {
+				vis = visibility.Public.Label()
+				break
+			}
+
+			vis = visibility.Private.Label()
+		}
+	}
+
+	return vis, nil
 }
 
 func timeline(tim *schema.Timeline, met map[string]string) map[string]string {
