@@ -36,9 +36,8 @@ func (v *Verifier) Verify(ctx context.Context, req *venture.SearchI) (bool, erro
 		if len(req.Obj) == 1 {
 			sub := req.Obj[0].Metadata[metadata.SubjectID]
 			ven := req.Obj[0].Metadata[metadata.VentureID]
-			ves := req.Obj[0].Metadata["venture.venturemark.co/slug"]
 
-			if sub == "" && ven == "" && ves == "" {
+			if sub == "" && ven == "" {
 				return false, nil
 			}
 		}
