@@ -13,8 +13,6 @@ import (
 	"github.com/venturemark/permission/pkg/label/visibility"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
-
-	"github.com/venturemark/apiserver/pkg/context/claimid"
 )
 
 type VerifierConfig struct {
@@ -147,15 +145,6 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 
 func (v *Verifier) vis(ctx context.Context, met map[string]string) (label.Label, error) {
 	var err error
-
-	var isp bool
-	{
-		cli, _ := claimid.FromContext(ctx)
-		if cli == "webclient" {
-			isp = true
-		}
-	}
-
 	var ven string
 	{
 		ven, err = v.permission.Resolver().Venture().Visibility(met)
@@ -172,7 +161,7 @@ func (v *Verifier) vis(ctx context.Context, met map[string]string) (label.Label,
 		if ven == visibility.Private.Label() {
 			vis = visibility.Private
 		}
-		if ven == visibility.Public.Label() && isp {
+		if ven == visibility.Public.Label() {
 			vis = visibility.Public
 		}
 	}

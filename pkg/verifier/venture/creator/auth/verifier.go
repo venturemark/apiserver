@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 
-	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/venture"
 	"github.com/venturemark/permission"
 	"github.com/venturemark/permission/pkg/label"
@@ -13,8 +12,6 @@ import (
 	"github.com/venturemark/permission/pkg/label/visibility"
 	"github.com/xh3b4sd/redigo"
 	"github.com/xh3b4sd/tracer"
-
-	"github.com/venturemark/apiserver/pkg/context/claimid"
 )
 
 type VerifierConfig struct {
@@ -92,31 +89,5 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 }
 
 func (v *Verifier) vis(ctx context.Context, met map[string]string) (label.Label, error) {
-	var isp bool
-	{
-		cli, _ := claimid.FromContext(ctx)
-		if cli == "webclient" {
-			isp = true
-		}
-	}
-
-	var vis label.Label
-	{
-		ven := met[metadata.ResourceVisibility]
-
-		if ven == "" {
-			vis = visibility.Any
-		}
-		if ven == visibility.Any.Label() {
-			vis = visibility.Any
-		}
-		if ven == visibility.Private.Label() {
-			vis = visibility.Private
-		}
-		if ven == visibility.Public.Label() && isp {
-			vis = visibility.Public
-		}
-	}
-
-	return vis, nil
+	return visibility.Any, nil
 }
