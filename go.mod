@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/badoux/checkmail v1.2.1
 	github.com/evanphx/json-patch v0.5.2
-	github.com/google/go-cmp v0.5.6
+	github.com/google/go-cmp v0.5.7
 	github.com/lestrrat-go/jwx v1.2.13
 	github.com/prometheus/client_golang v1.11.0
 	github.com/spf13/cobra v1.2.1
