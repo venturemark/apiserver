@@ -7,7 +7,7 @@ require (
 	github.com/evanphx/json-patch v0.5.2
 	github.com/google/go-cmp v0.5.6
 	github.com/lestrrat-go/jwx v1.2.13
-	github.com/prometheus/client_golang v1.11.0
+	github.com/prometheus/client_golang v1.12.0
 	github.com/spf13/cobra v1.2.1
 	github.com/venturemark/apicommon v0.9.1
 	github.com/venturemark/apigengo v0.4.2
