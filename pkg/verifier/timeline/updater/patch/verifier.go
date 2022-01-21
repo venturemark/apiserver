@@ -144,7 +144,7 @@ func (v *Verifier) Verify(ctx context.Context, req *timeline.UpdateI) (bool, err
 			}
 
 			var allowedValues []string
-			switch strings.TrimLeft(req.Obj[0].Jsnpatch[i].Pat, metadataPath) {
+			switch strings.TrimPrefix(req.Obj[0].Jsnpatch[i].Pat, metadataPath) {
 			case escapePatchPath(metadata.PermissionModel):
 				allowedValues = allowedPermissionModels
 			case escapePatchPath(metadata.ResourceVisibility):
