@@ -32,11 +32,13 @@ var allowedPrepopulate = []string{"a", "b"}
 var allowedSurvey = []string{"x", "y"}
 
 func (v *Verifier) Verify(ctx context.Context, req *user.CreateI) (bool, error) {
-	if prepopulate := req.Obj[0].Metadata["user.venturemark.co/prepopulate"]; !contains(prepopulate, allowedPrepopulate) {
+	prepopulate := req.Obj[0].Metadata["user.venturemark.co/prepopulate"]
+	if prepopulate != "" && !contains(prepopulate, allowedPrepopulate) {
 		return false, nil
 	}
 
-	if survey := req.Obj[0].Metadata["user.venturemark.co/surveyResponse"]; !contains(survey, allowedSurvey) {
+	survey := req.Obj[0].Metadata["user.venturemark.co/surveyResponse"]
+	if survey != "" && !contains(survey, allowedSurvey) {
 		return false, nil
 	}
 
