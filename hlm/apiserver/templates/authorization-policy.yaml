@@ -12,15 +12,6 @@ spec:
         - operation:
             methods: ["GET"]
             paths: ["/stats/prometheus"]
-        - operation:
-            methods: ["POST"]
-            paths:
-              # Allow anonymous searching of public ventures by slug
-              - /venture.API/Search
-              # Allow anonymous searching of public timelines by venture ID
-              - /timeline.API/Search
-              # Allow anonymous searching of public timeline updates
-              - /update.API/Search
   selector:
     matchLabels:
       app.kubernetes.io/name: apiserver

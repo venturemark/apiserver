@@ -29,15 +29,13 @@ func (h *Handler) Search(ctx context.Context, req *user.SearchI) (*user.SearchO,
 			return nil, tracer.Mask(invalidUserError)
 		}
 
-		if usi == "" {
-			return &user.SearchO{}, nil
-		}
-
-		for i := range req.Obj {
-			if req.Obj[i].Metadata[metadata.UserID] == "" {
-				req.Obj[i].Metadata[metadata.UserID] = usi
-			} else if req.Obj[i].Metadata[metadata.UserID] != usi {
-				return nil, tracer.Mask(invalidInputError)
+		if usi != "" {
+			for i := range req.Obj {
+				if req.Obj[i].Metadata[metadata.UserID] == "" {
+					req.Obj[i].Metadata[metadata.UserID] = usi
+				} else if req.Obj[i].Metadata[metadata.UserID] != usi {
+					return nil, tracer.Mask(invalidInputError)
+				}
 			}
 		}
 	}

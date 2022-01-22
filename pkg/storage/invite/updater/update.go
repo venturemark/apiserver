@@ -3,7 +3,7 @@ package updater
 import (
 	"encoding/json"
 
-	jsonpatch "github.com/evanphx/json-patch"
+	jsonpatch "github.com/evanphx/json-patch/v5"
 	"github.com/venturemark/apicommon/pkg/index"
 	"github.com/venturemark/apicommon/pkg/key"
 	"github.com/venturemark/apicommon/pkg/metadata"

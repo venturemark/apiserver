@@ -186,8 +186,11 @@ func (v *Verifier) vis(ctx context.Context, met map[string]string) (label.Label,
 }
 
 func (v *Verifier) resolveTimelineRole(met map[string]string) (string, error) {
-	var err error
+	if met[metadata.UserID] == "" {
+		return role.Any.Label(), nil
+	}
 
+	var err error
 	var tik *key.Key
 	{
 		tik = key.Timeline(met)

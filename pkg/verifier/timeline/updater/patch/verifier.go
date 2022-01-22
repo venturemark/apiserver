@@ -2,6 +2,8 @@ package patch
 
 import (
 	"context"
+	"github.com/venturemark/permission/pkg/label/visibility"
+	"strings"
 
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/timeline"
@@ -11,6 +13,33 @@ type VerifierConfig struct {
 }
 
 type Verifier struct {
+}
+
+const metadataPath = "/obj/property/metatdata/"
+
+var allowedVisibilities = []string{
+	visibility.Private.Label(),
+	visibility.Member.Label(),
+	visibility.Public.Label(),
+}
+
+var allowedPermissionModels = []string{
+	"writer",
+	"reader",
+}
+
+func contains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}
+
+// https://datatracker.ietf.org/doc/html/rfc6901#section-3
+func escapePatchPath(s string) string {
+	return strings.ReplaceAll(s, "/", "~1")
 }
 
 func NewVerifier(config VerifierConfig) (*Verifier, error) {
@@ -104,6 +133,35 @@ func (v *Verifier) Verify(ctx context.Context, req *timeline.UpdateI) (bool, err
 
 			if !valEmp && !valAct && !valArc {
 				return false, nil
+			}
+		}
+	}
+
+	{
+		for i := range req.Obj[0].Jsnpatch {
+			if !strings.HasPrefix(req.Obj[0].Jsnpatch[i].Pat, metadataPath) {
+				continue
+			}
+
+			var allowedValues []string
+			switch strings.TrimPrefix(req.Obj[0].Jsnpatch[i].Pat, metadataPath) {
+			case escapePatchPath(metadata.PermissionModel):
+				allowedValues = allowedPermissionModels
+			case escapePatchPath(metadata.ResourceVisibility):
+				allowedValues = allowedVisibilities
+			default:
+				// Don't allow other metadata fields to be patched
+				return false, nil
+			}
+
+			if contains([]string{"add", "replace"}, req.Obj[0].Jsnpatch[i].Ope) {
+				if val := req.Obj[0].Jsnpatch[i].Val; val == nil {
+					// Value must be defined for these operations
+					return false, nil
+				} else if !contains(allowedValues, *val) {
+					// Value must be one of the allowed values
+					return false, nil
+				}
 			}
 		}
 	}

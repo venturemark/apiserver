@@ -64,11 +64,6 @@ func (e *Interceptor) Interceptor() grpc.UnaryServerInterceptor {
 
 			a = l[0]
 
-			if a == "" {
-				ctx = claimid.NewContext(ctx, "")
-				return han(ctx, req)
-			}
-
 			if !bearerScheme.MatchString(a) {
 				return nil, tracer.Maskf(invalidMetadataError, "authorization must be bearer scheme")
 			}
@@ -83,13 +78,17 @@ func (e *Interceptor) Interceptor() grpc.UnaryServerInterceptor {
 				return nil, tracer.Mask(err)
 			}
 
-			h := sha256.New()
-			_, err = h.Write([]byte(t.Subject()))
-			if err != nil {
-				return nil, tracer.Mask(err)
-			}
+			if t.Issuer() == "public.venturemark.co" {
+				cli = "unauthenticated"
+			} else {
+				h := sha256.New()
+				_, err = h.Write([]byte(t.Subject()))
+				if err != nil {
+					return nil, tracer.Mask(err)
+				}
 
-			cli = fmt.Sprintf("%x", h.Sum(nil))
+				cli = fmt.Sprintf("%x", h.Sum(nil))
+			}
 		}
 
 		{
