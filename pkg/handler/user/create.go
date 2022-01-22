@@ -107,7 +107,7 @@ var defaultVenture = venture.CreateI_Obj_Property{
 	Name: "x",
 }
 
-var defaultTimelinesMap = map[string][]timeline.CreateI_Obj_Property{
+var defaultTimelinesMap = map[string][]*timeline.CreateI_Obj_Property{
 	"a": {
 		{
 			Desc: "a",
