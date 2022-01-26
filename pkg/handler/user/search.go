@@ -29,6 +29,11 @@ func (h *Handler) Search(ctx context.Context, req *user.SearchI) (*user.SearchO,
 			return nil, tracer.Mask(invalidUserError)
 		}
 
+		if usi == "" && req.Obj[0].Metadata[metadata.TimelineID] == "" && req.Obj[0].Metadata[metadata.VentureID] == "" {
+			// User is searching for themselves, but the user ID doesn't exist so the user must not exist, exit early
+			return &user.SearchO{}, nil
+		}
+
 		if usi != "" {
 			for i := range req.Obj {
 				if req.Obj[i].Metadata[metadata.UserID] == "" {

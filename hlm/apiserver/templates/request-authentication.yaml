@@ -7,11 +7,11 @@ spec:
     matchLabels:
       app.kubernetes.io/name: "{{ .Release.Name }}"
   jwtRules:
-    - issuer: "https://vm001.us.auth0.com/"
-      jwksUri: "https://vm001.us.auth0.com/.well-known/jwks.json"
+    - issuer: "https://auth.breadcrumb.so/"
+      jwksUri: "https://auth.breadcrumb.so/.well-known/jwks.json"
       audiences:
         - "{{ .Release.Name }}"
-        - "https://vm001.us.auth0.com/userinfo"
+        - "https://auth.breadcrumb.so/userinfo"
       forwardOriginalToken: true
       fromHeaders:
         - name: "Authorization"
