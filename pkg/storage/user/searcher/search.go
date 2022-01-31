@@ -51,6 +51,9 @@ func (s *Searcher) Search(req *user.SearchI) (*user.SearchO, error) {
 				delete(use.Obj.Metadata, metadata.TimelineLastUpdate)
 			}
 
+			// Don't leak private info about other the survey response
+			delete(use.Obj.Metadata, metadata.UserSurveyResponse)
+
 			o := &user.SearchO_Obj{
 				Metadata: use.Obj.Metadata,
 				Property: &user.SearchO_Obj_Property{

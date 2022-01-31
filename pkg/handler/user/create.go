@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"github.com/venturemark/apigengo/pkg/pbf/timeline"
+	"github.com/venturemark/apiserver/pkg/content"
 	"strconv"
 	"time"
 
@@ -102,28 +103,9 @@ func (h *Handler) Create(ctx context.Context, req *user.CreateI) (*user.CreateO,
 	return res, nil
 }
 
-var defaultVenture = venture.CreateI_Obj_Property{
-	Desc: "x",
-	Name: "x",
-}
-
-var defaultTimelinesMap = map[string][]*timeline.CreateI_Obj_Property{
-	"a": {
-		{
-			Desc: "a",
-			Name: "a",
-		},
-	},
-	"b": {
-		{
-			Desc: "b",
-			Name: "b",
-		},
-	},
-}
-
 func (h *Handler) createDefaultTimelines(ctx context.Context, userRequest *user.CreateI_Obj, usi string) error {
-	defaultTimelines := defaultTimelinesMap[userRequest.Metadata["user.venturemark.co/prepopulate"]]
+	prepopulateValue := userRequest.Metadata[metadata.UserPrepopulate]
+	defaultTimelines := content.DefaultTimelinesMap[prepopulateValue]
 
 	if len(defaultTimelines) == 0 {
 		return nil
@@ -171,8 +153,8 @@ func (h *Handler) createDefaultTimelines(ctx context.Context, userRequest *user.
 				{
 					Metadata: ventureMetadata,
 					Property: &venture.CreateI_Obj_Property{
-						Desc: defaultVenture.Desc,
-						Name: defaultVenture.Name,
+						Desc: content.DefaultVenture.Desc,
+						Name: content.DefaultVenture.Name,
 					},
 				},
 			},
