@@ -2,10 +2,8 @@ package format
 
 import (
 	"context"
-	"github.com/venturemark/apicommon/pkg/metadata"
-	"github.com/venturemark/apiserver/pkg/content"
-
 	"github.com/badoux/checkmail"
+	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/user"
 )
 
@@ -38,12 +36,14 @@ var allowedSurvey = []string{
 	"choiceOther",
 }
 
-func (v *Verifier) Verify(ctx context.Context, req *user.CreateI) (bool, error) {
-	var allowedPrepopulate []string
-	for key := range content.DefaultTimelinesMap {
-		allowedPrepopulate = append(allowedPrepopulate, key)
-	}
+// Keep in sync with https://github.com/venturemark/webclient/blob/767d411768e3e4fd45b42f16c8ded208233d7698/src/component/OnboardingGroup.tsx#L104-L106
+var allowedPrepopulate = []string{
+	"choiceNetwork",
+	"choiceProgress",
+	"choiceTeam",
+}
 
+func (v *Verifier) Verify(ctx context.Context, req *user.CreateI) (bool, error) {
 	prepopulate := req.Obj[0].Metadata[metadata.UserPrepopulate]
 	if prepopulate != "" && !contains(prepopulate, allowedPrepopulate) {
 		return false, nil

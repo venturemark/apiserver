@@ -1,46 +1,56 @@
 package content
 
 import (
-	"github.com/venturemark/apigengo/pkg/pbf/texupd"
-	"github.com/venturemark/apigengo/pkg/pbf/timeline"
-	"github.com/venturemark/apigengo/pkg/pbf/venture"
+	"encoding/json"
+	"github.com/xh3b4sd/tracer"
+	"os"
 )
 
-var DefaultVenture = venture.CreateI_Obj_Property{
-	Desc: "CHANGEME",
-	Name: "My Network",
+type SerializedUpdate struct {
+	Head string `json:"head"`
+	Text string `json:"text"`
 }
 
-var GettingStartedTimeline = timeline.CreateI_Obj_Property{
-	Desc: "CHANGEME",
-	Name: "Getting Started",
+type SerializedTimeline struct {
+	Desc    string             `json:"desc"`
+	Name    string             `json:"name"`
+	Updates []SerializedUpdate `json:"updates"`
 }
 
-var GettingStartedPosts = []texupd.CreateI_Obj_Property{
-	{
-		Head: "Post 1: What is a network?",
-		Text: "A Breadcrumb Network is",
-	},
+type SerializedVenture struct {
+	Prepopulate string               `json:"prepopulate"`
+	Desc        string               `json:"desc"`
+	Name        string               `json:"name"`
+	Timelines   []SerializedTimeline `json:"timelines"`
 }
 
-// Keep in sync with https://github.com/venturemark/webclient/blob/767d411768e3e4fd45b42f16c8ded208233d7698/src/component/OnboardingGroup.tsx#L104-L106
-var DefaultTimelinesMap = map[string][]*timeline.CreateI_Obj_Property{
-	"choiceNetwork": {
-		{
-			Desc: "a",
-			Name: "a",
-		},
-	},
-	"choiceProgress": {
-		{
-			Desc: "b",
-			Name: "b",
-		},
-	},
-	"choiceTeam": {
-		{
-			Desc: "b",
-			Name: "b",
-		},
-	},
+func GetTemplateVenture(prepopulate string) (*SerializedVenture, error) {
+	content, err := os.ReadFile("ventures.json")
+	if err != nil {
+		return nil, tracer.Mask(err)
+	}
+
+	var ventures []SerializedVenture
+	err = json.Unmarshal(content, &ventures)
+	if err != nil {
+		return nil, tracer.Mask(err)
+	}
+
+	var search string
+	switch prepopulate {
+	case "choiceNetwork":
+		search = "ku"
+	case "choiceProgress":
+		search = "tmp"
+	case "choiceTeam":
+		search = "sis"
+	}
+
+	for _, v := range ventures {
+		if v.Prepopulate == search {
+			return &v, nil
+		}
+	}
+
+	return nil, nil
 }

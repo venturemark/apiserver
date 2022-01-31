@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"github.com/venturemark/apigengo/pkg/pbf/texupd"
 	"github.com/venturemark/apigengo/pkg/pbf/timeline"
 	"github.com/venturemark/apiserver/pkg/content"
 	"strconv"
@@ -105,9 +106,10 @@ func (h *Handler) Create(ctx context.Context, req *user.CreateI) (*user.CreateO,
 
 func (h *Handler) createDefaultTimelines(ctx context.Context, userRequest *user.CreateI_Obj, usi string) error {
 	prepopulateValue := userRequest.Metadata[metadata.UserPrepopulate]
-	defaultTimelines := content.DefaultTimelinesMap[prepopulateValue]
-
-	if len(defaultTimelines) == 0 {
+	templateVenture, err := content.GetTemplateVenture(prepopulateValue)
+	if err != nil {
+		return tracer.Mask(err)
+	} else if templateVenture == nil {
 		return nil
 	}
 
@@ -153,8 +155,8 @@ func (h *Handler) createDefaultTimelines(ctx context.Context, userRequest *user.
 				{
 					Metadata: ventureMetadata,
 					Property: &venture.CreateI_Obj_Property{
-						Desc: content.DefaultVenture.Desc,
-						Name: content.DefaultVenture.Name,
+						Desc: templateVenture.Desc,
+						Name: templateVenture.Name,
 					},
 				},
 			},
@@ -175,7 +177,7 @@ func (h *Handler) createDefaultTimelines(ctx context.Context, userRequest *user.
 		}
 	}
 
-	for _, defaultTimeline := range defaultTimelines {
+	for _, defaultTimeline := range templateVenture.Timelines {
 		timelineRoleID := strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
 		timelineID := strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
 
@@ -238,6 +240,75 @@ func (h *Handler) createDefaultTimelines(ctx context.Context, userRequest *user.
 			_, err = h.storage.Timeline.Creator.Create(&timelineReq)
 			if err != nil {
 				return tracer.Mask(err)
+			}
+		}
+
+		for _, defaultUpdate := range defaultTimeline.Updates {
+			updateRoleID := strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
+			updateID := strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
+
+			updateMetadata := map[string]string{
+				metadata.SubjectID:    usi,
+				metadata.UserID:       usi,
+				metadata.ResourceKind: "update",
+				metadata.RoleKind:     "owner",
+				metadata.RoleID:       updateRoleID,
+				metadata.TimelineID:   timelineID,
+				metadata.UpdateFormat: "slate",
+				metadata.UpdateID:     updateID,
+				metadata.VentureID:    ventureID,
+			}
+
+			{
+				rolReq := role.CreateI{
+					Obj: []*role.CreateI_Obj{
+						{
+							Metadata: updateMetadata,
+						},
+					},
+				}
+
+				ok, err := h.storage.Role.Creator.Verify(ctx, &rolReq)
+				if err != nil {
+					return tracer.Mask(err)
+				}
+
+				if !ok {
+					return tracer.Mask(invalidInputError)
+				}
+
+				_, err = h.storage.Role.Creator.Create(&rolReq)
+				if err != nil {
+					return tracer.Mask(err)
+				}
+			}
+
+			{
+				updateReq := texupd.CreateI{
+					Obj: []*texupd.CreateI_Obj{
+						{
+							Metadata: timelineMetadata,
+							Property: &texupd.CreateI_Obj_Property{
+								Head: defaultUpdate.Head,
+								Text: defaultUpdate.Text,
+							},
+						},
+					},
+				}
+
+				ok, err := h.storage.TexUpd.Creator.Verify(ctx, &updateReq)
+				if err != nil {
+					return tracer.Mask(err)
+				}
+
+				if !ok {
+					return tracer.Mask(invalidInputError)
+				}
+
+				_, err = h.storage.TexUpd.Creator.Create(&updateReq)
+				if err != nil {
+					return tracer.Mask(err)
+				}
 			}
 		}
 	}
