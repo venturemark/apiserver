@@ -287,7 +287,7 @@ func (h *Handler) createDefaultTimelines(ctx context.Context, userRequest *user.
 				updateReq := texupd.CreateI{
 					Obj: []*texupd.CreateI_Obj{
 						{
-							Metadata: timelineMetadata,
+							Metadata: updateMetadata,
 							Property: &texupd.CreateI_Obj_Property{
 								Head: defaultUpdate.Head,
 								Text: defaultUpdate.Text,
