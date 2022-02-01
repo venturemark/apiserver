@@ -1,0 +1,157 @@
+[
+  {
+    "prepopulate": "sis",
+    "desc": "Stay in Sync",
+    "name": "My Network",
+    "timelines": [
+      {
+        "desc": "A few examples to give you ideas",
+        "name": "Getting Started",
+        "updates": [
+          {
+            "head": "What is a 'Network'?",
+            "text": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"A Breadcrumb Network is:\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"an organization, professional group, team, or community\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Use a network to organize groups of updates by topic and audience.\"}]}]"
+          },
+          {
+            "head": "What is a 'Timeline'?",
+            "text": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"A Breadcrumb Timeline is:\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"a feed that tracks progress for a group\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Use a timeline to organize updates by an audience.\"}]}]"
+          },
+          {
+            "head": "What is an 'Update'?",
+            "text": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"A Breadcrumb Update is:\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"a standard way to report the latest relevant information in a topic to a contact group.\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Use Updates to provide context on what has happened to other stakeholders.\"}]}]"
+          }
+        ]
+      },
+      {
+        "desc": "Product status",
+        "name": "Product",
+        "updates": [
+          {
+            "head": "Daily Standup - Peter",
+            "text": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"🚀 \"},{\"text\":\" Yesterday’s achievements\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"[Issue #460] Switching between interfaces (settings) deletes update\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"[Issue $464] Posting updates doesn't reset editor\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Setup local BE with Thomas's instruction (nearly done)\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"🗺️  \"},{\"text\":\"Today’s plan\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"[Issue #460] Switching between interfaces (share modal) deletes update\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Try to follow the rest of local BE setup guide and get it running\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"🧱  \"},{\"text\":\"Blockers\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"According to Thomas, I need one more step to setup local BE as being added to flux repo and install apiserver via flux\"}]}]}]"
+          }
+        ]
+      },
+      {
+        "desc": "Updates in design, development handoff",
+        "name": "Design ↔  Dev",
+        "updates": [
+          {
+            "head": "Content now part of action bar",
+            "text": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"🚨  \"},{\"text\":\"Breaking Design Changes\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Select Component Changed\",\"underline\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Dropdowns are being replaced with a new plasmic component called select (created by plasmic). Replacing components that consist of isOwner dropdowns rather than the old method of isDropDown variant.  I suspect this may break some things, hopefully we can figure out how to use this moving forward instead.\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Components affected by new Select component:\",\"underline\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"MemberItem\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"VisibilityState\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"ActionBar\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"ContentPost\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"ReplyContent\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"🎯  Next Steps\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"@Peter: please review and we can sync for next steps\"}]}]"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "prepopulate": "ku",
+    "desc": "Keep Updated",
+    "name": "My Network",
+    "timelines": [
+      {
+        "desc": "A few examples to give you ideas",
+        "name": "Getting Started",
+        "updates": [
+          {
+            "head": "What is a 'Network'?",
+            "text": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"A Breadcrumb Network is:\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"an organization, professional group, team, or community\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Use a network to organize groups of updates by topic and audience.\"}]}]"
+          },
+          {
+            "head": "What is a 'Timeline'?",
+            "text": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"A Breadcrumb Timeline is:\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"a feed that tracks progress for a group\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Use a timeline to organize updates by an audience.\"}]}]"
+          },
+          {
+            "head": "What is an 'Update'?",
+            "text": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"A Breadcrumb Update is:\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"a standard way to report the latest relevant information in a topic to a contact group.\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Use Updates to provide context on what has happened to other stakeholders.\"}]}]"
+          }
+        ]
+      },
+      {
+        "desc": "What's happening with folks at my university.",
+        "name": "NYU Alumni",
+        "updates": [
+          {
+            "head": "Q1 2022 - Alumni Checkin",
+            "text": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"💼  \"},{\"text\":\"Work\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"Building Breadcrumb to empower professionals with next generation communication tools.\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"🙋‍♂️  \"},{\"text\":\"How I can help\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"I meeting with a lot of investors. Are there any B2B SaaS founders looking for intros?\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"📢  \"},{\"text\":\"Ask\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"I'm interested in organizing quarterly alumni dinners. Who's interested in helping?\"}]}]}]"
+          }
+        ]
+      },
+      {
+        "desc": "Updates on building our service",
+        "name": "Product Updates",
+        "updates": [
+          {
+            "head": "Enhanced Posting Shipped!",
+            "text": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"🗺  \"},{\"text\":\"What's been happening\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"Product walkthroughs and testing sessions\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Fixing bugs\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Incorporating feedback into our product roadmap\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"⚡ \"},{\"text\":\"Upcoming Feature Highlight\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"Rich text editing for control over formatting\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Attachment support\"}]}]}]"
+          }
+        ]
+      },
+      {
+        "desc": "Keeping track of how we analyze data",
+        "name": "Data Analysis Group",
+        "updates": [
+          {
+            "head": "Causal Inference is the future?",
+            "text": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"🎯  Topic: Causal Inference\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Link https://www.sciencedirect.com/topics/social-sciences/causal-inference\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"📖 \"},{\"text\":\" Summary\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"Most data science is classification and regression\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Correlation is not causation\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"But most data scientist takes a data scientist to interpret\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Causal inference presents a way for normal folks to get better insights from data\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"❓ \"},{\"text\":\"Question\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Do you think casual inference is currently relevant for smbs?\"}]}]"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "prepopulate": "tmp",
+    "desc": "Track my progress",
+    "name": "My Network",
+    "timelines": [
+      {
+        "desc": "Keep track of investment knowledge",
+        "name": "Investments",
+        "updates": [
+          {
+            "head": "Tracking Crypto - January 5th, 2022",
+            "text": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"📈  \"},{\"text\":\"Economy\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"With the loosening up covid restrictions, many folks are bullish that 2022 will be an up year as supply chains catch up. However, rising interest rates, inflation, and political instability cause uncertainty.\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"💼   Portfolio\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"I’m bullish on recent allocations in $ETH and $BTC to materialize through the end of 2023\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"I'm doubling down on opportunistic investments in Defi layer 2 infrastructure\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"🚀  Recent Network Success:\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"John and mike realized a 7X and 10x return from whitelist participation in RedactedDao and PixieDao\"}]}]}]"
+          }
+        ]
+      },
+      {
+        "desc": "A few examples to give you ideas",
+        "name": "Getting Started",
+        "updates": [
+          {
+            "head": "What is a 'Network'?",
+            "text": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"A Breadcrumb Network is:\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"an organization, professional group, team, or community\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Use a network to organize groups of updates by topic and audience.\"}]}]"
+          },
+          {
+            "head": "What is a 'Timeline'?",
+            "text": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"A Breadcrumb Timeline is:\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"a feed that tracks progress for a group\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Use a timeline to organize updates by an audience.\"}]}]"
+          },
+          {
+            "head": "What is an 'Update'?",
+            "text": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"A Breadcrumb Update is:\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"a standard way to report the latest relevant information in a topic to a contact group.\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Use Updates to provide context on what has happened to other stakeholders.\"}]}]"
+          }
+        ]
+      },
+      {
+        "desc": "Track my health",
+        "name": "Health",
+        "updates": [
+          {
+            "head": "Daily Retro - January 25th, 2022",
+            "text": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"Oura Ring Metrics\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"Bed Time: 10:15pm\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Resting Heart Rate: 50 bpm\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Average HRV: 42\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Sleep: 7 Hours\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Readiness Score: 82\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Sleep Score: 77\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Previous day:\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"Physical\"}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"Woke up at 6:55am\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Breakfast at 10:30am\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Egg + Protein Shake\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Last coffee at 11:30pm\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Full Workout - Day 4 Superman Workout\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Dinner at 7:30pm\"}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"Pizza\"}]}]}]}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"Mental \"}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"Orai\"}]}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"Meditation\"}]}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Notes:\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"Pizza was not great. Everything else 💪 \"}]}]}]"
+          }
+        ]
+      },
+      {
+        "desc": "How I'm doing growing.",
+        "name": "Growth Log",
+        "updates": [
+          {
+            "head": "Growth - January 25th, 2022",
+            "text": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"🚀 \"},{\"text\":\"Yesterday’s achievements\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"Reached out to 13 folks through Linkedin\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Reached out to 8 on Twitter\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Emailed 3 folks\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"🗺️ \"},{\"text\":\"Today’s plan\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"Set traction goals\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Reflect on growth tactics efficacy\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Reach out to 20 more folks\"}]},{\"type\":\"list-item\",\"children\":[{\"text\":\"Publish survey in a few communities\"}]}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"🧱 \"},{\"text\":\"Blockers\",\"bold\":true}]},{\"type\":\"unordered-list\",\"children\":[{\"type\":\"list-item\",\"children\":[{\"text\":\"Need to understand reliable feedback loop\"}]}]}]"
+          }
+        ]
+      }
+    ]
+  }
+]

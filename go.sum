@@ -532,8 +532,9 @@ github.com/tmc/grpc-websocket-proxy v0.0.0-20170815181823-89b8d40f7ca8/go.mod h1
 github.com/tv42/httpunix v0.0.0-20150427012821-b75d8614f926/go.mod h1:9ESjWnEqriFuLhtthL60Sar/7RFoluCcXsuvEwTV5KM=
 github.com/urfave/cli v1.20.0/go.mod h1:70zkFmudgCuE/ngEzBv17Jvp/497gISqfk5gWijbERA=
 github.com/urfave/cli v1.22.1/go.mod h1:Gos4lmkARVdJ6EkW0WaNv/tZAAMe9V7XWyB60NtXRu0=
-github.com/venturemark/apicommon v0.9.1 h1:Vt45et3vuwIy/2VKFIws41W0fIuvmJMMNViJnTtxZPM=
 github.com/venturemark/apicommon v0.9.1/go.mod h1:9vrrBHnGgzuIE8LYiqBYl+CD/ZR0VUJMWL9jA0QkHYM=
+github.com/venturemark/apicommon v0.10.0 h1:toeMD3cKcx7ksZmNDT0oVRqhFYARk4oJt6r4NZYrVhs=
+github.com/venturemark/apicommon v0.10.0/go.mod h1:NgOjjwJ/tvD+aKKr1nM0tQ0JAZjfnqn0Ni93XScjRmY=
 github.com/venturemark/apigengo v0.4.2 h1:+rQOie3RcL3sWWHX2dTi+i3qoloKS7f7r62vVGMh+Ew=
 github.com/venturemark/apigengo v0.4.2/go.mod h1:K2CTnU4S8YWtDVKDlwhBWbPJnI5A2svon4oNTCHYWBo=
 github.com/venturemark/permission v0.9.0 h1:WfxbYrXpj0V2K46DpTva1Q4ue0fjpMYBfuNffA0T1co=

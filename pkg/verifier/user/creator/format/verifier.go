@@ -2,8 +2,8 @@ package format
 
 import (
 	"context"
-
 	"github.com/badoux/checkmail"
+	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apigengo/pkg/pbf/user"
 )
 
@@ -19,7 +19,41 @@ func NewVerifier(config VerifierConfig) (*Verifier, error) {
 	return v, nil
 }
 
+func contains(s string, a []string) bool {
+	for _, v := range a {
+		if v == s {
+			return true
+		}
+	}
+	return false
+}
+
+// Keep in sync with https://github.com/venturemark/webclient/blob/767d411768e3e4fd45b42f16c8ded208233d7698/src/component/OnboardingGroup.tsx#L100-L103
+var allowedSurvey = []string{
+	"choicePeople",
+	"choiceSearch",
+	"choiceSocial",
+	"choiceOther",
+}
+
+// Keep in sync with https://github.com/venturemark/webclient/blob/767d411768e3e4fd45b42f16c8ded208233d7698/src/component/OnboardingGroup.tsx#L104-L106
+var allowedPrepopulate = []string{
+	"choiceNetwork",
+	"choiceProgress",
+	"choiceTeam",
+}
+
 func (v *Verifier) Verify(ctx context.Context, req *user.CreateI) (bool, error) {
+	prepopulate := req.Obj[0].Metadata[metadata.UserPrepopulate]
+	if prepopulate != "" && !contains(prepopulate, allowedPrepopulate) {
+		return false, nil
+	}
+
+	survey := req.Obj[0].Metadata[metadata.UserSurveyResponse]
+	if survey != "" && !contains(survey, allowedSurvey) {
+		return false, nil
+	}
+
 	{
 		err := checkmail.ValidateFormat(req.Obj[0].Property.Mail)
 		if err != nil {

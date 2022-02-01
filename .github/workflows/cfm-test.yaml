@@ -65,6 +65,7 @@ jobs:
           APIWORKER_POSTMARK_TOKEN_ACCOUNT: "foo"
           APIWORKER_POSTMARK_TOKEN_SERVER: "foo"
         run: |
+          cp ./venturemark/apiserver/ventures.json ./
           apiserver daemon --metrics-port 8081 &
           apiworker daemon --metrics-port 8082 &
           cd ./venturemark/cfm && go test ./... -race -tags conformance
