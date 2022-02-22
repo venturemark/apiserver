@@ -38,10 +38,6 @@ func (v *Verifier) Verify(ctx context.Context, req *timeline.SearchI) (bool, err
 			return false, nil
 		}
 
-		if !suiEmp && (!tiiEmp || !veiEmp) {
-			return false, nil
-		}
-
 		if !tiiEmp && veiEmp {
 			return false, nil
 		}

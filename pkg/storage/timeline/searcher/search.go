@@ -3,6 +3,7 @@ package searcher
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/venturemark/permission/pkg/label/visibility"
 	"strconv"
 	"strings"
 	"time"
@@ -26,23 +27,25 @@ func (s *Searcher) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 	{
 		subEmp := req.Obj[0].Metadata[metadata.SubjectID] == ""
 		timEmp := req.Obj[0].Metadata[metadata.TimelineID] == ""
+		venEmp := req.Obj[0].Metadata[metadata.VentureID] == ""
 
-		if subEmp && timEmp {
+		if subEmp && timEmp { // search by venture id
 			str, err = s.searchAll(req)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
-		}
-
-		if !subEmp && timEmp {
+		} else if !subEmp && timEmp && venEmp { // search by subject id in all ventures
 			str, err = s.searchSub(req)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
-		}
-
-		if subEmp && !timEmp {
-			str, err = s.searchTim(req)
+		} else if !subEmp && timEmp && !venEmp { // search by subject id in a specific venture
+			str, err = s.searchVenSub(req)
+			if err != nil {
+				return nil, tracer.Mask(err)
+			}
+		} else if subEmp && !timEmp { // search by subject id and timeline id
+			str, err = s.searchTimSub(req)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}
@@ -76,6 +79,11 @@ func (s *Searcher) Search(req *timeline.SearchI) (*timeline.SearchO, error) {
 					updateID := update.Obj.Metadata[metadata.UpdateID]
 					tim.Obj.Metadata[metadata.TimelineLastUpdate] = updateID
 				}
+			}
+
+			if req.Obj[0].Metadata[metadata.UserID] == "" && tim.Obj.Metadata[metadata.ResourceVisibility] != visibility.Public.Label() {
+				// Only return public timelines on unauthenticated requests
+				continue
 			}
 
 			o := &timeline.SearchO_Obj{
@@ -191,6 +199,61 @@ func (s *Searcher) searchRolPat(pat string, req *timeline.SearchI) ([]*schema.Ro
 }
 
 func (s *Searcher) searchSub(req *timeline.SearchI) ([]string, error) {
+	timSub, err := s.searchTimSub(req)
+	if err != nil {
+		return nil, tracer.Mask(err)
+	}
+
+	venSub, err := s.searchVenSub(req)
+	if err != nil {
+		return nil, tracer.Mask(err)
+	}
+
+	combined := timSub[:]
+	for _, l := range venSub {
+		if !contains(combined, l) {
+			combined = append(combined, l)
+		}
+	}
+
+	return combined, nil
+}
+
+func (s *Searcher) searchVenSub(req *timeline.SearchI) ([]string, error) {
+	var str []string
+
+	{
+		rol, err := s.searchRolPat(venPat, req)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+
+		for _, r := range rol {
+			req := &timeline.SearchI{
+				Obj: []*timeline.SearchI_Obj{
+					{
+						Metadata: r.Obj.Metadata,
+					},
+				},
+			}
+
+			lis, err := s.searchAll(req)
+			if err != nil {
+				return nil, tracer.Mask(err)
+			}
+
+			for _, l := range lis {
+				if !contains(str, l) {
+					str = append(str, l)
+				}
+			}
+		}
+	}
+
+	return str, nil
+}
+
+func (s *Searcher) searchTimSub(req *timeline.SearchI) ([]string, error) {
 	var str []string
 
 	{
@@ -209,34 +272,6 @@ func (s *Searcher) searchSub(req *timeline.SearchI) ([]string, error) {
 			}
 
 			lis, err := s.searchTim(req)
-			if err != nil {
-				return nil, tracer.Mask(err)
-			}
-
-			for _, l := range lis {
-				if !contains(str, l) {
-					str = append(str, l)
-				}
-			}
-		}
-	}
-
-	{
-		rol, err := s.searchRolPat(venPat, req)
-		if err != nil {
-			return nil, tracer.Mask(err)
-		}
-
-		for _, r := range rol {
-			req := &timeline.SearchI{
-				Obj: []*timeline.SearchI_Obj{
-					{
-						Metadata: r.Obj.Metadata,
-					},
-				},
-			}
-
-			lis, err := s.searchAll(req)
 			if err != nil {
 				return nil, tracer.Mask(err)
 			}

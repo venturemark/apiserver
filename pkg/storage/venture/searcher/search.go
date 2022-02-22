@@ -6,6 +6,7 @@ import (
 	"github.com/venturemark/apicommon/pkg/metadata"
 	"github.com/venturemark/apicommon/pkg/schema"
 	"github.com/venturemark/apigengo/pkg/pbf/venture"
+	"github.com/venturemark/permission/pkg/label/visibility"
 	"github.com/xh3b4sd/redigo/pkg/simple"
 	"github.com/xh3b4sd/tracer"
 	"strconv"
@@ -39,11 +40,22 @@ func (s *Searcher) Search(req *venture.SearchI) (*venture.SearchO, error) {
 	{
 		res = &venture.SearchO{}
 
-		for _, s := range str {
+		for _, cs := range str {
 			ven := &schema.Venture{}
-			err := json.Unmarshal([]byte(s), ven)
+			err := json.Unmarshal([]byte(cs), ven)
 			if err != nil {
 				return nil, tracer.Mask(err)
+			}
+
+			if req.Obj[0].Metadata[metadata.UserID] == "" {
+				vis, err := s.resolveTimelineVisibility(req.Obj[0].Metadata)
+				if err != nil {
+					return nil, tracer.Mask(err)
+				}
+				if vis != visibility.Public.Label() {
+					// Only return public ventures on unauthenticated requests
+					continue
+				}
 			}
 
 			o := &venture.SearchO_Obj{
@@ -166,6 +178,45 @@ func (s *Searcher) searchVen(req *venture.SearchI) ([]string, error) {
 	}
 
 	return str, nil
+}
+
+func (s *Searcher) resolveTimelineVisibility(met map[string]string) (string, error) {
+	var err error
+
+	var tik *key.Key
+	{
+		tik = key.Timeline(met)
+	}
+
+	var str []string
+	{
+		k := tik.List()
+
+		str, err = s.redigo.Sorted().Search().Order(k, 0, -1)
+		if err != nil {
+			return "", tracer.Mask(err)
+		}
+	}
+
+	var vis string
+	{
+		for _, s := range str {
+			tim := &schema.Timeline{}
+			err := json.Unmarshal([]byte(s), tim)
+			if err != nil {
+				return "", tracer.Mask(err)
+			}
+
+			if tim.Obj.Metadata[metadata.ResourceVisibility] == "public" {
+				vis = visibility.Public.Label()
+				break
+			}
+
+			vis = visibility.Private.Label()
+		}
+	}
+
+	return vis, nil
 }
 
 func lin(i []schema.VentureObjPropertyLink) []*venture.SearchO_Obj_Property_Link {

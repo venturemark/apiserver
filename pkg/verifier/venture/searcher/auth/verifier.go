@@ -150,6 +150,10 @@ func (v *Verifier) rol(met map[string]string) (label.Label, error) {
 }
 
 func (v *Verifier) vis(ctx context.Context, met map[string]string) (label.Label, error) {
+	if met[metadata.UserID] == "" {
+		return visibility.Public, nil
+	}
+
 	var err error
 	var ven string
 	{
