@@ -539,8 +539,9 @@ github.com/venturemark/apigengo v0.4.2 h1:+rQOie3RcL3sWWHX2dTi+i3qoloKS7f7r62vVG
 github.com/venturemark/apigengo v0.4.2/go.mod h1:K2CTnU4S8YWtDVKDlwhBWbPJnI5A2svon4oNTCHYWBo=
 github.com/venturemark/permission v0.9.0 h1:WfxbYrXpj0V2K46DpTva1Q4ue0fjpMYBfuNffA0T1co=
 github.com/venturemark/permission v0.9.0/go.mod h1:lhNsSI80xygiYSp02xvKvchnzWid9kbUP1kqGVNpiB8=
-github.com/xh3b4sd/budget v0.2.1 h1:wn1s+MpnJPfusLN28jH7cH2v4SeP0ldmmwU6H6FRARI=
 github.com/xh3b4sd/budget v0.2.1/go.mod h1:Qq5YihqFy2k1Q3TX+QhlPQYlLtA98ZxNwkWiX72mlAU=
+github.com/xh3b4sd/budget v0.3.0 h1:f/Wwj9fZmToz2s7oYSiBEDWJdN2iFWZcqxF/Kd2oQaI=
+github.com/xh3b4sd/budget v0.3.0/go.mod h1:ihMxyqLjp3IRsWmmeEahY2CdYXY+KRqM8zyGm2C724w=
 github.com/xh3b4sd/logger v0.2.0 h1:IAMhu5QB/HHucgX/tiNRl7/Of7Gq3bSZ4NBCtnFIh48=
 github.com/xh3b4sd/logger v0.2.0/go.mod h1:mVsr+vC1BnsU4v5ZjNYWfLM0SYVxNs9M9neRTOV9RJU=
 github.com/xh3b4sd/random v0.2.1 h1:Y7frHrlwd1h+vEEsZNAwYZZwORB/iE8ULKOECzTs2m8=
@@ -549,8 +550,9 @@ github.com/xh3b4sd/redigo v0.17.1 h1:VIM310nF7tuSCS15ccm06CBQi3HWOwq+1oj/ZK9Auy4
 github.com/xh3b4sd/redigo v0.17.1/go.mod h1:Qw7ahf+87pLO0b5Ss8mHuWke0DuBr+eFDxRG/k+WXWA=
 github.com/xh3b4sd/rescue v0.5.0 h1:mrxkY2I3JbW4ctT3YoO+HXjCR6pEimsa0qoZcUVlWL8=
 github.com/xh3b4sd/rescue v0.5.0/go.mod h1:PH2Eva1ultHXo7KPo+B0uee38NxGd6cr2ZB5D/mziog=
-github.com/xh3b4sd/tracer v0.4.0 h1:SUxjzOf0ZqeF/mXi2Gtlr5bsJemTlcx9F2NKI6pFWM4=
 github.com/xh3b4sd/tracer v0.4.0/go.mod h1:MxvZ4BYzuaPgQToz+R+iO0q0RZ6BnDijHRGfWvR+yxM=
+github.com/xh3b4sd/tracer v0.5.0 h1:KglVpem7dGWfNdjEXbTUmIt/t2UOTKa3vWpPATqpQvE=
+github.com/xh3b4sd/tracer v0.5.0/go.mod h1:nllAQlwq3YjVc61aNRE8svIEwUngBi9+iKKW9siC5yk=
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
